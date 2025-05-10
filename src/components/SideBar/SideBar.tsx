@@ -25,7 +25,7 @@ const SideBar = () => {
         {isExpended ? (
           <img src="syncnox.png" className="w-[171px] h-[36px]" />
         ) : (
-          <img className="w-[36px] h-[36px]" src="logo.png" />
+          <img src="logo.png" className="w-[36px] h-[36px]" />
         )}
       </div>
 
@@ -56,7 +56,7 @@ const SideBar = () => {
       {menuItems.map((item, index) => (
         <div
           key={index}
-          className="flex items-center gap-[19px] pl-[9px] py-[9.26px] my-[9.26px] transition-all duration-300 ease-in-out hover:bg-gray-100 rounded-md cursor-pointer"
+          className="flex items-center gap-[19px] pl-[9px] py-[9.26px] my-[9.26px] transition-all duration-300 ease-in-out hover:bg-[#F6FFED] rounded-md cursor-pointer"
         >
           <div className="w-[24px] h-[24px] flex items-center justify-center">
             <img
