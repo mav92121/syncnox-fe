@@ -44,9 +44,9 @@ const SideBar = () => {
             />
           </div>
         ) : (
-          <div className="flex items-center justify-center h-[43px]">
+          <div className="flex items-center justify-center h-[43px] pl-[9px]">
             <SearchOutlined
-              className="text-base text-[#999]"
+              className="absolute left-[11px] top-1/2 -translate-y-1/2 text-base text-[#999]"
               style={{ pointerEvents: "none" }}
             />
           </div>
