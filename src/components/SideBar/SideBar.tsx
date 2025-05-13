@@ -6,13 +6,13 @@ const SideBar = () => {
   const [isExpended, setIsExpended] = useState(false);
 
   const menuItems = [
-    { icon: "recent.png", label: "Recent", alt: "recent" },
-    { icon: "plan.png", label: "Plan", alt: "plan" },
-    { icon: "manage.png", label: "Manage", alt: "manage" },
-    { icon: "analytics.png", label: "Analytics", alt: "analytics" },
-    { icon: "tracking.png", label: "Live Tracking & Alerts", alt: "tracking" },
-    { icon: "deals.png", label: "Deals", alt: "deals" },
-    { icon: "export.png", label: "Exports", alt: "exports" },
+    { icon: "recent.svg", label: "Recent", alt: "recent" },
+    { icon: "plan.svg", label: "Plan", alt: "plan" },
+    { icon: "manage.svg", label: "Manage", alt: "manage" },
+    { icon: "analytics.svg", label: "Analytics", alt: "analytics" },
+    { icon: "tracking.svg", label: "Live Tracking & Alerts", alt: "tracking" },
+    { icon: "deals.svg", label: "Deals", alt: "deals" },
+    { icon: "export.svg", label: "Exports", alt: "exports" },
   ];
 
   return (
@@ -23,9 +23,9 @@ const SideBar = () => {
     >
       <div className="logo transition-all duration-[300ms] ease-in-out">
         {isExpended ? (
-          <img src="syncnox.png" className="w-[171px] h-[36px]" />
+          <img src="syncnox.svg" className="w-[171px] h-[36px]" />
         ) : (
-          <img src="logo.png" className="w-[36px] h-[36px]" />
+          <img src="logo.svg" className="w-[36px] h-[36px]" />
         )}
       </div>
 
