@@ -1,11 +1,40 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Input } from "../ui/input";
 import { SearchOutlined } from "@ant-design/icons";
 
 const SideBar = () => {
   const [isExpended, setIsExpended] = useState(false);
   const [showManageDropdown, setShowManageDropdown] = useState(false);
-  const [hoveringDropdown, setHoveringDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+  const manageItemRef = useRef(null);
+  const closeTimerRef = useRef(null);
+
+  // Handle dropdown visibility with better hover detection
+  const handleManageHover = (isHovering) => {
+    if (isHovering) {
+      // Clear any close timer that might be running
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
+      setShowManageDropdown(true);
+    } else {
+      // Set a timer to close the dropdown
+      closeTimerRef.current = setTimeout(() => {
+        setShowManageDropdown(false);
+        closeTimerRef.current = null;
+      }, 150);
+    }
+  };
+
+  // Clean up any timers on unmount
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+      }
+    };
+  }, []);
 
   const menuItems = [
     { icon: "recent.svg", label: "Recent", alt: "recent" },
@@ -43,6 +72,10 @@ const SideBar = () => {
       onMouseLeave={() => {
         setIsExpended(false);
         setShowManageDropdown(false);
+        if (closeTimerRef.current) {
+          clearTimeout(closeTimerRef.current);
+          closeTimerRef.current = null;
+        }
       }}
       onMouseEnter={() => setIsExpended(true)}
     >
@@ -95,23 +128,24 @@ const SideBar = () => {
             <div
               key={index}
               className={`relative ${
-                item.label === "Manage" && showManageDropdown ? "mb-32" : ""
+                item.label === "Manage" && showManageDropdown ? "" : ""
               }`}
             >
               <div
-                className="flex items-center pl-2 py-[10px] my-1 hover:bg-gray-100 rounded-md cursor-pointer"
+                ref={item.label === "Manage" ? manageItemRef : null}
+                className={`flex items-center pl-2 py-[10px] my-1 hover:bg-gray-100 rounded-md cursor-pointer ${
+                  item.label === "Manage" && showManageDropdown
+                    ? "bg-gray-100"
+                    : ""
+                }`}
                 onMouseEnter={() => {
                   if (item.label === "Manage" && isExpended) {
-                    setShowManageDropdown(true);
+                    handleManageHover(true);
                   }
                 }}
                 onMouseLeave={() => {
-                  if (item.label === "Manage" && !hoveringDropdown) {
-                    setTimeout(() => {
-                      if (!hoveringDropdown) {
-                        setShowManageDropdown(false);
-                      }
-                    }, 100);
+                  if (item.label === "Manage") {
+                    handleManageHover(false);
                   }
                 }}
               >
@@ -153,19 +187,17 @@ const SideBar = () => {
                 )}
               </div>
 
-              {/* Manage dropdown - now below the Manage item */}
-              {item.label === "Manage" && showManageDropdown && isExpended && (
+              {/* Manage dropdown - with improved transition */}
+              {item.label === "Manage" && isExpended && (
                 <div
-                  className="manage-dropdown absolute w-full left-0 bg-white shadow-sm z-50 py-1 pl-10"
-                  onMouseEnter={() => setHoveringDropdown(true)}
-                  onMouseLeave={() => {
-                    setHoveringDropdown(false);
-                    setTimeout(() => {
-                      if (!document.querySelector(".manage-menu:hover")) {
-                        setShowManageDropdown(false);
-                      }
-                    }, 100);
-                  }}
+                  ref={dropdownRef}
+                  className={`manage-dropdown absolute w-full left-0 bg-white shadow-sm z-50 py-1 pl-10 transition-all duration-200 ${
+                    showManageDropdown
+                      ? "opacity-100 max-h-[200px]"
+                      : "opacity-0 max-h-0 pointer-events-none overflow-hidden"
+                  }`}
+                  onMouseEnter={() => handleManageHover(true)}
+                  onMouseLeave={() => handleManageHover(false)}
                 >
                   {manageDropdownItems.map((dropdownItem, idx) => (
                     <div
@@ -192,7 +224,7 @@ const SideBar = () => {
         >
           <div className="w-[32px] h-[32px] rounded-full overflow-hidden">
             <img
-              src="/avatar.png"
+              src="/avatar.svg"
               alt="Gustavo Xavier"
               className="w-full h-full object-cover"
             />
