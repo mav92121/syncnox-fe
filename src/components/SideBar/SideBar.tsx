@@ -4,76 +4,235 @@ import { SearchOutlined } from "@ant-design/icons";
 
 const SideBar = () => {
   const [isExpended, setIsExpended] = useState(false);
+  const [showManageDropdown, setShowManageDropdown] = useState(false);
+  const [hoveringDropdown, setHoveringDropdown] = useState(false);
 
   const menuItems = [
     { icon: "recent.svg", label: "Recent", alt: "recent" },
     { icon: "plan.svg", label: "Plan", alt: "plan" },
-    { icon: "manage.svg", label: "Manage", alt: "manage" },
+    { icon: "schedule.svg", label: "Schedule", alt: "schedule" },
+    { icon: "manage.svg", label: "Manage", alt: "manage", hasArrow: true },
     { icon: "analytics.svg", label: "Analytics", alt: "analytics" },
     { icon: "tracking.svg", label: "Live Tracking & Alerts", alt: "tracking" },
     { icon: "deals.svg", label: "Deals", alt: "deals" },
-    { icon: "export.svg", label: "Exports", alt: "exports" },
+    { icon: "export.svg", label: "Export", alt: "export" },
+  ];
+
+  const manageDropdownItems = [
+    { label: "User" },
+    { label: "Alerts" },
+    { label: "Fleet" },
+    { label: "Customers" },
+  ];
+
+  const bottomMenuItems = [
+    { icon: "settings.svg", label: "Settings", alt: "settings" },
+    {
+      icon: "logout.svg",
+      label: "Log out",
+      alt: "logout",
+      textColor: "text-red-500",
+    },
   ];
 
   return (
     <div
-      className={`pt-[16.5px] px-[9.26px] transition-all duration-300 ease-in-out`}
-      onMouseLeave={() => setIsExpended(false)}
+      className={`h-screen bg-white flex flex-col justify-between border-r border-gray-100 shadow-sm transition-all duration-300 ease-in-out ${
+        isExpended ? "w-[280px]" : "w-[60px]"
+      }`}
+      onMouseLeave={() => {
+        setIsExpended(false);
+        setShowManageDropdown(false);
+      }}
       onMouseEnter={() => setIsExpended(true)}
     >
-      <div className="logo transition-all duration-[300ms] ease-in-out">
-        {isExpended ? (
-          <img src="syncnox.svg" className="w-[171px] h-[36px]" />
-        ) : (
-          <img src="logo.svg" className="w-[36px] h-[36px]" />
-        )}
-      </div>
-
-      <div className="relative my-[26px] transition-all duration-300 ease-in-out">
-        {isExpended ? (
-          <div>
-            <SearchOutlined
-              className="absolute left-[11px] top-1/2 -translate-y-1/2 text-base text-[#999]"
-              style={{ pointerEvents: "none" }}
-            />
-            <Input
-              style={{ boxShadow: "none" }}
-              type="text"
-              className="w-full h-[43px] pl-[35px]"
-              placeholder="Search"
-            />
-          </div>
-        ) : (
-          <div className="flex items-center justify-center h-[43px] pl-[9px]">
-            <SearchOutlined
-              className="absolute left-[11px] top-1/2 -translate-y-1/2 text-base text-[#999]"
-              style={{ pointerEvents: "none" }}
-            />
-          </div>
-        )}
-      </div>
-
-      {menuItems.map((item, index) => (
-        <div
-          key={index}
-          className="flex items-center gap-[19px] pl-[9px] py-[9.26px] my-[9.26px] transition-all duration-300 ease-in-out hover:bg-[#F6FFED] rounded-md cursor-pointer"
-        >
-          <div className="w-[24px] h-[24px] flex items-center justify-center">
-            <img
-              src={item.icon}
-              alt={item.alt}
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <div
-            className={`whitespace-nowrap overflow-hidden transition-all duration-300 text-sm ${
-              isExpended ? "opacity-100 max-w-[180px]" : "opacity-0 w-0"
-            }`}
-          >
-            {item.label}
+      {/* Main content section */}
+      <div className="flex flex-col flex-1 overflow-hidden">
+        {/* Logo section */}
+        <div className="pt-5 px-4 mb-4">
+          <div className="logo transition-all duration-300 ease-in-out">
+            {isExpended ? (
+              <div className="flex items-center">
+                <img src="/syncnox.svg" alt="SYNCNOX" className="h-[28px]" />
+                {/* Pink underline visible in third image */}
+                <div className="absolute w-[40px] h-[2px] bg-pink-500 bottom-[-6px] left-4"></div>
+              </div>
+            ) : (
+              <div className="flex justify-center">
+                <img src="/logo.svg" alt="Logo" className="w-[28px] h-[28px]" />
+              </div>
+            )}
           </div>
         </div>
-      ))}
+
+        {/* Search section */}
+        <div className="px-4 mb-6">
+          <div className="relative transition-all duration-300 ease-in-out">
+            {isExpended ? (
+              <div>
+                <SearchOutlined
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
+                  style={{ pointerEvents: "none" }}
+                />
+                <Input
+                  style={{ boxShadow: "none" }}
+                  type="text"
+                  className="w-full h-[38px] pl-9 text-sm rounded-md border-gray-200"
+                  placeholder="Search"
+                />
+              </div>
+            ) : (
+              <div className="flex items-center justify-center h-[38px]">
+                <SearchOutlined className="text-gray-400 text-sm" />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Menu items */}
+        <div className="flex-1 overflow-y-auto px-2 relative">
+          {menuItems.map((item, index) => (
+            <div
+              key={index}
+              className={`relative ${
+                item.label === "Manage" && showManageDropdown ? "mb-32" : ""
+              }`}
+            >
+              <div
+                className="flex items-center pl-2 py-[10px] my-1 hover:bg-gray-100 rounded-md cursor-pointer"
+                onMouseEnter={() => {
+                  if (item.label === "Manage" && isExpended) {
+                    setShowManageDropdown(true);
+                  }
+                }}
+                onMouseLeave={() => {
+                  if (item.label === "Manage" && !hoveringDropdown) {
+                    setTimeout(() => {
+                      if (!hoveringDropdown) {
+                        setShowManageDropdown(false);
+                      }
+                    }, 100);
+                  }
+                }}
+              >
+                <div className="w-[20px] h-[20px] flex items-center justify-center">
+                  <img
+                    src={`/${item.icon}`}
+                    alt={item.alt}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div
+                  className={`ml-3 whitespace-nowrap overflow-hidden transition-all duration-300 text-sm ${
+                    isExpended ? "opacity-100 max-w-[180px]" : "opacity-0 w-0"
+                  }`}
+                >
+                  {item.label}
+                </div>
+                {item.hasArrow && isExpended && (
+                  <div className="ml-auto mr-2">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className={`transform transition-transform ${
+                        showManageDropdown ? "rotate-90" : ""
+                      }`}
+                    >
+                      <path
+                        d="M9 6L15 12L9 18"
+                        stroke="#666"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              {/* Manage dropdown - now below the Manage item */}
+              {item.label === "Manage" && showManageDropdown && isExpended && (
+                <div
+                  className="manage-dropdown absolute w-full left-0 bg-white shadow-sm z-50 py-1 pl-10"
+                  onMouseEnter={() => setHoveringDropdown(true)}
+                  onMouseLeave={() => {
+                    setHoveringDropdown(false);
+                    setTimeout(() => {
+                      if (!document.querySelector(".manage-menu:hover")) {
+                        setShowManageDropdown(false);
+                      }
+                    }, 100);
+                  }}
+                >
+                  {manageDropdownItems.map((dropdownItem, idx) => (
+                    <div
+                      key={idx}
+                      className="py-2 text-sm hover:bg-gray-50 cursor-pointer"
+                    >
+                      {dropdownItem.label}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom section with user profile and settings */}
+      <div className="border-t border-gray-200 pt-3 pb-4 px-2">
+        {/* User profile */}
+        <div
+          className={`flex items-center px-2 mb-3 ${
+            isExpended ? "" : "justify-center"
+          }`}
+        >
+          <div className="w-[32px] h-[32px] rounded-full overflow-hidden">
+            <img
+              src="/avatar.png"
+              alt="Gustavo Xavier"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          {isExpended && (
+            <div className="ml-2">
+              <p className="text-sm font-medium">Gustavo Xavier</p>
+              <p className="text-xs text-gray-500">Admin</p>
+            </div>
+          )}
+        </div>
+
+        {/* Bottom menu items */}
+        {bottomMenuItems.map((item, index) => (
+          <div
+            key={index}
+            className="flex items-center pl-2 py-[10px] hover:bg-gray-100 rounded-md cursor-pointer"
+          >
+            <div className="w-[20px] h-[20px] flex items-center justify-center">
+              <img
+                src={`/${item.icon}`}
+                alt={item.alt}
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div
+              className={`ml-3 whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                item.textColor || "text-gray-700"
+              } text-sm ${
+                isExpended ? "opacity-100 max-w-[180px]" : "opacity-0 w-0"
+              }`}
+            >
+              {item.label}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom pink line visible in third image */}
+      {isExpended && <div className="w-full h-[2px] bg-pink-500"></div>}
     </div>
   );
 };
