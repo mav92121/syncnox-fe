@@ -1,15 +1,37 @@
-import "./App.css";
-import NavBar from "./components/NavBar/NavBar";
-import SideBar from "./components/SideBar/SideBar";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import RootLayout from "./components/Layout/RootLayout";
+import PlanPage from "./pages/PlanPage";
+const Dashboard = () => <div>Dashboard Page</div>;
+const Analytics = () => <div>Analytics Page</div>;
+const Schedule = () => <div>Schedule Page</div>;
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
+      },
+      {
+        path:"plan",
+        element: <PlanPage/>
+      },
+      {
+        path: "analytics",
+        element: <Analytics />,
+      },
+      {
+        path: "schedule",
+        element: <Schedule />,
+      },
+    ],
+  },
+]);
+
 function App() {
-  return (
-    <>
-      <div className="flex">
-        <SideBar />
-        <NavBar />
-      </div>
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
