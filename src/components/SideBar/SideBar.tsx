@@ -7,10 +7,10 @@ const SideBar = () => {
   const [showManageDropdown, setShowManageDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const manageItemRef = useRef(null);
-  const closeTimerRef = useRef(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Handle dropdown visibility with better hover detection
-  const handleManageHover = (isHovering) => {
+  const handleManageHover = (isHovering: boolean) => {
     if (isHovering) {
       // Clear any close timer that might be running
       if (closeTimerRef.current) {
@@ -64,9 +64,12 @@ const SideBar = () => {
     },
   ];
 
+  // Find manage item index
+  const manageIndex = menuItems.findIndex((item) => item.label === "Manage");
+
   return (
     <div
-      className={`h-screen bg-white flex flex-col justify-between border-r border-gray-100 shadow-sm transition-all duration-300 ease-in-out ${
+      className={`h-screen bg-white flex flex-col justify-between border-r border-gray-100 shadow-sm overflow-hidden transition-all duration-300 ${
         isExpended ? "w-[280px]" : "w-[60px]"
       }`}
       onMouseLeave={() => {
@@ -87,8 +90,6 @@ const SideBar = () => {
             {isExpended ? (
               <div className="flex items-center">
                 <img src="/syncnox.svg" alt="SYNCNOX" className="h-[28px]" />
-                {/* Pink underline visible in third image */}
-                <div className="absolute w-[40px] h-[2px] bg-pink-500 bottom-[-6px] left-4"></div>
               </div>
             ) : (
               <div className="flex justify-center">
@@ -123,17 +124,13 @@ const SideBar = () => {
         </div>
 
         {/* Menu items */}
-        <div className="flex-1 overflow-y-auto px-2 relative">
-          {menuItems.map((item, index) => (
-            <div
-              key={index}
-              className={`relative ${
-                item.label === "Manage" && showManageDropdown ? "" : ""
-              }`}
-            >
+        <div className="flex-1 overflow-y-auto px-2">
+          {/* Render menu items before Manage */}
+          {menuItems.slice(0, manageIndex + 1).map((item, index) => (
+            <div key={index} className="relative">
               <div
                 ref={item.label === "Manage" ? manageItemRef : null}
-                className={`flex items-center pl-2 py-[10px] my-1 hover:bg-gray-100 rounded-md cursor-pointer ${
+                className={`flex items-center pl-2 py-[10px] my-1  hover:bg-[#F6FFED] rounded-md cursor-pointer ${
                   item.label === "Manage" && showManageDropdown
                     ? "bg-gray-100"
                     : ""
@@ -153,12 +150,12 @@ const SideBar = () => {
                   <img
                     src={`/${item.icon}`}
                     alt={item.alt}
-                    className="w-full h-full object-contain"
+                    className="w-[16px] h-[16px] object-contain"
                   />
                 </div>
                 <div
-                  className={`ml-3 whitespace-nowrap overflow-hidden transition-all duration-300 text-sm ${
-                    isExpended ? "opacity-100 max-w-[180px]" : "opacity-0 w-0"
+                  className={`ml-3 whitespace-nowrap overflow-hidden transition-opacity duration-300 text-sm ${
+                    isExpended ? "opacity-100 w-auto" : "opacity-0 w-0"
                   }`}
                 >
                   {item.label}
@@ -187,28 +184,46 @@ const SideBar = () => {
                 )}
               </div>
 
-              {/* Manage dropdown - with improved transition */}
-              {item.label === "Manage" && isExpended && (
+              {/* Manage dropdown - inline instead of absolute */}
+              {item.label === "Manage" && isExpended && showManageDropdown && (
                 <div
                   ref={dropdownRef}
-                  className={`manage-dropdown absolute w-full left-0 bg-white shadow-sm z-50 py-1 pl-10 transition-all duration-200 ${
-                    showManageDropdown
-                      ? "opacity-100 max-h-[200px]"
-                      : "opacity-0 max-h-0 pointer-events-none overflow-hidden"
-                  }`}
+                  className={`bg-[#F6FFED] rounded-md mt-1 mb-1 overflow-hidden transition-all duration-200`}
                   onMouseEnter={() => handleManageHover(true)}
                   onMouseLeave={() => handleManageHover(false)}
                 >
                   {manageDropdownItems.map((dropdownItem, idx) => (
                     <div
                       key={idx}
-                      className="py-2 text-sm hover:bg-gray-50 cursor-pointer"
+                      className="py-2 pl-10 text-sm hover:bg-green-100 cursor-pointer"
                     >
                       {dropdownItem.label}
                     </div>
                   ))}
                 </div>
               )}
+            </div>
+          ))}
+
+          {/* Render menu items after Manage */}
+          {menuItems.slice(manageIndex + 1).map((item, index) => (
+            <div key={index} className="relative">
+              <div className="flex items-center pl-2 py-[10px] my-1 rounded-md cursor-pointer hover:bg-[#F6FFED]">
+                <div className="w-[20px] h-[20px] flex items-center justify-center">
+                  <img
+                    src={`/${item.icon}`}
+                    alt={item.alt}
+                    className="w-[16px] h-[16px] object-contain"
+                  />
+                </div>
+                <div
+                  className={`ml-3 whitespace-nowrap overflow-hidden transition-opacity duration-300 text-sm ${
+                    isExpended ? "opacity-100 w-auto" : "opacity-0 w-0"
+                  }`}
+                >
+                  {item.label}
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -241,21 +256,19 @@ const SideBar = () => {
         {bottomMenuItems.map((item, index) => (
           <div
             key={index}
-            className="flex items-center pl-2 py-[10px] hover:bg-gray-100 rounded-md cursor-pointer"
+            className="flex items-center pl-2 py-[10px] hover:bg-[#F6FFED] rounded-md cursor-pointer"
           >
             <div className="w-[20px] h-[20px] flex items-center justify-center">
               <img
                 src={`/${item.icon}`}
                 alt={item.alt}
-                className="w-full h-full object-contain"
+                className="w-[16px] h-[16px] object-contain"
               />
             </div>
             <div
-              className={`ml-3 whitespace-nowrap overflow-hidden transition-all duration-300 ${
+              className={`ml-3 whitespace-nowrap overflow-hidden transition-opacity duration-300 ${
                 item.textColor || "text-gray-700"
-              } text-sm ${
-                isExpended ? "opacity-100 max-w-[180px]" : "opacity-0 w-0"
-              }`}
+              } text-sm ${isExpended ? "opacity-100 w-auto" : "opacity-0 w-0"}`}
             >
               {item.label}
             </div>
