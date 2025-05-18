@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Input } from "../ui/input";
+import "./SideBar.css";
 import { SearchOutlined } from "@ant-design/icons";
 
 const SideBar = () => {
@@ -123,16 +124,24 @@ const SideBar = () => {
           </div>
         </div>
 
-        {/* Menu items */}
-        <div className="flex-1 overflow-y-auto px-2">
+        {/* Menu items with sleek scrollbar */}
+        <div
+          className="flex-1 px-2 sidebar-menu"
+          style={{
+            overflowY: "auto",
+            overflowX: "hidden",
+            scrollbarWidth: "thin",
+            scrollbarColor: "#E2E8F0 transparent",
+          }}
+        >
           {/* Render menu items before Manage */}
           {menuItems.slice(0, manageIndex + 1).map((item, index) => (
             <div key={index} className="relative">
               <div
                 ref={item.label === "Manage" ? manageItemRef : null}
-                className={`flex items-center pl-2 py-[10px] my-1  hover:bg-[#F6FFED] rounded-md cursor-pointer ${
+                className={`flex items-center pl-2 py-[10px] my-1 hover:bg-[#F6FFED] rounded-md cursor-pointer ${
                   item.label === "Manage" && showManageDropdown
-                    ? "bg-gray-100"
+                    ? "bg-[#F6FFED]"
                     : ""
                 }`}
                 onMouseEnter={() => {
@@ -188,7 +197,11 @@ const SideBar = () => {
               {item.label === "Manage" && isExpended && showManageDropdown && (
                 <div
                   ref={dropdownRef}
-                  className={`bg-[#F6FFED] rounded-md mt-1 mb-1 overflow-hidden transition-all duration-200`}
+                  className={`bg-[#F6FFED] rounded-md mt-1 mb-1 transition-all duration-200`}
+                  style={{
+                    maxHeight: showManageDropdown ? "1000px" : "0px",
+                    overflow: "hidden",
+                  }}
                   onMouseEnter={() => handleManageHover(true)}
                   onMouseLeave={() => handleManageHover(false)}
                 >
