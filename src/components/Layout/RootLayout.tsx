@@ -4,7 +4,7 @@ import NavBar from "../NavBar/NavBar";
 
 const RootLayout = () => {
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen">
       <SideBar />
       <div className="flex-1 flex flex-col">
         <NavBar
@@ -13,7 +13,7 @@ const RootLayout = () => {
             { label: "Add Tasks/Orders" },
           ]}
         />
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 overflow-auto bg-[#fafafa]">
           <Outlet />
         </main>
       </div>
