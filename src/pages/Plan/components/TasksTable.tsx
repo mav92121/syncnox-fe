@@ -122,10 +122,12 @@ const TasksTable = () => {
       {/* Table with scroll container */}
       <div className="flex-1 overflow-auto custom-scrollbar">
         <table className="min-w-full">
-          <thead className="bg-white sticky top-0 z-10">
+          <thead className="bg-background sticky top-0 z-10">
             <tr className="border-b border-gray-200">
-              <th className="w-10 py-3 text-left">
-                <Checkbox className="h-4 w-4 rounded-none border-gray-300" />
+              <th className="w-10 py-3 pl-4">
+                <div className="flex items-center justify-start">
+                  <Checkbox className="h-4 w-4 rounded-none border-gray-300" />
+                </div>
               </th>
               <th className="w-8 py-3"></th>
               <th className="py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -224,7 +226,9 @@ const TasksTable = () => {
             {tasks.map((task, index) => (
               <tr key={index} className="hover:bg-gray-50">
                 <td className="py-3 pl-4">
-                  <Checkbox className="h-4 w-4 rounded-none border-gray-300" />
+                  <div className="flex items-center justify-start">
+                    <Checkbox className="h-4 w-4 rounded-none border-gray-300" />
+                  </div>
                 </td>
                 <td className="py-3">
                   <svg
