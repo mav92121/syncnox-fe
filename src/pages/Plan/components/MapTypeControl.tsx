@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import L from "leaflet";
+import { cn } from "@/lib/utils";
 
 interface MapTypeControlProps {
   mapType: "osm" | "satellite";
@@ -45,19 +46,31 @@ const MapTypeControl: React.FC<MapTypeControlProps> = ({
   }, [map, mapType, mapUrls, mapAttributions]);
 
   return (
-    <div className="absolute top-4 right-4 bg-white shadow-md z-[1000] flex rounded-none">
-      <Button
-        variant={mapType === "osm" ? "default" : "outline"}
-        onClick={() => setMapType("osm")}
-      >
-        Map
-      </Button>
-      <Button
-        variant={mapType === "satellite" ? "default" : "outline"}
-        onClick={() => setMapType("satellite")}
-      >
-        Satellite
-      </Button>
+    <div className="absolute top-4 right-4 z-[1000]">
+      <div className="bg-white shadow-md overflow-hidden flex transition-all duration-300 ease-in-out">
+        <Button
+          onClick={() => setMapType("osm")}
+          className={cn(
+            "px-4 py-2 text-sm font-medium transition-all duration-300 ease-in-out",
+            mapType === "osm"
+              ? "bg-primary text-primary-foreground"
+              : "bg-white text-gray-700 hover:bg-gray-50"
+          )}
+        >
+          Map
+        </Button>
+        <Button
+          onClick={() => setMapType("satellite")}
+          className={cn(
+            "px-4 py-2 text-sm font-medium transition-all duration-300 ease-in-out",
+            mapType === "satellite"
+              ? "bg-primary text-primary-foreground"
+              : "bg-white text-gray-700 hover:bg-gray-50"
+          )}
+        >
+          Satellite
+        </Button>
+      </div>
     </div>
   );
 };

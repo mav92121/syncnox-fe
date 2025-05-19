@@ -360,7 +360,6 @@ const TaskForm = () => {
                   placeholder="Type"
                 />
               </div>
-              py-3 bg-[#003220] hover:bg-[#004c30] text-white rounded-none
               {/* Submit Button */}
               <div className="py-4">
                 <Button className="w-full">Add</Button>
