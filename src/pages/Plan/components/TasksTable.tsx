@@ -52,7 +52,7 @@ const TasksTable = () => {
             <Input
               type="text"
               placeholder="Search"
-              className="pl-8 pr-4 py-1.5 rounded-none border-gray-200 text-sm focus:outline-none focus:ring-1 focus:ring-[#003220]"
+              className="pl-8 pr-4 py-1.5"
             />
             <svg
               className="w-4 h-4 absolute left-2.5 top-2.5 text-gray-400"
@@ -68,10 +68,7 @@ const TasksTable = () => {
               />
             </svg>
           </div>
-          <Button
-            className="flex items-center px-3 py-1.5 bg-white border border-gray-200 rounded-none text-sm text-gray-700 hover:bg-gray-50"
-            variant="outline"
-          >
+          <Button variant="outline">
             <svg
               className="w-4 h-4 mr-1"
               fill="none"
@@ -87,10 +84,7 @@ const TasksTable = () => {
             </svg>
             Delete
           </Button>
-          <Button
-            className="flex items-center px-3 py-1.5 bg-white border border-gray-200 rounded-none text-sm text-gray-700 hover:bg-gray-50"
-            variant="outline"
-          >
+          <Button variant="outline">
             <svg
               className="w-4 h-4 mr-1"
               fill="none"
@@ -106,10 +100,7 @@ const TasksTable = () => {
             </svg>
             Filters
           </Button>
-          <Button
-            className="flex items-center px-3 py-1.5 bg-white border border-gray-200 rounded-none text-sm text-gray-700 hover:bg-gray-50"
-            variant="outline"
-          >
+          <Button variant="outline">
             <svg
               className="w-4 h-4 mr-1"
               fill="none"
@@ -289,9 +280,7 @@ const TasksTable = () => {
 
       {/* Add More Stops Button */}
       <div className="mt-4">
-        <Button className="w-full py-3 bg-[#003220] hover:bg-[#004c30] text-white text-sm font-medium rounded-none">
-          Add More Stops
-        </Button>
+        <Button className="w-full">Add More Stops</Button>
       </div>
     </div>
   );

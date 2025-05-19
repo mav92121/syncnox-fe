@@ -1,24 +1,14 @@
 import { Button } from "@/components/ui/button";
-import type { ViewMode } from "../Plan";
 
 interface ActionButtonsProps {
   onAddClick: () => void;
   onRecentClick: () => void;
-  active: ViewMode;
 }
 
-const ActionButtons = ({
-  onAddClick,
-  onRecentClick,
-  active,
-}: ActionButtonsProps) => {
+const ActionButtons = ({ onAddClick, onRecentClick }: ActionButtonsProps) => {
   return (
     <div className="flex space-x-2">
-      <Button
-        onClick={onAddClick}
-        className="flex items-center bg-[#003220] hover:bg-[#004c30] text-white rounded-none"
-        variant="default"
-      >
+      <Button onClick={onAddClick} variant="default">
         <svg className="w-4 h-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor">
           <path
             fillRule="evenodd"
@@ -28,15 +18,7 @@ const ActionButtons = ({
         </svg>
         Add
       </Button>
-      <Button
-        onClick={onRecentClick}
-        className={`flex items-center ${
-          active === "list"
-            ? "bg-gray-100 text-gray-700"
-            : "bg-gray-100 text-gray-700"
-        } hover:bg-gray-200 rounded-none`}
-        variant="outline"
-      >
+      <Button onClick={onRecentClick} variant="outline">
         <svg
           className="w-4 h-4 mr-1.5"
           fill="none"

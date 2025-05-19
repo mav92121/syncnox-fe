@@ -66,7 +66,6 @@ const TaskForm = () => {
                   </div>
                 </div>
               </div>
-
               {/* Type */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -96,7 +95,6 @@ const TaskForm = () => {
                   </div>
                 </div>
               </div>
-
               {/* Address */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -126,7 +124,6 @@ const TaskForm = () => {
                   </div>
                 </div>
               </div>
-
               {/* Customer */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -155,7 +152,6 @@ const TaskForm = () => {
                   </div>
                 </div>
               </div>
-
               {/* Priority */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -185,7 +181,6 @@ const TaskForm = () => {
                   </div>
                 </div>
               </div>
-
               {/* First Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -197,7 +192,6 @@ const TaskForm = () => {
                   placeholder="Type and Auto Suggest"
                 />
               </div>
-
               {/* Last Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -209,7 +203,6 @@ const TaskForm = () => {
                   placeholder="Type and Auto Suggest"
                 />
               </div>
-
               {/* Business Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -221,7 +214,6 @@ const TaskForm = () => {
                   placeholder="Type and Auto Suggest"
                 />
               </div>
-
               {/* Email */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -233,7 +225,6 @@ const TaskForm = () => {
                   placeholder="Type and Auto Suggest"
                 />
               </div>
-
               {/* Country Code */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -266,7 +257,6 @@ const TaskForm = () => {
                   />
                 </div>
               </div>
-
               {/* From, To, Duration */}
               <div className="flex space-x-4 pt-4">
                 {/* From */}
@@ -359,7 +349,6 @@ const TaskForm = () => {
                   </div>
                 </div>
               </div>
-
               {/* Additional Notes */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -371,12 +360,10 @@ const TaskForm = () => {
                   placeholder="Type"
                 />
               </div>
-
+              py-3 bg-[#003220] hover:bg-[#004c30] text-white rounded-none
               {/* Submit Button */}
               <div className="py-4">
-                <Button className="w-full py-3 bg-[#003220] hover:bg-[#004c30] text-white rounded-none">
-                  Add
-                </Button>
+                <Button className="w-full">Add</Button>
               </div>
             </div>
           </div>

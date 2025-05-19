@@ -103,9 +103,8 @@ const NavBar = ({
               <SearchOutlined className="text-gray-400 text-sm" />
             </div>
             <Input
-              style={{ boxShadow: "none", height: "32px" }}
               type="text"
-              className="w-full pl-9 text-sm rounded-md border-gray-200 bg-gray-50"
+              className="pl-9"
               placeholder={searchPlaceholder}
               onChange={(e) => onSearch && onSearch(e.target.value)}
             />

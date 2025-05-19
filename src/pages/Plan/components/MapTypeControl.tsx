@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
+import { Button } from "@/components/ui/button";
 import L from "leaflet";
 
 interface MapTypeControlProps {
@@ -45,22 +46,18 @@ const MapTypeControl: React.FC<MapTypeControlProps> = ({
 
   return (
     <div className="absolute top-4 right-4 bg-white shadow-md z-[1000] flex rounded-none">
-      <button
-        className={`px-3 py-1 text-sm ${
-          mapType === "osm" ? "bg-[#003220] text-white" : "text-gray-700"
-        }`}
+      <Button
+        variant={mapType === "osm" ? "default" : "outline"}
         onClick={() => setMapType("osm")}
       >
         Map
-      </button>
-      <button
-        className={`px-3 py-1 text-sm ${
-          mapType === "satellite" ? "bg-[#003220] text-white" : "text-gray-700"
-        }`}
+      </Button>
+      <Button
+        variant={mapType === "satellite" ? "default" : "outline"}
         onClick={() => setMapType("satellite")}
       >
         Satellite
-      </button>
+      </Button>
     </div>
   );
 };

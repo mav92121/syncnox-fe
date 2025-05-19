@@ -90,9 +90,11 @@ const SideBar = () => {
         <div className="pt-5 px-4 mb-4">
           <div className="logo transition-all duration-300 ease-in-out">
             {isExpended ? (
-              <div className="flex items-center">
-                <img src="/syncnox.svg" alt="SYNCNOX" className="h-[28px]" />
-              </div>
+              <Link to="/">
+                <div className="flex items-center cursor-pointer">
+                  <img src="/syncnox.svg" alt="SYNCNOX" className="h-[28px]" />
+                </div>
+              </Link>
             ) : (
               <div className="flex justify-center">
                 <img src="/logo.svg" alt="Logo" className="w-[28px] h-[28px]" />
@@ -111,9 +113,8 @@ const SideBar = () => {
                   style={{ pointerEvents: "none" }}
                 />
                 <Input
-                  style={{ boxShadow: "none" }}
                   type="text"
-                  className="w-full h-[38px] pl-9 text-sm rounded-md border-gray-200"
+                  className="w-full pl-9"
                   placeholder="Search"
                 />
               </div>
@@ -295,9 +296,6 @@ const SideBar = () => {
           </div>
         ))}
       </div>
-
-      {/* Bottom pink line visible in third image */}
-      {isExpended && <div className="w-full h-[2px] bg-pink-500"></div>}
     </div>
   );
 };

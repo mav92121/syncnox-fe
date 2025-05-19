@@ -58,7 +58,6 @@ const Plan = () => {
         <ActionButtons
           onAddClick={handleAddClick}
           onRecentClick={handleRecentClick}
-          active={viewMode}
         />
       </div>
 

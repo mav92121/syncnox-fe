@@ -28,7 +28,7 @@ const TaskOptions = ({ onManualAdd }: TaskOptionsProps) => {
         Manually Add Tasks/Orders
       </Button>
 
-      <Button className="w-full py-4 px-6 bg-[#003220] hover:bg-[#004c30] text-white text-sm shadow-sm rounded-none flex items-center justify-center">
+      <Button className="w-full">
         <svg
           className="w-5 h-5 mr-3"
           fill="none"
