@@ -112,7 +112,7 @@ const TaskForm = () => {
                   <FormField
                     control={form.control}
                     name="date"
-                    render={({ field }) => (
+                    render={() => (
                       <FormItem>
                         <FormLabel className={labelClasses}>Date</FormLabel>
                         <Input type="date" />
