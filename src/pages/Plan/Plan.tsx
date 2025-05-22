@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as L from "leaflet";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import TasksTable from "./components/TasksTable";
@@ -50,6 +50,21 @@ const Plan = () => {
     setViewMode("add");
   };
 
+  useEffect(() => {
+    const hideAttribution = () => {
+      const attributionElements = document.getElementsByClassName(
+        "leaflet-control-attribution"
+      );
+      for (let i = 0; i < attributionElements.length; i++) {
+        (attributionElements[i] as HTMLElement).style.display = "none";
+      }
+    };
+    hideAttribution();
+    const timer = setTimeout(hideAttribution, 100);
+
+    return () => clearTimeout(timer);
+  }, [mapType, viewMode]);
+
   return (
     <div className="h-full flex flex-col">
       {/* Action Buttons */}
@@ -71,6 +86,7 @@ const Plan = () => {
               zoom={13}
               style={{ height: "100%", width: "100%" }}
               zoomControl={false}
+              attributionControl={false}
               className="overflow-hidden"
             >
               <TileLayer
@@ -122,6 +138,7 @@ const Plan = () => {
               zoom={13}
               style={{ height: "100%", width: "100%" }}
               zoomControl={false}
+              attributionControl={false}
               className="overflow-hidden"
             >
               <TileLayer
@@ -163,6 +180,7 @@ const Plan = () => {
               zoom={13}
               style={{ height: "100%", width: "100%" }}
               zoomControl={false}
+              attributionControl={false}
             >
               <TileLayer
                 url={
