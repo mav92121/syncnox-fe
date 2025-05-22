@@ -119,7 +119,7 @@ const SideBar = () => {
                 />
               </div>
             ) : (
-              <div className="flex items-center justify-center h-[38px]">
+              <div className="flex items-center justify-center h-[38px] border border-gray-200 transition-all duration-300 ease-in-out">
                 <SearchOutlined className="text-gray-400 text-sm" />
               </div>
             )}
@@ -142,7 +142,7 @@ const SideBar = () => {
               <div key={index} className="relative">
                 <div
                   ref={item.label === "Manage" ? manageItemRef : null}
-                  className={`flex items-center pl-2 py-[10px] my-1 hover:bg-[#F6FFED] rounded-md cursor-pointer ${
+                  className={`flex items-center pl-2 py-[10px] my-1 hover:bg-[#F6FFED] cursor-pointer ${
                     item.label === "Manage" && showManageDropdown
                       ? "bg-[#F6FFED]"
                       : ""
@@ -202,7 +202,7 @@ const SideBar = () => {
                   showManageDropdown && (
                     <div
                       ref={dropdownRef}
-                      className={`bg-[#F6FFED] rounded-md mt-1 mb-1 transition-all duration-200`}
+                      className={`bg-[#F6FFED] mt-1 mb-1 transition-all duration-200`}
                       style={{
                         maxHeight: showManageDropdown ? "1000px" : "0px",
                         overflow: "hidden",
@@ -228,7 +228,7 @@ const SideBar = () => {
           {menuItems.slice(manageIndex + 1).map((item, index) => (
             <Link to={item.alt}>
               <div key={index} className="relative">
-                <div className="flex items-center pl-2 py-[10px] my-1 rounded-md cursor-pointer hover:bg-[#F6FFED]">
+                <div className="flex items-center pl-2 py-[10px] my-1 cursor-pointer hover:bg-[#F6FFED]">
                   <div className="w-[20px] h-[20px] flex items-center justify-center">
                     <img
                       src={`/${item.icon}`}
@@ -277,7 +277,7 @@ const SideBar = () => {
         {bottomMenuItems.map((item, index) => (
           <div
             key={index}
-            className="flex items-center pl-2 py-[10px] hover:bg-[#F6FFED] rounded-md cursor-pointer"
+            className="flex items-center pl-2 py-[10px] hover:bg-[#F6FFED] cursor-pointer"
           >
             <div className="w-[20px] h-[20px] flex items-center justify-center">
               <img
