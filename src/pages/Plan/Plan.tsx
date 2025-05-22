@@ -1,6 +1,6 @@
 import { useState } from "react";
 import * as L from "leaflet";
-import { MapContainer, TileLayer, CircleMarker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import TasksTable from "./components/TasksTable";
 import ActionButtons from "./components/ActionButtons";
 import TaskOptions from "./components/TaskOptions";
@@ -9,12 +9,11 @@ import MapTypeControl from "./components/MapTypeControl";
 import "leaflet/dist/leaflet.css";
 
 // Fix for default marker icons in Leaflet with React
-import icon from "leaflet/dist/images/marker-icon.png";
-import iconShadow from "leaflet/dist/images/marker-shadow.png";
+// import icon from "public/marker.svg";
 
 const DefaultIcon = L.icon({
-  iconUrl: icon,
-  shadowUrl: iconShadow,
+  iconUrl: "/marker.svg",
+  // shadowUrl: iconShadow,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
@@ -87,15 +86,16 @@ const Plan = () => {
                 }
               />
               {markers.map((marker, index) => (
-                <CircleMarker
+                <Marker
                   key={index}
-                  center={marker.position}
-                  radius={8}
-                  pathOptions={{
-                    fillColor: marker.color,
-                    fillOpacity: 1,
-                    stroke: false,
-                  }}
+                  position={marker.position}
+                  // center={marker.position}
+                  // radius={8}
+                  // pathOptions={{
+                  //   fillColor: marker.color,
+                  //   fillOpacity: 1,
+                  //   stroke: false,
+                  // }}
                 />
               ))}
               <MapTypeControl mapType={mapType} setMapType={setMapType} />
@@ -137,15 +137,16 @@ const Plan = () => {
                 }
               />
               {markers.map((marker, index) => (
-                <CircleMarker
+                <Marker
                   key={index}
-                  center={marker.position}
-                  radius={8}
-                  pathOptions={{
-                    fillColor: marker.color,
-                    fillOpacity: 1,
-                    stroke: false,
-                  }}
+                  position={marker.position}
+                  // center={marker.position}
+                  // radius={8}
+                  // pathOptions={{
+                  //   fillColor: marker.color,
+                  //   fillOpacity: 1,
+                  //   stroke: false,
+                  // }}
                 />
               ))}
               <MapTypeControl mapType={mapType} setMapType={setMapType} />
