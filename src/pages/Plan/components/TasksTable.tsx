@@ -276,7 +276,7 @@ const columns: ColumnsType<Task> = [
     render: (team: string[]) => (
       <div className="flex justify-center">
         <span className="flex items-center gap-1">
-          {team.map((t, i) => (
+          {team.map((_, i) => (
             <span
               key={i}
               className="inline-block w-6 h-6 rounded-full bg-gray-200 border border-gray-300"
