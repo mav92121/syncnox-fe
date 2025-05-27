@@ -455,10 +455,7 @@ const TasksTable = () => {
               />
             </svg>
           </div>
-          <Button
-            variant="outline"
-            className="border-gray-200 text-base px-4 py-2 flex items-center"
-          >
+          <div className="border-gray-200 cursor-pointer text-base px-4 py-2 flex items-center">
             <svg
               className="w-5 h-5 mr-2"
               fill="none"
@@ -473,11 +470,8 @@ const TasksTable = () => {
               />
             </svg>
             Delete
-          </Button>
-          <Button
-            variant="outline"
-            className="border-gray-200 text-base px-4 py-2 flex items-center"
-          >
+          </div>
+          <div className="border-gray-200 cursor-pointer text-base px-4 py-2 flex items-center">
             <svg
               className="w-5 h-5 mr-2"
               fill="none"
@@ -492,7 +486,7 @@ const TasksTable = () => {
               />
             </svg>
             Filters
-          </Button>
+          </div>
           <Button
             variant="outline"
             className=" border-gray-200 text-base px-4 py-2 flex items-center"

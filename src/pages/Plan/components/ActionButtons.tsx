@@ -1,14 +1,22 @@
 import { Button } from "@/components/ui/button";
 
 interface ActionButtonsProps {
+  viewMode: "list" | "add" | "options";
   onAddClick: () => void;
   onRecentClick: () => void;
 }
 
-const ActionButtons = ({ onAddClick, onRecentClick }: ActionButtonsProps) => {
+const ActionButtons = ({
+  viewMode,
+  onAddClick,
+  onRecentClick,
+}: ActionButtonsProps) => {
   return (
     <div className="flex space-x-2">
-      <Button onClick={onAddClick} variant="default">
+      <Button
+        onClick={onAddClick}
+        variant={viewMode === "add" ? "default" : "outline"}
+      >
         <svg className="w-4 h-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor">
           <path
             fillRule="evenodd"
@@ -18,7 +26,10 @@ const ActionButtons = ({ onAddClick, onRecentClick }: ActionButtonsProps) => {
         </svg>
         Add
       </Button>
-      <Button onClick={onRecentClick} variant="outline">
+      <Button
+        onClick={onRecentClick}
+        variant={viewMode === "list" ? "default" : "outline"}
+      >
         <svg
           className="w-4 h-4 mr-1.5"
           fill="none"

@@ -70,6 +70,7 @@ const Plan = () => {
       {/* Action Buttons */}
       <div className="px-6 pt-6 pb-2">
         <ActionButtons
+          viewMode={viewMode}
           onAddClick={handleAddClick}
           onRecentClick={handleRecentClick}
         />
