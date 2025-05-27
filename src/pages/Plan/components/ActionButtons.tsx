@@ -2,17 +2,19 @@ import { Button } from "@/components/ui/button";
 
 interface ActionButtonsProps {
   viewMode: "list" | "add" | "options";
+  className?: string;
   onAddClick: () => void;
   onRecentClick: () => void;
 }
 
 const ActionButtons = ({
+  className,
   viewMode,
   onAddClick,
   onRecentClick,
 }: ActionButtonsProps) => {
   return (
-    <div className="flex space-x-4">
+    <div className={`flex space-x-4 ${className}`}>
       <Button
         className={`${viewMode !== "list" ? "" : "text-[#7D7D7D]"}`}
         onClick={onAddClick}

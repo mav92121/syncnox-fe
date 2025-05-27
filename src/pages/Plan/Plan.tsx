@@ -68,13 +68,15 @@ const Plan = () => {
   return (
     <div className="h-full flex flex-col">
       {/* Action Buttons */}
-      <div className="px-6 pt-6 pb-2">
-        <ActionButtons
-          viewMode={viewMode}
-          onAddClick={handleAddClick}
-          onRecentClick={handleRecentClick}
-        />
-      </div>
+      {viewMode !== "add" && (
+        <div className="px-6 pt-6 pb-2">
+          <ActionButtons
+            viewMode={viewMode}
+            onAddClick={handleAddClick}
+            onRecentClick={handleRecentClick}
+          />
+        </div>
+      )}
 
       {/* Main Content Area */}
       {viewMode === "list" ? (
@@ -127,13 +129,21 @@ const Plan = () => {
       ) : viewMode === "add" ? (
         // Add view - Form on left, map on right (side by side)
         <div className="flex-1 flex overflow-hidden px-6 pt-2 pb-6">
-          {/* Form */}
-          <div className="w-1/2 pr-4 overflow-auto custom-scrollbar">
-            <TaskForm />
+          <div className="pb-6 pt-4 flex flex-col">
+            <ActionButtons
+            className="mb-4"
+              viewMode={viewMode}
+              onAddClick={handleAddClick}
+              onRecentClick={handleRecentClick}
+            />
+            {/* Form */}
+            <div className="w-full pr-4 overflow-auto custom-scrollbar">
+              <TaskForm />
+            </div>
           </div>
 
           {/* Map */}
-          <div className="w-1/2 pl-4 relative">
+          <div className="w-[80%] pl-4 relative">
             <MapContainer
               center={center}
               zoom={13}
