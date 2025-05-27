@@ -88,7 +88,7 @@ const Plan = () => {
               center={center}
               zoom={13}
               style={{ height: "100%", width: "100%" }}
-              zoomControl={false}
+              zoomControl={true}
               attributionControl={false}
               className="overflow-hidden"
             >
@@ -148,7 +148,7 @@ const Plan = () => {
               center={center}
               zoom={13}
               style={{ height: "100%", width: "100%" }}
-              zoomControl={false}
+              zoomControl={true}
               attributionControl={false}
               className="overflow-hidden"
             >
@@ -190,7 +190,7 @@ const Plan = () => {
               center={center}
               zoom={13}
               style={{ height: "100%", width: "100%" }}
-              zoomControl={false}
+              zoomControl={true}
               attributionControl={false}
             >
               <TileLayer
