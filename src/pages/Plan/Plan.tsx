@@ -69,7 +69,7 @@ const Plan = () => {
     <div className="h-full flex flex-col">
       {/* Action Buttons */}
       {viewMode !== "add" && (
-        <div className="px-6 pt-6 pb-2">
+        <div className="px-4 pt-4 pb-2">
           <ActionButtons
             viewMode={viewMode}
             onAddClick={handleAddClick}
@@ -81,7 +81,7 @@ const Plan = () => {
       {/* Main Content Area */}
       {viewMode === "list" ? (
         // List view - Map on top, table on bottom
-        <div className="flex-1 flex flex-col px-6 pt-2 pb-6 overflow-hidden">
+        <div className="flex-1 flex flex-col px-4 pt-2 pb-4 overflow-hidden">
           {/* Map - Takes approximately 40% of the space */}
           <div className="h-2/5 w-full mb-4 relative">
             <MapContainer
@@ -128,22 +128,22 @@ const Plan = () => {
         </div>
       ) : viewMode === "add" ? (
         // Add view - Form on left, map on right (side by side)
-        <div className="flex-1 flex overflow-hidden px-6 pt-2 pb-6">
-          <div className="pb-6 pt-4 flex flex-col">
+        <div className="flex-1 flex overflow-hidden">
+          <div className="py-4 pl-4 w-[40%] flex flex-col">
             <ActionButtons
-            className="mb-4"
+              className="mb-4"
               viewMode={viewMode}
               onAddClick={handleAddClick}
               onRecentClick={handleRecentClick}
             />
             {/* Form */}
-            <div className="w-full pr-4 overflow-auto custom-scrollbar">
+            <div className="w-full overflow-auto custom-scrollbar">
               <TaskForm />
             </div>
           </div>
 
           {/* Map */}
-          <div className="w-[80%] pl-4 relative">
+          <div className="w-[60%] pl-4 py-4 pr-4 relative">
             <MapContainer
               center={center}
               zoom={13}
