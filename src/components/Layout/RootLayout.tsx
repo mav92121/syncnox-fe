@@ -13,7 +13,7 @@ const RootLayout = () => {
             { label: "Add Tasks/Orders" },
           ]}
         />
-        <main className="flex-1 overflow-auto bg-[#fafafa]">
+        <main className="flex-1 overflow-auto bg-white">
           <Outlet />
         </main>
       </div>

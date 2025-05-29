@@ -56,7 +56,7 @@ const NavBar = ({
   const iconsToRender = navIcons || defaultNavIcons;
 
   return (
-    <nav className="border-b border-gray-200 bg-[#fafafa]">
+    <nav className="border-b border-gray-200">
       <div className="h-[60px] flex items-center justify-between px-6">
         {/* Left side - Navigation */}
         <div className="flex items-center">
