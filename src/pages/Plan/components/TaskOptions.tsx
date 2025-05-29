@@ -25,7 +25,7 @@ const TaskOptions = ({ onManualAdd }: TaskOptionsProps) => {
             d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
           />
         </svg>
-        Manually Add Tasks/Orders
+        Manually Add Jobs
       </Button>
 
       <Button className="w-full">
@@ -42,7 +42,7 @@ const TaskOptions = ({ onManualAdd }: TaskOptionsProps) => {
             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
           />
         </svg>
-        Bulk Upload Tasks/Orders
+        Bulk Upload Jobs
       </Button>
     </div>
   );

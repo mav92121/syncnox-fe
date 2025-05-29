@@ -433,7 +433,7 @@ const TasksTable = () => {
   return (
     <div className="flex flex-col w-full shadow overflow-hidden h-full bg-white">
       <div className="flex items-center justify-between flex-shrink-0 px-6">
-        <h2 className="text-xl font-bold tracking-tight">Tasks/Orders</h2>
+        <h2 className="text-xl font-bold tracking-tight">Jobs</h2>
         <div className="flex space-x-3">
           <div className="relative">
             <Input

@@ -183,9 +183,9 @@ const Plan = () => {
         </div>
       ) : (
         // Options view - Task options in center, map in background
-        <div className="flex-1 flex px-6 pt-2 pb-6 relative">
+        <div className="flex-1 flex px-2 pb-2 relative">
           {/* Map as background */}
-          <div className="absolute opacity-30 inset-0 mx-6 my-2 overflow-hidden">
+          <div className="absolute opacity-30 inset-0 py-2 mx-4 mb-2 overflow-hidden">
             <MapContainer
               center={center}
               zoom={13}

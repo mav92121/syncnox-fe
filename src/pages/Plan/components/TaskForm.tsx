@@ -18,7 +18,7 @@ const TaskForm = () => {
 
   return (
     <div className="w-full flex flex-col h-full">
-      <h2 className="text-base font-medium my-3 mb-6">Add Task / Orders</h2>
+      <h2 className="text-base font-medium my-3 mb-6">Add Job</h2>
       <div className="flex-1 overflow-auto pr-2">
         <Form
           form={form}
@@ -38,8 +38,8 @@ const TaskForm = () => {
             </Form.Item>
 
             <Form.Item
-              label="Task / Order Type"
-              name="taskType"
+              label="Job Type"
+              name="jobType"
               rules={[{ required: true, message: "Type is required" }]}
             >
               <Select placeholder="Select">
@@ -75,7 +75,7 @@ const TaskForm = () => {
               </Select>
             </Form.Item>
 
-            <Form.Item label="Order or Task ID" name="id">
+            <Form.Item label="Job ID" name="id">
               <Input
                 placeholder="Auto Generate"
                 suffix={<SearchOutlined className="text-gray-400" />}
@@ -115,7 +115,7 @@ const TaskForm = () => {
               <TimePicker className="w-full" format="HH:mm" />
             </Form.Item>
 
-            <Form.Item label="Task/Order Duration" name="duration">
+            <Form.Item label="Job Duration" name="duration">
               <Select placeholder="Select">
                 <Select.Option value="15">15 minutes</Select.Option>
                 <Select.Option value="30">30 minutes</Select.Option>

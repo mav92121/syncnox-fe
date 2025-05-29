@@ -10,7 +10,7 @@ const RootLayout = () => {
         <NavBar
           breadcrumbs={[
             { label: "Plan", path: "/plan" },
-            { label: "Add Tasks/Orders" },
+            { label: "Add Jobs" },
           ]}
         />
         <main className="flex-1 overflow-auto bg-white">

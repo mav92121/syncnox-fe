@@ -39,7 +39,7 @@ const SideBar = () => {
   }, []);
 
   const menuItems = [
-    { icon: "recent.svg", label: "Recent", alt: "recent" },
+    { icon: "recent.svg", label: "Insights", alt: "recent" },
     { icon: "plan.svg", label: "Plan", alt: "plan" },
     { icon: "schedule.svg", label: "Schedule", alt: "schedule" },
     { icon: "manage.svg", label: "Manage", alt: "manage", hasArrow: true },
@@ -119,7 +119,7 @@ const SideBar = () => {
                 />
               </div>
             ) : (
-              <div className="flex items-center justify-center h-[38px] border border-gray-200 transition-all duration-300 ease-in-out">
+              <div className="flex items-center justify-center h-[38px] transition-all duration-300 ease-in-out">
                 <SearchOutlined className="text-gray-400 text-sm" />
               </div>
             )}
