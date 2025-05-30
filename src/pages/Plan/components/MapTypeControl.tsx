@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
-import { Button } from "@/components/ui/button";
+import { Button } from "antd";
 import L from "leaflet";
-import { cn } from "@/lib/utils";
 
 interface MapTypeControlProps {
   mapType: "osm" | "satellite";
@@ -50,23 +49,13 @@ const MapTypeControl: React.FC<MapTypeControlProps> = ({
       <div className="bg-white shadow-md overflow-hidden flex transition-all duration-300 ease-in-out">
         <Button
           onClick={() => setMapType("osm")}
-          className={cn(
-            "px-4 py-2 text-sm font-medium transition-all duration-300 ease-in-out",
-            mapType === "osm"
-              ? "bg-primary text-primary-foreground"
-              : "bg-white text-gray-700 hover:bg-gray-50"
-          )}
+          type={mapType === "osm" ? "primary" : "default"}
         >
           Map
         </Button>
         <Button
           onClick={() => setMapType("satellite")}
-          className={cn(
-            "px-4 py-2 text-sm font-medium transition-all duration-300 ease-in-out",
-            mapType === "satellite"
-              ? "bg-primary text-primary-foreground"
-              : "bg-white text-gray-700 hover:bg-gray-50"
-          )}
+          type={mapType === "satellite" ? "primary" : "default"}
         >
           Satellite
         </Button>

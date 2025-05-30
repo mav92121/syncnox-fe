@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
+import { Button } from "antd";
 
 interface ActionButtonsProps {
   viewMode: "list" | "add" | "options";
@@ -18,10 +19,10 @@ const ActionButtons = ({
       <Button
         className={`${viewMode !== "list" ? "" : "text-[#7D7D7D]"}`}
         onClick={onAddClick}
-        variant={viewMode !== "list" ? "default" : "outline"}
+        type={viewMode !== "list" ? "primary" : "default"}
       >
         <svg
-          className="w-7 h-7"
+          className="w-5 h-5"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -34,10 +35,10 @@ const ActionButtons = ({
       <Button
         className={`${viewMode === "list" ? "" : "text-[#7D7D7D]"}`}
         onClick={onRecentClick}
-        variant={viewMode === "list" ? "default" : "outline"}
+        type={viewMode === "list" ? "primary" : "default"}
       >
         <svg
-          className="w-11 h-11 mr-0"
+          className="w-5 h-5 mr-0"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"

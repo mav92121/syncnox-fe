@@ -1,4 +1,4 @@
-import { Input } from "../ui/input";
+import { Input } from "antd";
 import {
   BellOutlined,
   QuestionCircleOutlined,
@@ -104,6 +104,12 @@ const NavBar = ({
             </div>
             <Input
               type="text"
+              prefix={
+                <SearchOutlined
+                  style={{ fontSize: "16px" }}
+                  className="text-gray-400"
+                />
+              }
               className="pl-9"
               placeholder={searchPlaceholder}
               onChange={(e) => onSearch && onSearch(e.target.value)}

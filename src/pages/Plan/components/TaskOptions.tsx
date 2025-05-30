@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "antd";
 
 interface TaskOptionsProps {
   onManualAdd: () => void;
@@ -6,14 +6,15 @@ interface TaskOptionsProps {
 
 const TaskOptions = ({ onManualAdd }: TaskOptionsProps) => {
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto">
+    <div className="flex flex-col gap-5 items-center justify-center w-full max-w-md mx-auto">
       <Button
+        size="large"
         onClick={onManualAdd}
-        className="w-full mb-4 py-4 px-6 bg-white hover:bg-gray-50 text-gray-700 text-sm border border-gray-200 shadow-sm rounded-none flex items-center justify-center"
-        variant="outline"
+        className="w-full"
+        type="primary"
       >
         <svg
-          className="w-5 h-5 mr-3 text-gray-500"
+          className="w-5 h-5 mr-3 text-white"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -28,7 +29,7 @@ const TaskOptions = ({ onManualAdd }: TaskOptionsProps) => {
         Manually Add Jobs
       </Button>
 
-      <Button className="w-full">
+      <Button size="large" className="w-full" type="default">
         <svg
           className="w-5 h-5 mr-3"
           fill="none"

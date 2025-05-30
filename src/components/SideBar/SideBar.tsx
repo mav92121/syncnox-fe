@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { Input } from "../ui/input";
+import { Input } from "antd";
 import "./SideBar.css";
 
 const SideBar = () => {
@@ -105,24 +105,29 @@ const SideBar = () => {
 
         {/* Search section */}
         <div className="px-4 mb-6">
-          <div className="relative transition-all duration-300 ease-in-out">
-            {isExpended ? (
-              <div>
+          <div className="relative w-full h-[38px] transition-all duration-300 ease-in-out">
+            <Input
+              placeholder="Search"
+              prefix={
                 <SearchOutlined
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
-                  style={{ pointerEvents: "none" }}
+                  style={{ fontSize: "16px" }}
+                  className="text-gray-400"
                 />
-                <Input
-                  type="text"
-                  className="w-full pl-9"
-                  placeholder="Search"
-                />
-              </div>
-            ) : (
-              <div className="flex items-center justify-center h-[38px] transition-all duration-300 ease-in-out">
-                <SearchOutlined className="text-gray-400 text-sm" />
-              </div>
-            )}
+              }
+              className={`transition-all duration-300 ${
+                isExpended
+                  ? "w-full opacity-100"
+                  : "w-[38px] opacity-0 border-0 bg-transparent pointer-events-none"
+              }`}
+            />
+            <SearchOutlined
+              style={{ fontSize: "17px" }}
+              className={`text-gray-400 absolute top-1/2 transform -translate-y-1/2 transition-all duration-300 ${
+                isExpended
+                  ? "opacity-0 pointer-events-none"
+                  : "opacity-100 left-1/2 -translate-x-1/2"
+              }`}
+            />
           </div>
         </div>
 
