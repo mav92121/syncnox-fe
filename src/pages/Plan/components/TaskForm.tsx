@@ -28,7 +28,7 @@ const TaskForm = () => {
           // className="space-y-4"
         >
           {/* Row 1: Date and Type */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 mb-[-8px]">
             <Form.Item
               label="Date"
               name="date"
@@ -50,19 +50,21 @@ const TaskForm = () => {
           </div>
 
           {/* Row 2: Address */}
-          <Form.Item
-            label="Address"
-            name="address"
-            rules={[{ required: true, message: "Address is required" }]}
-          >
-            <Input
-              placeholder="Select"
-              suffix={<SearchOutlined className="text-gray-400" />}
-            />
-          </Form.Item>
+          <div className="mb-[-8px]">
+            <Form.Item
+              label="Address"
+              name="address"
+              rules={[{ required: true, message: "Address is required" }]}
+            >
+              <Input
+                placeholder="Select"
+                suffix={<SearchOutlined className="text-gray-400" />}
+              />
+            </Form.Item>
+          </div>
 
           {/* Row 3: Priority and ID */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 mb-[-8px]">
             <Form.Item
               label="Priority"
               name="priority"
@@ -84,7 +86,7 @@ const TaskForm = () => {
           </div>
 
           {/* Row 4: Names */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 mb-[-8px]">
             <Form.Item label="First Name" name="firstName">
               <Input placeholder="Type and Auto Suggest" />
             </Form.Item>
@@ -95,7 +97,7 @@ const TaskForm = () => {
           </div>
 
           {/* Row 5: Email and Business */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 mb-[-8px]">
             <Form.Item label="Email" name="email">
               <Input type="email" placeholder="Type and Auto Suggest" />
             </Form.Item>
@@ -106,7 +108,7 @@ const TaskForm = () => {
           </div>
 
           {/* Row 6: Times */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-4 mb-[-8px]">
             <Form.Item label="From" name="timeFrom">
               <TimePicker className="w-full" format="HH:mm" />
             </Form.Item>
@@ -126,27 +128,33 @@ const TaskForm = () => {
           </div>
 
           {/* Row 7: Phone */}
-          <Form.Item label="Phone Number" name="phone">
-            <Input.Group compact>
-              <Select defaultValue="+234" style={{ width: "30%" }}>
-                <Select.Option value="+234">+234</Select.Option>
-              </Select>
-              <Input style={{ width: "70%" }} placeholder="8023456789" />
-            </Input.Group>
-          </Form.Item>
+          <div className="mb-[-8px]">
+            <Form.Item label="Phone Number" name="phone">
+              <Input.Group compact>
+                <Select defaultValue="+234" style={{ width: "30%" }}>
+                  <Select.Option value="+234">+234</Select.Option>
+                </Select>
+                <Input style={{ width: "70%" }} placeholder="8023456789" />
+              </Input.Group>
+            </Form.Item>
+          </div>
 
           {/* Row 8: Customer Preferences */}
-          <Form.Item label="Customer Preferences" name="preferences">
-            <Input.TextArea rows={3} placeholder="Type" />
-          </Form.Item>
+          <div className="mb-[-8px]">
+            <Form.Item label="Customer Preferences" name="preferences">
+              <Input.TextArea rows={3} placeholder="Type" />
+            </Form.Item>
+          </div>
 
           {/* Row 9: Notes */}
-          <Form.Item label="Notes" name="notes">
-            <Input.TextArea rows={3} placeholder="Type" />
-          </Form.Item>
+          <div className="mb-[-8px]">
+            <Form.Item label="Notes" name="notes">
+              <Input.TextArea rows={3} placeholder="Type" />
+            </Form.Item>
+          </div>
 
           {/* Row 10: Assign Drivers and Single/Recurring */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 mb-[-8px]">
             <Form.Item label="Assign Drivers" name="drivers" required>
               <Select placeholder="Select">
                 <Select.Option value="rahul">Rahul +1</Select.Option>
@@ -163,33 +171,38 @@ const TaskForm = () => {
           </div>
 
           {/* Row 11: File Attachment */}
-          <Form.Item label="Attach Files" name="files">
-            <Upload.Dragger
-              multiple
-              className="border-2 border-dashed p-4"
-              showUploadList={false}
-            >
-              <p className="flex items-center justify-center">
-                <PlusOutlined className="mr-2" />
-                <span>Attach Files</span>
-              </p>
-            </Upload.Dragger>
-          </Form.Item>
+          <div className="mb-[-8px]">
+            <Form.Item label="Attach Files" name="files">
+              <Upload.Dragger
+                multiple
+                // className="border-2 border-dashed p-4"
+              >
+                <p className="flex items-center justify-center">
+                  <PlusOutlined className="mr-2" />
+                  <span>Attach Files</span>
+                </p>
+              </Upload.Dragger>
+            </Form.Item>
+          </div>
 
           {/* Row 12: Payment Status */}
-          <Form.Item label="Paid/Unpaid" name="paymentStatus" required>
-            <Select placeholder="Select">
-              <Select.Option value="paid">Paid</Select.Option>
-              <Select.Option value="unpaid">Unpaid</Select.Option>
-            </Select>
-          </Form.Item>
+          <div className="">
+            <Form.Item label="Paid/Unpaid" name="paymentStatus" required>
+              <Select placeholder="Select">
+                <Select.Option value="paid">Paid</Select.Option>
+                <Select.Option value="unpaid">Unpaid</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
 
           {/* Submit Button */}
-          <Form.Item>
-            <Button type="primary" htmlType="submit" className="w-full">
-              Add
-            </Button>
-          </Form.Item>
+          <div className="">
+            <Form.Item>
+              <Button type="primary" htmlType="submit" className="w-full">
+                Add
+              </Button>
+            </Form.Item>
+          </div>
         </Form>
       </div>
     </div>
