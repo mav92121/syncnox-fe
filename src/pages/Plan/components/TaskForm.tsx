@@ -97,7 +97,7 @@ const TaskForm = () => {
           {/* Row 5: Email and Business */}
           <div className="grid grid-cols-2 gap-4">
             <Form.Item label="Email" name="email">
-              <Input placeholder="Type and Auto Suggest" />
+              <Input type="email" placeholder="Type and Auto Suggest" />
             </Form.Item>
 
             <Form.Item label="Business Name" name="businessName">

@@ -104,7 +104,7 @@ const NavBar = ({
             </div>
             <Input
               type="text"
-              prefix={
+              suffix={
                 <SearchOutlined
                   style={{ fontSize: "16px" }}
                   className="text-gray-400"
