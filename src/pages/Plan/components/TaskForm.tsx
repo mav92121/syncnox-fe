@@ -18,7 +18,7 @@ const TaskForm = () => {
 
   return (
     <div className="w-full flex flex-col h-full">
-      <h2 className="text-base font-medium my-3 mb-6">Add Job</h2>
+      <h2 className="text-base font-medium mb-3">Add Job</h2>
       <div className="flex-1 overflow-auto pr-2">
         <Form
           form={form}

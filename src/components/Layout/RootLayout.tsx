@@ -13,7 +13,7 @@ const RootLayout = () => {
             { label: "Add Jobs" },
           ]}
         />
-        <main className="flex-1 overflow-auto bg-white">
+        <main className="flex-1 overflow-auto bg-white px-4 py-4">
           <Outlet />
         </main>
       </div>

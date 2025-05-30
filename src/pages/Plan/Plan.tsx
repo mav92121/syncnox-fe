@@ -69,7 +69,7 @@ const Plan = () => {
     <div className="h-full flex flex-col">
       {/* Action Buttons */}
       {viewMode !== "add" && (
-        <div className="px-4 pt-4 pb-2">
+        <div className="pb-4">
           <ActionButtons
             viewMode={viewMode}
             onAddClick={handleAddClick}
@@ -81,7 +81,7 @@ const Plan = () => {
       {/* Main Content Area */}
       {viewMode === "list" ? (
         // List view - Map on top, table on bottom
-        <div className="flex-1 flex flex-col px-4 pt-2 pb-4 overflow-hidden">
+        <div className="flex-1 flex flex-col pb-4 overflow-hidden">
           {/* Map - Takes approximately 40% of the space */}
           <div className="h-2/5 w-full mb-4 relative">
             <MapContainer
@@ -122,14 +122,14 @@ const Plan = () => {
           </div>
 
           {/* Table - Takes approximately 60% of the space */}
-          <div className="h-3/5 w-full overflow-auto custom-scrollbar">
+          <div className="h-3/5 w-full bg-red-200 overflow-auto custom-scrollbar">
             <TasksTable />
           </div>
         </div>
       ) : viewMode === "add" ? (
         // Add view - Form on left, map on right (side by side)
         <div className="flex-1 flex overflow-hidden">
-          <div className="py-4 pl-4 w-[40%] flex flex-col">
+          <div className="w-[40%] flex flex-col">
             <ActionButtons
               className="mb-4"
               viewMode={viewMode}
@@ -143,7 +143,7 @@ const Plan = () => {
           </div>
 
           {/* Map */}
-          <div className="w-[60%] pl-4 py-4 pr-4 relative">
+          <div className="w-[60%] relative">
             <MapContainer
               center={center}
               zoom={13}
@@ -183,9 +183,9 @@ const Plan = () => {
         </div>
       ) : (
         // Options view - Task options in center, map in background
-        <div className="flex-1 flex px-2 pb-2 relative">
+        <div className="flex-1 flex relative">
           {/* Map as background */}
-          <div className="absolute opacity-30 inset-0 py-2 mx-4 mb-2 overflow-hidden">
+          <div className="absolute opacity-30 inset-0 overflow-hidden">
             <MapContainer
               center={center}
               zoom={13}
