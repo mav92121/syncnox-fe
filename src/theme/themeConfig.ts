@@ -56,6 +56,20 @@ const theme: ThemeConfig = {
       controlHeight: 38,
       paddingBlock: 8,
     },
+    Checkbox: {
+      // Fix checkbox border and focus styles
+      controlHeight: 20,
+      borderRadiusSM: 5,
+      controlOutlineWidth: 0.5,
+      controlOutline: "#003220",
+      colorPrimary: "#003220",
+      colorBorder: "#d9d9d9",
+      colorBorderSecondary: "#f0f0f0",
+    },
+    Table: {
+      rowSelectedBg: "#F6FFED",
+      rowSelectedHoverBg: "#F6FFED",
+    },
   },
 };
 

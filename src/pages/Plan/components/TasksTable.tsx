@@ -1,9 +1,15 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Table } from "antd";
+import { useState } from "react";
+// import { Button } from "@/components/ui/button";
+import { SearchOutlined } from "@ant-design/icons";
+// import { Checkbox } from "@/components/ui/checkbox";
+import { Table, Input, Button } from "antd";
+import type { TableProps } from "antd/es/table";
 
 import type { ColumnsType } from "antd/es/table";
+import tasks from "../tableData";
+
+type TableRowSelection<T extends object = object> =
+  TableProps<T>["rowSelection"];
 
 type Task = {
   key: string;
@@ -29,18 +35,6 @@ type Task = {
 };
 
 const columns: ColumnsType<Task> = [
-  {
-    title: <Checkbox className="h-5 w-5 rounded border-gray-300" />,
-    width: 60, // Increased width
-    key: "checkbox",
-    // fixed: "left" as const,
-    align: "center", // Center content
-    render: () => (
-      <div className="flex justify-center">
-        <Checkbox className="h-5 w-5 rounded border-gray-300" />
-      </div>
-    ),
-  },
   {
     title: "",
     width: 50, // Increased width
@@ -118,8 +112,13 @@ const columns: ColumnsType<Task> = [
     title: "First Name",
     dataIndex: "firstName",
     key: "firstName",
-    width: 120, // Increased width
+    width: 250, // Increased width
     align: "center", // Center content
+    render: (text: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {text}
+      </div>
+    ),
   },
   {
     title: "Last Name",
@@ -128,27 +127,25 @@ const columns: ColumnsType<Task> = [
     width: 120, // Increased width
     align: "center", // Center content
   },
-  
-    // title: "Address",
-    // dataIndex: "address",
-    // key: "address",
-    // width: 250, // Increased width
-    // align: "center", // Center content
-    {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-      width: 250, // adjust as needed
-      align: "center",
-      render: (text: string) => (
-        <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
-          {text}
-        </div>
-      ),      
-    },
-    
-    
-  
+
+  // title: "Address",
+  // dataIndex: "address",
+  // key: "address",
+  // width: 250, // Increased width
+  // align: "center", // Center content
+  {
+    title: "Address",
+    dataIndex: "address",
+    key: "address",
+    // width: 250, // adjust as needed
+    align: "center",
+    render: (text: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {text}
+      </div>
+    ),
+  },
+
   {
     title: "Status",
     dataIndex: "status",
@@ -157,13 +154,7 @@ const columns: ColumnsType<Task> = [
     align: "center",
     render: (status: string) => (
       <div className="flex justify-center">
-        <Button
-          size="sm"
-          className="bg-blue-50 text-blue-700 border-blue-200 font-semibold px-3 py-1 h-7"
-          variant="outline"
-        >
-          {status}
-        </Button>
+        <Button type="link">{status}</Button>
       </div>
     ),
   },
@@ -182,7 +173,7 @@ const columns: ColumnsType<Task> = [
       <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
         {text}
       </div>
-    ),      
+    ),
   },
   {
     title: "Status",
@@ -192,13 +183,9 @@ const columns: ColumnsType<Task> = [
     align: "center",
     render: (status2: string) => (
       <div className="flex justify-center">
-        <Button
-          size="sm"
-          className="bg-yellow-50 text-yellow-700 border-yellow-200 font-semibold px-3 py-1 h-7"
-          variant="outline"
-        >
+        <div className="bg-yellow-50 text-yellow-700 border-yellow-200 font-semibold px-3 py-1 h-7">
           {status2}
-        </Button>
+        </div>
       </div>
     ),
   },
@@ -217,7 +204,7 @@ const columns: ColumnsType<Task> = [
       <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
         {text}
       </div>
-    ),  
+    ),
   },
   {
     title: "Service Duration",
@@ -372,122 +359,36 @@ const columns: ColumnsType<Task> = [
   },
 ];
 
-const tasks = [
-  {
-    key: "1",
-    id: "ORD839501",
-    priority: "Low",
-    firstName: "Jack",
-    lastName: "Reacher",
-    address: "1600 Pennsylvania Avenue NW, Washington, DC 20500",
-    status: "Map View",
-    businessName: "The White House",
-    status2: "Unassigned",
-    phone: "+1 (824) 365-999",
-    serviceDuration: "10 Minutes",
-    from: "09:00 AM",
-    to: "12:00 PM",
-    customerPreferences: "Remember to water the plants on Friday.",
-    notes: "Remember to water the plants on Friday.",
-    singleRecurring: "Single",
-    ratings: 4,
-    team: ["A", "B"],
-    files: 2,
-    paid: "Paid",
-  },
-  {
-    key: "2",
-    id: "TASK01202",
-    priority: "Medium",
-    firstName: "Sofia",
-    lastName: "Khan",
-    address: "1 Infinite Loop, Cupertino, CA 95014",
-    status: "Map View",
-    businessName: "Apple Inc.",
-    status2: "Unassigned",
-    phone: "+1 (408) 996-1010",
-    serviceDuration: "30 Minutes",
-    from: "10:00 AM",
-    to: "10:30 AM",
-    customerPreferences: "Call before arrival.",
-    notes: "N/A",
-    singleRecurring: "Recurring",
-    ratings: 5,
-    team: ["C"],
-    files: 1,
-    paid: "Unpaid",
-  },
-  {
-    key: "3",
-    id: "TASK04567",
-    priority: "Urgent",
-    firstName: "Adonis",
-    lastName: "Kerlut",
-    address: "450 Serra Mall, Stanford, CA 94305",
-    status: "Map View",
-    businessName: "Stanford University",
-    status2: "Unassigned",
-    phone: "+1 (650) 723-2300",
-    serviceDuration: "1 Hour",
-    from: "01:00 PM",
-    to: "02:00 PM",
-    customerPreferences: "Requires wheelchair access.",
-    notes: "Meet at the main entrance.",
-    singleRecurring: "Single",
-    ratings: 3,
-    team: ["D", "E"],
-    files: 0,
-    paid: "Paid",
-  },
-  {
-    key: "4",
-    id: "ORD493827",
-    priority: "Urgent",
-    firstName: "Mover",
-    lastName: "Grimr",
-    address: "901 W Olympic Blvd, Los Angeles, CA 90015",
-    status: "Map View",
-    businessName: "Los Angeles Convention Center",
-    status2: "Unassigned",
-    phone: "+1 (213) 741-1151",
-    serviceDuration: "45 Minutes",
-    from: "03:00 PM",
-    to: "03:45 PM",
-    customerPreferences: "No special preferences.",
-    notes: "Deliver to the main entrance.",
-    singleRecurring: "Recurring",
-    ratings: 4,
-    team: ["F"],
-    files: 3,
-    paid: "Unpaid",
-  },
-];
-
 const TasksTable = () => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection: TableRowSelection<Task> = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+
   return (
     <div className="flex flex-col w-full shadow overflow-hidden h-full bg-white">
-      <div className="flex items-center justify-between flex-shrink-0 px-6">
+      <div className="flex items-center justify-between flex-shrink-0">
         <h2 className="text-xl font-bold tracking-tight">Jobs</h2>
         <div className="flex space-x-3">
           <div className="relative">
             <Input
               type="text"
-              placeholder="Search"
-              className="pl-10 pr-4 py-2 border border-gray-200 bg-[#F7F8FA] text-base"
+              suffix={
+                <SearchOutlined
+                  style={{ fontSize: "16px" }}
+                  className="text-gray-400"
+                />
+              }
+              className="pl-9"
+              placeholder={"search"}
+              // onChange={(e) => onSearch && onSearch(e.target.value)}
             />
-            <svg
-              className="w-5 h-5 absolute left-3 top-2.5 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
           </div>
           <div className="border-gray-200 cursor-pointer text-base px-4 py-2 flex items-center">
             <svg
@@ -540,7 +441,7 @@ const TasksTable = () => {
             </svg>
             Export
           </Button>
-          <Button>
+          <Button type="primary">
             <svg className="w-4 h-7" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fillRule="evenodd"
@@ -553,16 +454,17 @@ const TasksTable = () => {
         </div>
       </div>
       {/* Only the table is scrollable */}
-      <div className="flex-1 min-h-0 overflow-x-auto custom-scrollbar px-6 my-2">
+      <div className="flex-1 min-h-0 overflow-x-auto custom-scrollbar my-2">
         <Table
+          rowSelection={rowSelection}
           className="w-[100px]" // You might need to adjust this width based on the total column widths
           pagination={false}
           columns={columns}
           dataSource={tasks}
         />
       </div>
-      <div className="">
-        <Button className="w-full h-12 bg-[#003220] hover:bg-[#004830] text-white text-base font-semibold shadow-none">
+      <div className="w-full">
+        <Button className="w-full" type="primary">
           Add More Stops
         </Button>
       </div>

@@ -1,0 +1,114 @@
+type Task = {
+  key: string;
+  id: string;
+  priority: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  status: string;
+  businessName: string;
+  status2: string;
+  phone: string;
+  serviceDuration: string;
+  from: string;
+  to: string;
+  customerPreferences: string;
+  notes: string;
+  singleRecurring: string;
+  ratings: number;
+  team: string[];
+  files: number;
+  paid: string;
+};
+const tasks: Task[] = [
+  {
+    key: "1",
+    id: "ORD839501",
+    priority: "Low",
+    firstName: "Jack",
+    lastName: "Reacher",
+    address: "1600 Pennsylvania Avenue NW, Washington, DC 20500",
+    status: "Map View",
+    businessName: "The White House",
+    status2: "Unassigned",
+    phone: "+1 (824) 365-999",
+    serviceDuration: "10 Minutes",
+    from: "09:00 AM",
+    to: "12:00 PM",
+    customerPreferences: "Remember to water the plants on Friday.",
+    notes: "Remember to water the plants on Friday.",
+    singleRecurring: "Single",
+    ratings: 4,
+    team: ["A", "B"],
+    files: 2,
+    paid: "Paid",
+  },
+  {
+    key: "2",
+    id: "TASK01202",
+    priority: "Medium",
+    firstName: "Sofia",
+    lastName: "Khan",
+    address: "1 Infinite Loop, Cupertino, CA 95014",
+    status: "Map View",
+    businessName: "Apple Inc.",
+    status2: "Unassigned",
+    phone: "+1 (408) 996-1010",
+    serviceDuration: "30 Minutes",
+    from: "10:00 AM",
+    to: "10:30 AM",
+    customerPreferences: "Call before arrival.",
+    notes: "N/A",
+    singleRecurring: "Recurring",
+    ratings: 5,
+    team: ["C"],
+    files: 1,
+    paid: "Unpaid",
+  },
+  {
+    key: "3",
+    id: "TASK04567",
+    priority: "Urgent",
+    firstName: "Adonis",
+    lastName: "Kerlut",
+    address: "450 Serra Mall, Stanford, CA 94305",
+    status: "Map View",
+    businessName: "Stanford University",
+    status2: "Unassigned",
+    phone: "+1 (650) 723-2300",
+    serviceDuration: "1 Hour",
+    from: "01:00 PM",
+    to: "02:00 PM",
+    customerPreferences: "Requires wheelchair access.",
+    notes: "Meet at the main entrance.",
+    singleRecurring: "Single",
+    ratings: 3,
+    team: ["D", "E"],
+    files: 0,
+    paid: "Paid",
+  },
+  {
+    key: "4",
+    id: "ORD493827",
+    priority: "Urgent",
+    firstName: "Mover",
+    lastName: "Grimr",
+    address: "901 W Olympic Blvd, Los Angeles, CA 90015",
+    status: "Map View",
+    businessName: "Los Angeles Convention Center",
+    status2: "Unassigned",
+    phone: "+1 (213) 741-1151",
+    serviceDuration: "45 Minutes",
+    from: "03:00 PM",
+    to: "03:45 PM",
+    customerPreferences: "No special preferences.",
+    notes: "Deliver to the main entrance.",
+    singleRecurring: "Recurring",
+    ratings: 4,
+    team: ["F"],
+    files: 3,
+    paid: "Unpaid",
+  },
+];
+
+export default tasks;
