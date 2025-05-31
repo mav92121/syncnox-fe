@@ -128,13 +128,27 @@ const columns: ColumnsType<Task> = [
     width: 120, // Increased width
     align: "center", // Center content
   },
-  {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-    width: 250, // Increased width
-    align: "center", // Center content
-  },
+  
+    // title: "Address",
+    // dataIndex: "address",
+    // key: "address",
+    // width: 250, // Increased width
+    // align: "center", // Center content
+    {
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+      width: 250, // adjust as needed
+      align: "center",
+      render: (text: string) => (
+        <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+          {text}
+        </div>
+      ),      
+    },
+    
+    
+  
   {
     title: "Status",
     dataIndex: "status",
@@ -154,11 +168,21 @@ const columns: ColumnsType<Task> = [
     ),
   },
   {
+    // title: "Business Name",
+    // dataIndex: "businessName",
+    // key: "businessName",
+    // width: 180, // Increased width
+    // align: "center", // Center content
     title: "Business Name",
     dataIndex: "businessName",
     key: "businessName",
-    width: 180, // Increased width
-    align: "center", // Center content
+    width: 250, // adjust as needed
+    align: "center",
+    render: (text: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {text}
+      </div>
+    ),      
   },
   {
     title: "Status",
@@ -179,11 +203,21 @@ const columns: ColumnsType<Task> = [
     ),
   },
   {
+    // title: "Phone",
+    // dataIndex: "phone",
+    // key: "phone",
+    // width: 150, // Increased width
+    // align: "center", // Center content
     title: "Phone",
     dataIndex: "phone",
     key: "phone",
-    width: 150, // Increased width
-    align: "center", // Center content
+    width: 250, // adjust as needed
+    align: "center",
+    render: (text: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {text}
+      </div>
+    ),  
   },
   {
     title: "Service Duration",
