@@ -343,17 +343,7 @@ const columns: ColumnsType<Task> = [
     width: 150, // Increased width
     render: (text: string) => (
       <div className="flex justify-center">
-        <Button
-          size="sm"
-          className={`min-w-[90px] ${
-            text === "Paid"
-              ? "bg-[#00774C] text-white"
-              : "bg-[#667085] text-white"
-          } font-semibold px-3 py-1 h-7`}
-          variant="outline"
-        >
-          {text}
-        </Button>
+        <Button>{text}</Button>
       </div>
     ),
   },
@@ -422,10 +412,7 @@ const TasksTable = () => {
             </svg>
             Filters
           </div>
-          <Button
-            variant="outline"
-            className=" border-gray-200 text-base px-4 py-2 flex items-center"
-          >
+          <Button>
             <svg
               className="w-5 h-5 mr-2"
               fill="none"
