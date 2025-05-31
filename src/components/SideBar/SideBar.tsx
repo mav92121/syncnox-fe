@@ -87,17 +87,17 @@ const SideBar = () => {
       {/* Main content section */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Logo section */}
-        <div className="pt-5 px-4 mb-4">
+        <div className="pt-3 px-4 mb-4">
           <div className="logo transition-all duration-300 ease-in-out">
             {isExpended ? (
               <Link to="/">
                 <div className="flex items-center cursor-pointer">
-                  <img src="/syncnox.svg" alt="SYNCNOX" className="h-[28px]" />
+                  <img src="/syncnox.svg" alt="SYNCNOX" className="h-[38px]" />
                 </div>
               </Link>
             ) : (
               <div className="flex justify-center">
-                <img src="/logo.svg" alt="Logo" className="w-[28px] h-[28px]" />
+                <img src="/logo.svg" alt="Logo" className="w-[28px] h-[38px]" />
               </div>
             )}
           </div>

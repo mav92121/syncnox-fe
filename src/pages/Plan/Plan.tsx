@@ -7,6 +7,7 @@ import TaskOptions from "./components/TaskOptions";
 import TaskForm from "./components/TaskForm";
 import MapTypeControl from "./components/MapTypeControl";
 import "leaflet/dist/leaflet.css";
+import { Button } from "antd";
 
 // Fix for default marker icons in Leaflet with React
 // import icon from "public/marker.svg";
@@ -137,7 +138,7 @@ const Plan = () => {
               onRecentClick={handleRecentClick}
             />
             {/* Form */}
-            <div className="w-full overflow-auto custom-scrollbar">
+            <div className="w-full overflow-auto custom-scrollbar pr-2">
               <TaskForm />
             </div>
           </div>

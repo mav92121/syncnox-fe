@@ -17,9 +17,9 @@ const TaskForm = () => {
   };
 
   return (
-    <div className="w-full flex flex-col h-full">
+    <div className="flex flex-col h-full">
       <h2 className="text-base font-medium mb-3 px-1">Add Job</h2>
-      <div className="flex-1 overflow-auto px-1">
+      <div className="flex-1 overflow-y-auto px-2">
         <Form
           form={form}
           layout="vertical"
@@ -194,16 +194,17 @@ const TaskForm = () => {
               </Select>
             </Form.Item>
           </div>
-
-          {/* Submit Button */}
-          <div className="">
-            <Form.Item>
-              <Button type="primary" htmlType="submit" className="w-full">
-                Add
-              </Button>
-            </Form.Item>
-          </div>
         </Form>
+      </div>
+      <div className="mt-4 sticky bottom-0 bg-white px-2">
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
+          onClick={() => form.submit()}
+        >
+          Add
+        </Button>
       </div>
     </div>
   );
