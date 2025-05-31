@@ -1,6 +1,6 @@
 import { useState } from "react";
 // import { Button } from "@/components/ui/button";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, MoreOutlined } from "@ant-design/icons";
 // import { Checkbox } from "@/components/ui/checkbox";
 import { Table, Input, Button } from "antd";
 import type { TableProps } from "antd/es/table";
@@ -40,34 +40,7 @@ const columns: ColumnsType<Task> = [
     width: 50, // Increased width
     key: "drag",
     align: "center",
-    render: () => (
-      <div className="flex flex-col gap-0 justify-center cursor-pointer">
-        <svg
-          className="w-2 h-2 text-black"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <circle cx="12" cy="12" r="2" fill="currentColor" />
-        </svg>
-        <svg
-          className="w-2 h-2 text-black"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <circle cx="12" cy="12" r="2" fill="currentColor" />
-        </svg>
-        <svg
-          className="w-2 h-2 text-black"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <circle cx="12" cy="12" r="2" fill="currentColor" />
-        </svg>
-      </div>
-    ),
+    render: () => <MoreOutlined />,
   },
   {
     title: "Task / Order ID",
@@ -76,7 +49,7 @@ const columns: ColumnsType<Task> = [
     width: 150, // Increased width
     align: "center",
     render: (id: string) => (
-      <div className="flex items-center justify-center font-medium text-gray-800">
+      <div className="flex w-[100px] items-center justify-center font-medium text-gray-800">
         {id.startsWith("ORD") ? (
           <img className="inline-block w-10 h-10 pt-2" src="order.svg" />
         ) : (
@@ -115,7 +88,7 @@ const columns: ColumnsType<Task> = [
     width: 250, // Increased width
     align: "center", // Center content
     render: (text: string) => (
-      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+      <div className="whitespace-nowrap w-[90px] overflow-hidden text-ellipsis text-center px-2">
         {text}
       </div>
     ),
@@ -126,6 +99,11 @@ const columns: ColumnsType<Task> = [
     key: "lastName",
     width: 120, // Increased width
     align: "center", // Center content
+    render: (text: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {text}
+      </div>
+    ),
   },
 
   // title: "Address",
@@ -212,6 +190,11 @@ const columns: ColumnsType<Task> = [
     key: "serviceDuration",
     width: 150, // Increased width
     align: "center", // Center content
+    render: (duration: string) => (
+      <div className="whitespace-nowrap w-[150px] overflow-hidden text-ellipsis text-center px-2">
+        {duration}
+      </div>
+    ),
   },
   {
     title: "From",
@@ -219,6 +202,11 @@ const columns: ColumnsType<Task> = [
     key: "from",
     width: 120, // Increased width
     align: "center", // Center content
+    render: (time: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {time}
+      </div>
+    ),
   },
   {
     title: "To",
@@ -226,6 +214,11 @@ const columns: ColumnsType<Task> = [
     key: "to",
     width: 120, // Increased width
     align: "center", // Center content
+    render: (time: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {time}
+      </div>
+    ),
   },
   {
     title: "Customer Preferences",
@@ -233,6 +226,11 @@ const columns: ColumnsType<Task> = [
     key: "customerPreferences",
     width: 200, // Increased width
     align: "center", // Center content
+    render: (preference: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {preference}
+      </div>
+    ),
   },
   {
     title: "Notes",
@@ -240,6 +238,11 @@ const columns: ColumnsType<Task> = [
     key: "notes",
     width: 180, // Increased width
     align: "center", // Center content
+    render: (notes: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {notes}
+      </div>
+    ),
   },
   {
     title: "Single/Recurring",
@@ -295,7 +298,7 @@ const columns: ColumnsType<Task> = [
     align: "center",
     // width: 1200, // Increased width
     render: (team: string[]) => (
-      <div className="flex justify-center">
+      <div className="flex w-[100px] justify-center">
         <span className="flex items-center gap-1">
           {team.map((_, i) => (
             <span
@@ -342,8 +345,14 @@ const columns: ColumnsType<Task> = [
     align: "center",
     width: 150, // Increased width
     render: (text: string) => (
-      <div className="flex justify-center">
-        <Button>{text}</Button>
+      <div className="flex w-[150px] justify-center">
+        <div
+          className={`w-[100px] px-[10px] py-[7px] text-white ${
+            text === "Paid" ? "bg-[#00774C]" : "bg-[#667085]"
+          }`}
+        >
+          {text}
+        </div>
       </div>
     ),
   },

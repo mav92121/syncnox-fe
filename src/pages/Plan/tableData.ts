@@ -69,7 +69,7 @@ const tasks: Task[] = [
     key: "3",
     id: "TASK04567",
     priority: "Urgent",
-    firstName: "Adonis",
+    firstName: "Adonioyis",
     lastName: "Kerlut",
     address: "450 Serra Mall, Stanford, CA 94305",
     status: "Map View",

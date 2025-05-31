@@ -122,7 +122,7 @@ const Plan = () => {
           </div>
 
           {/* Table - Takes approximately 60% of the space */}
-          <div className="h-3/5 w-full bg-red-200 overflow-auto custom-scrollbar">
+          <div className="h-3/5 w-full overflow-auto custom-scrollbar">
             <TasksTable />
           </div>
         </div>
