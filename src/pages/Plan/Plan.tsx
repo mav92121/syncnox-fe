@@ -81,7 +81,7 @@ const Plan = () => {
       {/* Main Content Area */}
       {viewMode === "list" ? (
         // List view - Map on top, table on bottom
-        <div className="flex-1 flex flex-col pb-4 overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden">
           {/* Map - Takes approximately 40% of the space */}
           <div className="h-2/5 w-full mb-4 relative">
             <MapContainer
