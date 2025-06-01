@@ -48,12 +48,14 @@ const MapTypeControl: React.FC<MapTypeControlProps> = ({
     <div className="absolute top-4 right-4 z-[1000]">
       <div className="bg-white shadow-md overflow-hidden flex transition-all duration-300 ease-in-out">
         <Button
+          size="small"
           onClick={() => setMapType("osm")}
           type={mapType === "osm" ? "primary" : "default"}
         >
           Map
         </Button>
         <Button
+          size="small"
           onClick={() => setMapType("satellite")}
           type={mapType === "satellite" ? "primary" : "default"}
         >

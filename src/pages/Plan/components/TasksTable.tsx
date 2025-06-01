@@ -379,7 +379,7 @@ const TasksTable = () => {
   return (
     <div className="flex flex-col w-full shadow overflow-hidden h-full bg-white">
       <div className="flex items-center justify-between flex-shrink-0">
-        <h2 className="text-xl font-bold tracking-tight">Jobs</h2>
+        <h4 className="text-xl font-bold tracking-tight">Jobs</h4>
         <div className="flex space-x-4 gap-3">
           <div className="flex gap-10">
             <Input
@@ -390,7 +390,7 @@ const TasksTable = () => {
                   className="text-gray-400"
                 />
               }
-              className="pl-9"
+              // className="pl-9 h-[20px]"
               placeholder={"search"}
               // onChange={(e) => onSearch && onSearch(e.target.value)}
             />
@@ -427,10 +427,11 @@ const TasksTable = () => {
       <div className="flex-1 min-h-0 overflow-x-auto custom-scrollbar my-2">
         <Table
           rowSelection={rowSelection}
-          className="w-[100px]" // You might need to adjust this width based on the total column widths
+          className="w-[100px] " // You might need to adjust this width based on the total column widths
           pagination={false}
           columns={columns}
           dataSource={tasks}
+          size="small"
         />
       </div>
       <div className="w-full">

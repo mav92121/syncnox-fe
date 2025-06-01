@@ -17,6 +17,7 @@ const ActionButtons = ({
   return (
     <div className={`flex space-x-4 ${className}`}>
       <Button
+        size="small"
         className={`${viewMode !== "list" ? "" : "text-[#7D7D7D]"}`}
         onClick={onAddClick}
         type={viewMode !== "list" ? "primary" : "default"}
@@ -33,6 +34,7 @@ const ActionButtons = ({
         Add
       </Button>
       <Button
+        size="small"
         className={`${viewMode === "list" ? "" : "text-[#7D7D7D]"}`}
         onClick={onRecentClick}
         type={viewMode === "list" ? "primary" : "default"}
