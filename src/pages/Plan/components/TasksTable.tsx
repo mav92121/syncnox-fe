@@ -1,6 +1,13 @@
 import { useState } from "react";
 // import { Button } from "@/components/ui/button";
-import { SearchOutlined, MoreOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  MoreOutlined,
+  FilterOutlined,
+  DeleteOutlined,
+  FileSearchOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 // import { Checkbox } from "@/components/ui/checkbox";
 import { Table, Input, Button } from "antd";
 import type { TableProps } from "antd/es/table";
@@ -37,13 +44,13 @@ type Task = {
 const columns: ColumnsType<Task> = [
   {
     title: "",
-    width: 50, // Increased width
+    width: 80,
     key: "drag",
     align: "center",
-    render: () => <MoreOutlined />,
+    render: () => <MoreOutlined className="text-[20px] cursor-pointer" />,
   },
   {
-    title: "Task / Order ID",
+    title: "Job ID",
     dataIndex: "id",
     key: "id",
     width: 150, // Increased width
@@ -123,7 +130,6 @@ const columns: ColumnsType<Task> = [
       </div>
     ),
   },
-
   {
     title: "Status",
     dataIndex: "status",
@@ -374,8 +380,8 @@ const TasksTable = () => {
     <div className="flex flex-col w-full shadow overflow-hidden h-full bg-white">
       <div className="flex items-center justify-between flex-shrink-0">
         <h2 className="text-xl font-bold tracking-tight">Jobs</h2>
-        <div className="flex space-x-3">
-          <div className="relative">
+        <div className="flex space-x-4 gap-3">
+          <div className="flex gap-10">
             <Input
               type="text"
               suffix={
@@ -389,52 +395,20 @@ const TasksTable = () => {
               // onChange={(e) => onSearch && onSearch(e.target.value)}
             />
           </div>
-          <div className="border-gray-200 cursor-pointer text-base px-4 py-2 flex items-center">
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
-            </svg>
-            Delete
+          <div className="border-gray-200 cursor-pointer text-sm px-4 py-2 flex gap-2 items-center">
+            <DeleteOutlined />
+            <div>Delete</div>
           </div>
-          <div className="border-gray-200 cursor-pointer text-base px-4 py-2 flex items-center">
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-              />
-            </svg>
-            Filters
+          <div className="border-gray-200 cursor-pointer text-sm flex gap-2 items-center">
+            <FilterOutlined />
+            <div>Filters</div>
+          </div>
+          <div className="border-gray-200 cursor-pointer text-sm flex gap-2 items-center">
+            <FileSearchOutlined />
+            <div>Verify</div>
           </div>
           <Button>
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-              />
-            </svg>
+            <UploadOutlined />
             Export
           </Button>
           <Button type="primary">
