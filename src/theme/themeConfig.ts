@@ -1,24 +1,21 @@
 import type { ThemeConfig } from "antd";
+
 const theme: ThemeConfig = {
   token: {
     colorPrimary: "#003220",
-    borderRadius: 0,
+    borderRadius: 0, // ✅ Ensures 90-degree edges globally
     fontFamily: "Inter, sans-serif",
     fontSize: 13,
-    // Fix focus border width
     lineWidth: 1,
     lineWidthBold: 1,
-    // Control border colors
     colorBorder: "#d9d9d9",
     colorBorderSecondary: "#f0f0f0",
-    // Fix focus states
     controlOutlineWidth: 0.5,
     controlOutline: "#003220",
-    controlHeight: 38, // Increased from default
+    controlHeight: 38,
   },
   components: {
     Input: {
-      // Remove thick focus border
       activeBorderColor: "#003220",
       hoverBorderColor: "#003220",
       activeShadow: "0 0 0 1px rgba(0, 50, 32, 0.1)",
@@ -28,16 +25,12 @@ const theme: ThemeConfig = {
       paddingBlock: 8,
     },
     Select: {
-      // Fix dropdown styling
       activeBorderColor: "#003220",
       hoverBorderColor: "#003220",
-      //   activeShadow: "0 0 0 1px rgba(0, 50, 32, 0.1)",
-      // Fix dropdown options
       optionSelectedBg: "#F6FFED",
       optionActiveBg: "#f5f5f5",
       optionSelectedColor: "#003220",
       controlHeight: 38,
-      // paddingBlock: 8,
     },
     DatePicker: {
       activeBorderColor: "#003220",
@@ -46,15 +39,13 @@ const theme: ThemeConfig = {
       controlHeight: 38,
       paddingBlock: 8,
     },
-    // TimePicker: {
-    //   controlHeight: 38,
-    //   paddingBlock: 8,
-    // },
     Button: {
-      // Ensure button styling is consistent
-      primaryShadow: "0 2px 0 rgba(0, 50, 32, 0.1)",
+      primaryShadow: "none",
       controlHeight: 38,
       paddingBlock: 8,
+    },
+    Checkbox: {
+      borderRadius: 0, // ✅ Square checkbox
     },
   },
 };

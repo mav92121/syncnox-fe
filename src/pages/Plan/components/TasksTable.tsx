@@ -4,7 +4,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Table } from "antd";
 
 import type { ColumnsType } from "antd/es/table";
-
 type Task = {
   key: string;
   id: string;
@@ -76,18 +75,20 @@ const columns: ColumnsType<Task> = [
     ),
   },
   {
-    title: "Task / Order ID",
+    title: "Job ID",
     dataIndex: "id",
     key: "id",
     width: 150, // Increased width
     align: "center",
     render: (id: string) => (
-      <div className="flex items-center justify-center font-medium text-gray-800">
-        {id.startsWith("ORD") ? (
-          <img className="inline-block w-10 h-10 pt-2" src="order.svg" />
-        ) : (
-          <img className="inline-block w-5 h-5" src="task.svg" />
-        )}
+      <div className="flex items-center justify-center gap-2 font-normal text-gray-800">
+       <div className="w-6 h-6 flex items-center justify-center overflow-hidden">
+      <img
+        src={id.startsWith("ORD") ? "order.svg" : "task.svg"}
+        className="w-full h-full object-contain"
+        alt="icon"
+      />
+    </div>
         <div>{id}</div>
       </div>
     ),
@@ -115,14 +116,31 @@ const columns: ColumnsType<Task> = [
     ),
   },
   {
-    title: "First Name",
+     title: (
+    <div style={{
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }}>
+      First Name
+    </div>
+  ),
     dataIndex: "firstName",
     key: "firstName",
     width: 120, // Increased width
     align: "center", // Center content
+  
   },
   {
-    title: "Last Name",
+    title: (
+    <div style={{
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }}>
+      Last Name
+    </div>
+  ),
     dataIndex: "lastName",
     key: "lastName",
     width: 120, // Increased width
@@ -186,39 +204,99 @@ const columns: ColumnsType<Task> = [
     align: "center", // Center content
   },
   {
-    title: "Service Duration",
+    // title: "Service Duration",
+    // dataIndex: "serviceDuration",
+    // key: "serviceDuration",
+    // width: 150, // Increased width
+    // align: "center", // Center content
+    title: (
+    <div style={{
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }}>
+     Service Duration
+    </div>
+  ),
     dataIndex: "serviceDuration",
     key: "serviceDuration",
-    width: 150, // Increased width
-    align: "center", // Center content
+    width: 150, // adjust as needed
+    align: "center",
+    render: (text: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {text}
+      </div>
+    ),  
+    
   },
   {
+    // title: "From",
+    // dataIndex: "from",
+    // key: "from",
+    // width: 120, // Increased width
+    // align: "center", // Center content
     title: "From",
     dataIndex: "from",
     key: "from",
-    width: 120, // Increased width
-    align: "center", // Center content
+    width: 120, // adjust as needed
+    align: "center",
+    render: (text: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {text}
+      </div>
+    ),  
   },
   {
+    // title: "To",
+    // dataIndex: "to",
+    // key: "to",
+    // width: 120, // Increased width
+    // align: "center", // Center content
     title: "To",
     dataIndex: "to",
     key: "to",
-    width: 120, // Increased width
-    align: "center", // Center content
+    width: 120, // adjust as needed
+    align: "center",
+    render: (text: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {text}
+      </div>
+    ), 
+    
   },
   {
+    // title: "Customer Preferences",
+    // dataIndex: "customerPreferences",
+    // key: "customerPreferences",
+    // width: 200, // Increased width
+    // align: "center", // Center content
     title: "Customer Preferences",
     dataIndex: "customerPreferences",
     key: "customerPreferences",
-    width: 200, // Increased width
-    align: "center", // Center content
+    width: 100, // adjust as needed
+    align: "center",
+    render: (text: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {text}
+      </div>
+    ), 
   },
   {
+    // title: "Notes",
+    // dataIndex: "notes",
+    // key: "notes",
+    // width: 180, // Increased width
+    // align: "center", // Center content
     title: "Notes",
     dataIndex: "notes",
     key: "notes",
-    width: 180, // Increased width
-    align: "center", // Center content
+    width: 100, // adjust as needed
+    align: "center",
+    render: (text: string) => (
+      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+        {text}
+      </div>
+    ), 
   },
   {
     title: "Single/Recurring",
@@ -268,7 +346,16 @@ const columns: ColumnsType<Task> = [
     ),
   },
   {
-    title: "Team Member",
+    // title: "Team Member",
+     title: (
+    <div style={{
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }}>
+    Team Member
+    </div>
+  ),
     dataIndex: "team",
     key: "team",
     align: "center",

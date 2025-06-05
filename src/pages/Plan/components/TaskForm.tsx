@@ -43,8 +43,9 @@ const TaskForm = () => {
               rules={[{ required: true, message: "Type is required" }]}
             >
               <Select placeholder="Select">
+                <Select.Option value="delievery">Delievery</Select.Option>
+                <Select.Option value="pickup">Pickup</Select.Option>
                 <Select.Option value="task">Task</Select.Option>
-                <Select.Option value="order">Order</Select.Option>
               </Select>
             </Form.Item>
           </div>

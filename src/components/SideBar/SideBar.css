@@ -17,3 +17,9 @@
   scrollbar-width: thin;
   scrollbar-color: #e2e8f0 transparent;
 }
+/* @media (max-width: 768px) {
+  .sidebar-menu {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+} */
