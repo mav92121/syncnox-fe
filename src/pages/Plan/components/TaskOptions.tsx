@@ -1,15 +1,17 @@
 import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
 
-interface TaskOptionsProps {
-  onManualAdd: () => void;
-}
+const TaskOptions = () => {
+  const navigate = useNavigate();
 
-const TaskOptions = ({ onManualAdd }: TaskOptionsProps) => {
+  const handleManualAdd = () => {
+    navigate("/plan/add");
+  };
   return (
     <div className="flex flex-col gap-5 items-center justify-center w-full max-w-md mx-auto">
       <Button
         size="large"
-        onClick={onManualAdd}
+        onClick={handleManualAdd}
         className="w-full"
         type="primary"
       >

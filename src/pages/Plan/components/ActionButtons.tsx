@@ -1,26 +1,28 @@
-// import { Button } from "@/components/ui/button";
 import { Button } from "antd";
+import { useNavigate, useLocation } from "react-router-dom";
+import type { ActionButtonsProps } from "../types";
 
-interface ActionButtonsProps {
-  viewMode: "list" | "add" | "options";
-  className?: string;
-  onAddClick: () => void;
-  onRecentClick: () => void;
-}
+const ActionButtons = ({ className }: ActionButtonsProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-const ActionButtons = ({
-  className,
-  viewMode,
-  onAddClick,
-  onRecentClick,
-}: ActionButtonsProps) => {
+  // const isAddActive = location.pathname === "/plan/add";
+  const isRecentsActive = location.pathname === "/plan/recents";
+
+  const handleAddClick = () => {
+    navigate("/plan/add");
+  };
+
+  const handleRecentClick = () => {
+    navigate("/plan/recents");
+  };
   return (
     <div className={`flex space-x-4 ${className}`}>
       <Button
         size="small"
-        className={`${viewMode !== "list" ? "" : "text-[#7D7D7D]"}`}
-        onClick={onAddClick}
-        type={viewMode !== "list" ? "primary" : "default"}
+        className={`${!isRecentsActive ? "" : "text-[#7D7D7D]"}`}
+        onClick={handleAddClick}
+        type={!isRecentsActive ? "primary" : "default"}
       >
         <svg
           className="w-5 h-5"
@@ -35,9 +37,9 @@ const ActionButtons = ({
       </Button>
       <Button
         size="small"
-        className={`${viewMode === "list" ? "" : "text-[#7D7D7D]"}`}
-        onClick={onRecentClick}
-        type={viewMode === "list" ? "primary" : "default"}
+        className={`${isRecentsActive ? "" : "text-[#7D7D7D]"}`}
+        onClick={handleRecentClick}
+        type={isRecentsActive ? "primary" : "default"}
       >
         <svg
           className="w-5 h-5 mr-0"

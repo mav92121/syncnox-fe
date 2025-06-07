@@ -1,25 +1,5 @@
-type Task = {
-  key: string;
-  id: string;
-  priority: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  status: string;
-  businessName: string;
-  status2: string;
-  phone: string;
-  serviceDuration: string;
-  from: string;
-  to: string;
-  customerPreferences: string;
-  notes: string;
-  singleRecurring: string;
-  ratings: number;
-  team: string[];
-  files: number;
-  paid: string;
-};
+import type { Task } from "./types";
+
 const tasks: Task[] = [
   {
     key: "1",

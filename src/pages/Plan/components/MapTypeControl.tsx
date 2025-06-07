@@ -2,10 +2,12 @@ import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 import { Button } from "antd";
 import L from "leaflet";
+import { mapUrls, mapAttributions } from "../utils/mapConfig";
+import type { MapType } from "../types";
 
 interface MapTypeControlProps {
-  mapType: "osm" | "satellite";
-  setMapType: (type: "osm" | "satellite") => void;
+  mapType: MapType;
+  setMapType: (type: MapType) => void;
 }
 
 const MapTypeControl: React.FC<MapTypeControlProps> = ({
@@ -13,20 +15,6 @@ const MapTypeControl: React.FC<MapTypeControlProps> = ({
   setMapType,
 }) => {
   const map = useMap();
-
-  // Map URLs
-  const mapUrls = {
-    osm: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    satellite:
-      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  };
-
-  // Map attribution
-  const mapAttributions = {
-    osm: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    satellite:
-      "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
-  };
 
   useEffect(() => {
     // Get all layers
@@ -42,7 +30,7 @@ const MapTypeControl: React.FC<MapTypeControlProps> = ({
     L.tileLayer(mapUrls[mapType], {
       attribution: mapAttributions[mapType],
     }).addTo(map);
-  }, [map, mapType, mapUrls, mapAttributions]);
+  }, [map, mapType]);
 
   return (
     <div className="absolute top-4 right-4 z-[1000]">

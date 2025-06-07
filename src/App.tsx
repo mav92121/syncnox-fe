@@ -1,7 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ConfigProvider } from "antd";
 import RootLayout from "./components/Layout/RootLayout";
-import Plan from "./pages/Plan/Plan";
+import PlanOptions from "./pages/Plan/PlanOptions";
+import PlanAdd from "./pages/Plan/PlanAdd";
+import PlanRecents from "./pages/Plan/PlanRecents";
 import theme from "./theme/themeConfig";
 
 const Dashboard = () => <div>Dashboard Page</div>;
@@ -17,7 +19,15 @@ const router = createBrowserRouter([
       },
       {
         path: "plan",
-        element: <Plan />,
+        element: <PlanOptions />,
+      },
+      {
+        path: "plan/add",
+        element: <PlanAdd />,
+      },
+      {
+        path: "plan/recents",
+        element: <PlanRecents />,
       },
     ],
   },

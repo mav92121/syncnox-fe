@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import { Button } from "@/components/ui/button";
 import {
   SearchOutlined,
   MoreOutlined,
@@ -8,38 +7,14 @@ import {
   FileSearchOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-// import { Checkbox } from "@/components/ui/checkbox";
 import { Table, Input, Button } from "antd";
 import type { TableProps } from "antd/es/table";
-
 import type { ColumnsType } from "antd/es/table";
 import tasks from "../tableData";
+import type { Task } from "../types";
 
 type TableRowSelection<T extends object = object> =
   TableProps<T>["rowSelection"];
-
-type Task = {
-  key: string;
-  id: string;
-  priority: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  status: string;
-  businessName: string;
-  status2: string;
-  phone: string;
-  serviceDuration: string;
-  from: string;
-  to: string;
-  customerPreferences: string;
-  notes: string;
-  singleRecurring: string;
-  ratings: number;
-  team: string[];
-  files: number;
-  paid: string;
-};
 
 const columns: ColumnsType<Task> = [
   {
@@ -57,11 +32,6 @@ const columns: ColumnsType<Task> = [
     align: "center",
     render: (id: string) => (
       <div className="flex w-[100px] items-center justify-center font-medium text-gray-800">
-        {id.startsWith("ORD") ? (
-          <img className="inline-block w-10 h-10 pt-2" src="order.svg" />
-        ) : (
-          <img className="inline-block w-5 h-5" src="task.svg" />
-        )}
         <div>{id}</div>
       </div>
     ),
