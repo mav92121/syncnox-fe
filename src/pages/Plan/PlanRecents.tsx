@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Spin } from "antd";
 import ActionButtons from "./components/ActionButtons";
 import TasksTable from "./components/TasksTable";
 import MapComponent from "./components/MapComponent";
@@ -76,7 +77,12 @@ const PlanRecents = () => {
   }, [jobs]);
 
   if (isLoading) {
-    return <div className="p-4">Loading jobs...</div>;
+    return (
+      <div className="flex items-center justify-center h-full w-full flex-col">
+        <Spin size="large" />
+        <div className="mt-4 text-primary">Loading Jobs...</div>
+      </div>
+    );
   }
 
   if (error) {

@@ -52,7 +52,7 @@ const theme: ThemeConfig = {
     // },
     Button: {
       // Ensure button styling is consistent
-      primaryShadow: "0 2px 0 rgba(0, 50, 32, 0.1)",
+      // primaryShadow: "0 2px 0 rgba(0, 50, 32, 0.1)",
       controlHeight: 38,
       paddingBlock: 8,
     },
