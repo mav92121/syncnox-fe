@@ -10,16 +10,18 @@ import {
 import { Table, Input, Button } from "antd";
 import type { TableProps } from "antd/es/table";
 import type { ColumnsType } from "antd/es/table";
-import tasks from "../tableData";
 import type { Task } from "../types";
 
 type TableRowSelection<T extends object = object> =
   TableProps<T>["rowSelection"];
 
+interface TasksTableProps {
+  dataSource: Task[];
+}
+
 const columns: ColumnsType<Task> = [
   {
     title: "",
-    width: 80,
     key: "drag",
     align: "center",
     render: () => <MoreOutlined className="text-[20px] cursor-pointer" />,
@@ -28,10 +30,9 @@ const columns: ColumnsType<Task> = [
     title: "Job ID",
     dataIndex: "id",
     key: "id",
-    width: 150, // Increased width
     align: "center",
     render: (id: string) => (
-      <div className="flex w-[100px] items-center justify-center font-medium text-gray-800">
+      <div className="flex items-center justify-center font-medium text-gray-800">
         <div>{id}</div>
       </div>
     ),
@@ -40,7 +41,6 @@ const columns: ColumnsType<Task> = [
     title: "Priority",
     dataIndex: "priority",
     key: "priority",
-    width: 120, // Increased width
     align: "center",
     render: (priority: string) => (
       <div className="flex justify-center">
@@ -50,7 +50,7 @@ const columns: ColumnsType<Task> = [
               ? "bg-green-100 text-green-700 border border-green-200"
               : priority === "Medium"
               ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
-              : "bg-red-100 text-red-800 border-red-200"
+              : "bg-red-100 text-red-800 border border-red-200"
           }`}
         >
           {priority}
@@ -62,40 +62,24 @@ const columns: ColumnsType<Task> = [
     title: "First Name",
     dataIndex: "firstName",
     key: "firstName",
-    width: 250, // Increased width
-    align: "center", // Center content
-    render: (text: string) => (
-      <div className="whitespace-nowrap w-[90px] overflow-hidden text-ellipsis text-center px-2">
-        {text}
-      </div>
-    ),
+    align: "center",
+    render: (text: string) => <div className="text-center px-2">{text}</div>,
   },
   {
     title: "Last Name",
     dataIndex: "lastName",
     key: "lastName",
-    width: 120, // Increased width
-    align: "center", // Center content
-    render: (text: string) => (
-      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
-        {text}
-      </div>
-    ),
+    align: "center",
+    render: (text: string) => <div className="text-center px-2">{text}</div>,
   },
-
-  // title: "Address",
-  // dataIndex: "address",
-  // key: "address",
-  // width: 250, // Increased width
-  // align: "center", // Center content
   {
     title: "Address",
     dataIndex: "address",
     key: "address",
-    // width: 250, // adjust as needed
     align: "center",
+    ellipsis: true,
     render: (text: string) => (
-      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+      <div className="text-center px-2" title={text}>
         {text}
       </div>
     ),
@@ -104,106 +88,78 @@ const columns: ColumnsType<Task> = [
     title: "Status",
     dataIndex: "status",
     key: "status",
-    width: 150, // Increased width
     align: "center",
-    render: (status: string) => (
+    render: () => (
       <div className="flex justify-center">
-        <Button type="link">{status}</Button>
+        <Button type="link" size="small">
+          Map View
+        </Button>
       </div>
     ),
   },
   {
-    // title: "Business Name",
-    // dataIndex: "businessName",
-    // key: "businessName",
-    // width: 180, // Increased width
-    // align: "center", // Center content
     title: "Business Name",
     dataIndex: "businessName",
     key: "businessName",
-    width: 250, // adjust as needed
     align: "center",
+    ellipsis: true,
     render: (text: string) => (
-      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+      <div className="text-center px-2" title={text}>
         {text}
       </div>
     ),
   },
   {
-    title: "Status",
+    title: "Assignment",
     dataIndex: "status2",
     key: "status2",
-    width: 150, // Increased width
     align: "center",
-    render: (status2: string) => (
+    render: () => (
       <div className="flex justify-center">
-        <div className="bg-yellow-50 text-yellow-700 border-yellow-200 font-semibold px-3 py-1 h-7">
-          {status2}
+        <div className="bg-yellow-50 text-yellow-700 border border-yellow-200 font-semibold px-3 py-1 h-7">
+          Unassigned
         </div>
       </div>
     ),
   },
   {
-    // title: "Phone",
-    // dataIndex: "phone",
-    // key: "phone",
-    // width: 150, // Increased width
-    // align: "center", // Center content
     title: "Phone",
     dataIndex: "phone",
     key: "phone",
-    width: 250, // adjust as needed
     align: "center",
-    render: (text: string) => (
-      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
-        {text}
-      </div>
-    ),
+    render: (text: string) => <div className="text-center px-2">{text}</div>,
   },
   {
     title: "Service Duration",
     dataIndex: "serviceDuration",
     key: "serviceDuration",
-    width: 150, // Increased width
-    align: "center", // Center content
+    align: "center",
     render: (duration: string) => (
-      <div className="whitespace-nowrap w-[150px] overflow-hidden text-ellipsis text-center px-2">
-        {duration}
-      </div>
+      <div className="text-center px-2">{duration}</div>
     ),
   },
   {
     title: "From",
     dataIndex: "from",
     key: "from",
-    width: 120, // Increased width
-    align: "center", // Center content
-    render: (time: string) => (
-      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
-        {time}
-      </div>
-    ),
+    align: "center",
+    render: (time: string) => <div className="text-center px-2">{time}</div>,
   },
   {
     title: "To",
     dataIndex: "to",
     key: "to",
-    width: 120, // Increased width
-    align: "center", // Center content
-    render: (time: string) => (
-      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
-        {time}
-      </div>
-    ),
+    align: "center",
+    render: (time: string) => <div className="text-center px-2">{time}</div>,
   },
   {
     title: "Customer Preferences",
     dataIndex: "customerPreferences",
     key: "customerPreferences",
-    width: 200, // Increased width
-    align: "center", // Center content
+    align: "center",
+    ellipsis: true,
     render: (preference: string) => (
-      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+      <div className="text-center px-2" title={preference}>
         {preference}
       </div>
     ),
@@ -212,20 +168,19 @@ const columns: ColumnsType<Task> = [
     title: "Notes",
     dataIndex: "notes",
     key: "notes",
-    width: 180, // Increased width
-    align: "center", // Center content
+    align: "center",
+    ellipsis: true,
     render: (notes: string) => (
-      <div className="whitespace-nowrap overflow-hidden text-ellipsis text-center px-2">
+      <div className="text-center px-2" title={notes}>
         {notes}
       </div>
     ),
   },
   {
-    title: "Single/Recurring",
+    title: "Type",
     dataIndex: "singleRecurring",
     key: "singleRecurring",
     align: "center",
-    width: 150, // Increased width
     render: (type: string) => (
       <div className="flex justify-center">
         <span
@@ -247,14 +202,13 @@ const columns: ColumnsType<Task> = [
     dataIndex: "ratings",
     key: "ratings",
     align: "center",
-    width: 120, // Increased width
     render: (rating: number) => (
       <div className="flex justify-center">
         <span className="flex items-center gap-0.5">
           {[1, 2, 3, 4, 5].map((i) => (
             <svg
               key={i}
-              className={`w-4 h-4 ${
+              className={`w-3 h-3 ${
                 i <= rating ? "text-yellow-400" : "text-gray-300"
               }`}
               fill="currentColor"
@@ -268,18 +222,17 @@ const columns: ColumnsType<Task> = [
     ),
   },
   {
-    title: "Team Member",
+    title: "Team",
     dataIndex: "team",
     key: "team",
     align: "center",
-    // width: 1200, // Increased width
     render: (team: string[]) => (
-      <div className="flex w-[100px] justify-center">
+      <div className="flex justify-center">
         <span className="flex items-center gap-1">
           {team.map((_, i) => (
             <span
               key={i}
-              className="inline-block w-6 h-6 rounded-full bg-gray-200 border border-gray-300"
+              className="inline-block w-5 h-5 rounded-full bg-gray-200 border border-gray-300"
             />
           ))}
         </span>
@@ -287,11 +240,10 @@ const columns: ColumnsType<Task> = [
     ),
   },
   {
-    title: "Attach Files",
+    title: "Files",
     dataIndex: "files",
     key: "files",
     align: "center",
-    width: 150, // Increased width
     render: () => (
       <div className="flex justify-center">
         <label className="flex items-center justify-center border-2 border-dashed border-gray-300 cursor-pointer bg-gray-50 hover:bg-gray-100 px-1 py-1.5 w-[100px]">
@@ -315,15 +267,14 @@ const columns: ColumnsType<Task> = [
     ),
   },
   {
-    title: "Paid / Unpaid",
+    title: "Payment",
     dataIndex: "paid",
     key: "paid",
     align: "center",
-    width: 150, // Increased width
     render: (text: string) => (
       <div className="flex w-[150px] justify-center">
         <div
-          className={`w-[100px] px-[10px] py-[7px] text-white ${
+          className={`w-[90px] px-[10px] py-[7px] text-white ${
             text === "Paid" ? "bg-[#00774C]" : "bg-[#667085]"
           }`}
         >
@@ -334,7 +285,7 @@ const columns: ColumnsType<Task> = [
   },
 ];
 
-const TasksTable = () => {
+const TasksTable = ({ dataSource }: TasksTableProps) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
@@ -348,8 +299,8 @@ const TasksTable = () => {
 
   return (
     <div className="flex flex-col w-full shadow overflow-hidden h-full bg-white">
-      <div className="flex items-center justify-between flex-shrink-0">
-        <h4 className="text-xl font-bold tracking-tight">Jobs</h4>
+      <div className="flex items-center justify-between flex-shrink-0 py-3">
+        <h4 className="text-xl tracking-tight">Jobs</h4>
         <div className="flex space-x-4 gap-3">
           <div className="flex gap-10">
             <Input
@@ -394,17 +345,24 @@ const TasksTable = () => {
         </div>
       </div>
       {/* Only the table is scrollable */}
-      <div className="flex-1 min-h-0 overflow-x-auto custom-scrollbar my-2">
-        <Table
-          rowSelection={rowSelection}
-          className="w-[100px] " // You might need to adjust this width based on the total column widths
-          pagination={false}
-          columns={columns}
-          dataSource={tasks}
-          size="small"
-        />
+      <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden custom-scrollbar">
+        <div
+          className="h-full overflow-y-auto custom-scrollbar"
+          style={{ minWidth: "max-content" }}
+        >
+          <Table
+            rowSelection={rowSelection}
+            scroll={undefined}
+            pagination={false}
+            columns={columns}
+            dataSource={dataSource}
+            size="small"
+            tableLayout="auto"
+            className="min-w-full"
+          />
+        </div>
       </div>
-      <div className="w-full">
+      <div className="w-full flex-shrink-0 pt-2">
         <Button className="w-full" type="primary">
           Add More Stops
         </Button>

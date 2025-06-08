@@ -36,6 +36,28 @@ export interface Task {
   paid: string;
 }
 
+export interface Job {
+  id?: string; // From backend Job model (int, but string for frontend consistency often fine)
+  scheduled_date: string; // ISO datetime string
+  job_type: "delivery" | "pickup" | "task";
+  delivery_address: string;
+  priority_level: "low" | "medium" | "high";
+  first_name?: string; // Optional in JobBase if not explicitly required, but form has it
+  last_name?: string;  // Optional in JobBase
+  email?: string;      // Optional in JobBase (EmailStr implies required, but let's assume form can omit)
+  business_name?: string;
+  start_time: string; // ISO datetime string
+  end_time: string;   // ISO datetime string
+  duration_minutes: number;
+  phone_number: string;
+  customer_preferences?: string;
+  additional_notes?: string;
+  recurrence_type: "one_time" | "recurring"; // Align with Python RecurrenceType
+  documents?: string[]; // Assuming list of file names or URLs
+  payment_status: "paid" | "unpaid";
+  created_at?: string; // From backend Job model
+  updated_at?: string; // From backend Job model
+}
 // Component props types
 export interface MapComponentProps {
   mapType: MapType;

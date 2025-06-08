@@ -5,7 +5,7 @@ import PlanOptions from "./pages/Plan/PlanOptions";
 import PlanAdd from "./pages/Plan/PlanAdd";
 import PlanRecents from "./pages/Plan/PlanRecents";
 import theme from "./theme/themeConfig";
-
+import { PlanProvider } from "./pages/Plan/context/PlanContext";
 const Dashboard = () => <div>Dashboard Page</div>;
 
 const router = createBrowserRouter([
@@ -23,11 +23,19 @@ const router = createBrowserRouter([
       },
       {
         path: "plan/add",
-        element: <PlanAdd />,
+        element: (
+          <PlanProvider>
+            <PlanAdd />
+          </PlanProvider>
+        ),
       },
       {
         path: "plan/recents",
-        element: <PlanRecents />,
+        element: (
+          <PlanProvider>
+            <PlanRecents />
+          </PlanProvider>
+        ),
       },
     ],
   },
