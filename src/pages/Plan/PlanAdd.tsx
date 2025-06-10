@@ -12,9 +12,9 @@ const PlanAdd = () => {
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
         <div className="w-[40%] flex flex-col">
-          <ActionButtons className="mb-4" />
+          <ActionButtons className="mb-3" />
           {/* Form */}
-          <div className="w-full overflow-auto custom-scrollbar pr-2">
+          <div className="w-full overflow-auto custom-scrollbar pr-1">
             <TaskForm />
           </div>
         </div>

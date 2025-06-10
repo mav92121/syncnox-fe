@@ -92,14 +92,14 @@ const PlanRecents = () => {
   return (
     <div className="h-full flex flex-col max-w-full overflow-hidden">
       {/* Action Buttons */}
-      <div className="pb-4 flex-shrink-0">
+      <div className="pb-2 flex-shrink-0">
         <ActionButtons />
       </div>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden min-h-0">
         {/* Map - Takes approximately 40% of the space */}
-        <div className="h-2/5 w-full mb-4 relative flex-shrink-0">
+        <div className="h-2/5 w-full mb-2 relative flex-shrink-0">
           <MapComponent
             mapType={mapType}
             setMapType={setMapType}

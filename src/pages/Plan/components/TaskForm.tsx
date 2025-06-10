@@ -6,10 +6,10 @@ import {
   TimePicker,
   Button,
   Upload,
+  message,
 } from "antd";
 import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import type { UploadFile } from "antd/es/upload/interface";
-import { message } from "antd";
 import type { Dayjs } from "dayjs";
 import { usePlanContext } from "../hooks/usePlanContext";
 import type { Job } from "../types";
@@ -41,11 +41,9 @@ interface TaskFormValues {
 
 const TaskForm = () => {
   const [form] = Form.useForm();
-  const { addJob, jobs } = usePlanContext();
-  console.log("jobs are ->  ", jobs);
+  const [messageApi, contextHolder] = message.useMessage();
+  const { addJob } = usePlanContext();
   const onFinish = async (values: TaskFormValues) => {
-    console.log("Form values submitted:", values);
-
     const jobData: Omit<Job, "id" | "created_at" | "updated_at"> = {
       scheduled_date: values.date.toISOString(),
       job_type: values.jobType,
@@ -89,11 +87,11 @@ const TaskForm = () => {
     try {
       const newJob = await addJob(jobData);
       if (newJob) {
-        message.success("Job added successfully!");
+        messageApi.success("Job added successfully!");
         form.resetFields();
       } else {
         // This case can occur if addJob completes but doesn't return a job (e.g., void return path in PlanContext)
-        message.warning(
+        messageApi.warning(
           "Job submission processed, but status unclear. Please check the job list."
         );
       }
@@ -110,6 +108,7 @@ const TaskForm = () => {
 
   return (
     <div className="flex flex-col h-full">
+      {contextHolder}
       <h2 className="text-base font-medium mb-3 px-1">Add Job</h2>
       <div className="flex-1 overflow-y-auto px-2">
         <Form

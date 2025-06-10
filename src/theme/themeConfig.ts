@@ -70,6 +70,9 @@ const theme: ThemeConfig = {
       rowSelectedBg: "#F6FFED",
       rowSelectedHoverBg: "#F6FFED",
     },
+    Message: {
+      colorSuccess: "#003220",
+    },
   },
 };
 

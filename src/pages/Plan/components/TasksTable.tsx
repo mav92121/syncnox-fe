@@ -299,7 +299,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
 
   return (
     <div className="flex flex-col w-full shadow overflow-hidden h-full bg-white">
-      <div className="flex items-center justify-between flex-shrink-0 py-3">
+      <div className="flex items-center justify-between flex-shrink-0 pb-2">
         <h4 className="text-xl tracking-tight">Jobs</h4>
         <div className="flex space-x-4 gap-3">
           <div className="flex gap-10">
@@ -362,7 +362,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
           />
         </div>
       </div>
-      <div className="w-full flex-shrink-0 pt-2">
+      <div className="w-full flex-shrink-0 pt-1">
         <Button className="w-full" type="primary">
           Add More Stops
         </Button>

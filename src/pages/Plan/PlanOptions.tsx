@@ -10,7 +10,7 @@ const PlanOptions = () => {
   return (
     <div className="h-full flex flex-col">
       {/* Action Buttons */}
-      <div className="pb-4">
+      <div className="pb-2">
         <ActionButtons />
       </div>
 
