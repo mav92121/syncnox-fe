@@ -8,7 +8,7 @@ Follow these steps to get the project up and running locally:
 
 ```bash
 # 1. Clone the repository
-git clone git@github.com:Syncnox-Codes/syncnox-fe.git
+git clone https://github.com/mav92121/syncnox-fe.git
 
 # 2. Navigate into the project directory
 cd syncnox-fe
