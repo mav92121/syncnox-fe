@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Spin } from "antd";
-import ActionButtons from "./components/ActionButtons";
 import TasksTable from "./components/TasksTable";
 import MapComponent from "./components/MapComponent";
 import { useMapState } from "./hooks/useMapState";
@@ -42,9 +41,9 @@ const mapJobsToTasks = (jobs: Job[]): Task[] => {
       firstName: job.first_name || "N/A",
       lastName: job.last_name || "N/A",
       address: job.delivery_address,
-      status: "Scheduled", // Default or map from a Job status if available
+      status: "Scheduled",
       businessName: job.business_name || "N/A",
-      status2: "Unassigned", // Default or map
+      status2: "Unassigned",
       phone: job.phone_number,
       serviceDuration: formatServiceDuration(job.duration_minutes),
       from: formatTime(job.start_time),
@@ -53,8 +52,8 @@ const mapJobsToTasks = (jobs: Job[]): Task[] => {
       notes: job.additional_notes || "N/A",
       singleRecurring:
         job.recurrence_type === "one_time" ? "Single" : "Recurring",
-      ratings: 0, // Default
-      team: [], // Default
+      ratings: 0,
+      team: [],
       files: job.documents?.length || 0,
       paid: capitalizeFirstLetter(job.payment_status),
     };
@@ -65,6 +64,11 @@ const PlanRecents = () => {
   const { mapType, setMapType } = useMapState();
   const { jobs, fetchJobs, isLoading, error } = usePlanContext();
   const [transformedTasks, setTransformedTasks] = useState<Task[]>([]);
+  const [mapHeight, setMapHeight] = useState<number>(400); // Initial map height
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isResizing = useRef(false);
+  const startY = useRef(0);
+  const startHeight = useRef(0);
 
   useEffect(() => {
     fetchJobs();
@@ -75,6 +79,45 @@ const PlanRecents = () => {
       setTransformedTasks(mapJobsToTasks(jobs));
     }
   }, [jobs]);
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent text selection while dragging
+    isResizing.current = true;
+    startY.current = e.clientY;
+    if (containerRef.current) {
+      startHeight.current = containerRef.current.offsetHeight;
+    }
+    document.body.style.cursor = 'ns-resize'; // Change cursor while dragging
+    document.body.style.userSelect = 'none'; // Prevent text selection
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  }, []);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isResizing.current) return;
+    const deltaY = e.clientY - startY.current;
+    let newHeight = startHeight.current + deltaY;
+
+    // Get the parent container's height
+    const parentHeight = containerRef.current?.parentElement?.offsetHeight || window.innerHeight;
+    
+    // Constraints
+    const minHeight = 200; // Minimum map height
+    const maxHeight = parentHeight - 200; // Leave space for table
+
+    if (newHeight < minHeight) newHeight = minHeight;
+    if (newHeight > maxHeight) newHeight = maxHeight;
+
+    setMapHeight(newHeight);
+  }, []);
+
+  const handleMouseUp = useCallback(() => {
+    isResizing.current = false;
+    document.body.style.cursor = ''; // Reset cursor
+    document.body.style.userSelect = ''; // Reset user select
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  }, []);
 
   if (isLoading) {
     return (
@@ -91,27 +134,31 @@ const PlanRecents = () => {
 
   return (
     <div className="h-full flex flex-col max-w-full overflow-hidden">
-      {/* Action Buttons */}
-      <div className="pb-2 flex-shrink-0">
-        <ActionButtons />
+      {/* Map Container */}
+      <div
+        ref={containerRef}
+        style={{ height: `${mapHeight}px` }}
+        className="w-full relative flex-shrink-0 transition-[height] duration-100 ease-out"
+      >
+        <MapComponent
+          mapType={mapType}
+          setMapType={setMapType}
+          config={defaultMapConfig}
+          className="h-full w-full"
+        />
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col overflow-hidden min-h-0">
-        {/* Map - Takes approximately 40% of the space */}
-        <div className="h-2/5 w-full mb-2 relative flex-shrink-0">
-          <MapComponent
-            mapType={mapType}
-            setMapType={setMapType}
-            config={defaultMapConfig}
-            className="h-full w-full"
-          />
-        </div>
+      {/* Resizer Handle */}
+      <div
+        className="w-full h-4 bg-gray-100 hover:bg-gray-200 cursor-ns-resize flex-shrink-0 flex items-center justify-center group transition-colors duration-150"
+        onMouseDown={handleMouseDown}
+      >
+        <div className="w-12 h-1 bg-gray-300 rounded-full group-hover:bg-gray-400 transition-colors duration-150" />
+      </div>
 
-        {/* Table - Takes approximately 60% of the space */}
-        <div className="h-3/5 w-full overflow-hidden min-h-0">
-          <TasksTable dataSource={transformedTasks} />
-        </div>
+      {/* Table Container - Will automatically fill remaining space */}
+      <div className="flex-1 w-full overflow-hidden min-h-0">
+        <TasksTable dataSource={transformedTasks} />
       </div>
     </div>
   );

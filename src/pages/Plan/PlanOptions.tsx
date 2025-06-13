@@ -1,35 +1,64 @@
-import ActionButtons from "./components/ActionButtons";
+import { Tabs } from "antd";
+import { PlusOutlined, HistoryOutlined } from "@ant-design/icons";
 import TaskOptions from "./components/TaskOptions";
 import MapComponent from "./components/MapComponent";
 import { useMapState } from "./hooks/useMapState";
 import { defaultMapConfig } from "./utils/mapConfig";
+import PlanAdd from "./PlanAdd";
+import PlanRecents from "./PlanRecents";
+import { PlanProvider } from "./context/PlanContext";
+import { useState } from "react";
 
 const PlanOptions = () => {
-  const { mapType, setMapType } = useMapState();
+  const [activeTab, setActiveTab] = useState("add");
+
+  const items = [
+    {
+      key: "add",
+      label: (
+        <span className="flex items-center">
+          <PlusOutlined className="mr-2" />
+          Add
+        </span>
+      ),
+      children: (
+        <div className="h-full flex flex-col">
+          <PlanProvider>
+            <PlanAdd />
+          </PlanProvider>
+        </div>
+      ),
+    },
+    {
+      key: "recent",
+      label: (
+        <span className="flex items-center">
+          <HistoryOutlined className="mr-2" />
+          Recent
+        </span>
+      ),
+      children: (
+        <div className="h-full flex flex-col">
+          <PlanProvider>
+            <PlanRecents />
+          </PlanProvider>
+        </div>
+      ),
+    },
+  ];
+
+  const handleTabChange = (key: string) => {
+    setActiveTab(key);
+  };
 
   return (
     <div className="h-full flex flex-col">
-      {/* Action Buttons */}
-      <div className="pb-2">
-        <ActionButtons />
-      </div>
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex relative">
-        {/* Map as background */}
-        <MapComponent
-          mapType={mapType}
-          setMapType={setMapType}
-          config={defaultMapConfig}
-          className="w-[100%]"
-          opacity={0.3}
-        />
-
-        {/* Task options centered */}
-        <div className="absolute inset-0 w-full h-full flex justify-center items-center z-10">
-          <TaskOptions />
-        </div>
-      </div>
+      <Tabs
+        activeKey={activeTab}
+        onChange={handleTabChange}
+        items={items}
+        className="custom-tabs"
+      />
     </div>
   );
 };

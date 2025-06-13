@@ -118,3 +118,200 @@
     @apply bg-background text-foreground;
   }
 }
+
+.custom-route-modal .ant-modal-content {
+  border-radius: 12px;
+  padding: 0;
+}
+
+.custom-route-modal .ant-modal-close-x {
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-route-modal .ant-modal-header {
+  border-bottom: none;
+  padding: 20px 24px 0;
+}
+
+.custom-route-modal .ant-modal-body {
+  padding: 24px;
+}
+
+.custom-route-modal .ant-modal-footer {
+  border-top: none;
+  padding: 0 24px 20px;
+}
+
+.custom-route-modal .ant-select-selector {
+  border-color: #d9d9d9 !important;
+  box-shadow: none !important;
+}
+
+.custom-route-modal .ant-select-arrow {
+  right: 12px;
+}
+
+.custom-route-modal .ant-select-selection-item, 
+.custom-route-modal .ant-select-placeholder {
+  display: flex !important;
+  align-items: center;
+}
+
+.custom-route-modal .ant-select-suffix .ant-select-arrow {
+  margin-left: 8px; /* Adjust as needed */
+  display: block;
+}
+
+.custom-route-modal .ant-select-suffix img {
+  margin-right: 8px; /* Space between image and arrow */
+}
+
+.custom-route-modal .ant-btn-text .cancel-text-color {
+  color: #1890ff !important; /* Ant Design's default blue */
+}
+
+.cancel-text-color {
+  color: #1890ff !important; /* Ant Design's default blue */
+}
+
+/* Custom scrollbar */
+html,
+body {
+  font-family: "Inter", sans-serif;
+  height: 100%;
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.custom-scrollbar:hover {
+  scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
+}
+
+/* Ensure Ant Design table doesn't break layout */
+.ant-table-wrapper {
+  max-width: 100% !important;
+  height: 100% !important;
+}
+
+.ant-table {
+  max-width: 100% !important;
+}
+
+.ant-table-container {
+  max-width: 100% !important;
+  height: 100% !important;
+}
+
+.ant-table-body {
+  height: 100% !important;
+}
+
+/* Fix horizontal scrollbar position */
+.ant-table-wrapper .ant-table-container {
+  overflow: auto !important;
+}
+
+.ant-table-wrapper .ant-table-body {
+  overflow: visible !important;
+}
+
+/* Custom Tabs Styling */
+.custom-tabs {
+  flex: 1; /* Make the entire Tabs component grow */
+  display: flex; /* Make it a flex container */
+  flex-direction: column; /* Stack its internal elements vertically */
+  margin-bottom: 0;
+  background: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.custom-tabs .ant-tabs-nav {
+  margin-bottom: 0;
+  background: white;
+  padding: 0; /* Remove padding from nav, it's now on the parent custom-tabs */
+  border-radius: 8px;
+  box-shadow: none; /* Remove redundant shadow */
+}
+
+.custom-tabs .ant-tabs-tab {
+  padding: 8px 16px;
+  margin: 0 8px 0 0;
+  transition: all 0.3s ease;
+}
+
+.custom-tabs .ant-tabs-tab:hover {
+  color: #003220; /* Forest green on hover */
+}
+
+.custom-tabs .ant-tabs-tab.ant-tabs-tab-active {
+  background: #003220; /* Forest green background */
+  border-radius: 6px;
+}
+
+.custom-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: white; /* White text for active tab */
+  font-weight: 500;
+}
+
+.custom-tabs .ant-tabs-ink-bar {
+  display: none;
+}
+
+/* Ensure Ant Design Tab content takes full height */
+.ant-tabs-content-holder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Important for scrollable content inside */
+}
+
+.ant-tabs-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ant-tabs-tabpane {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-route-modal .ant-btn-link {
+  color: #1890ff !important; /* Force Ant Design link button text to blue */
+}

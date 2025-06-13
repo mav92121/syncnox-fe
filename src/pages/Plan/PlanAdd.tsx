@@ -1,4 +1,3 @@
-import ActionButtons from "./components/ActionButtons";
 import TaskForm from "./components/TaskForm";
 import MapComponent from "./components/MapComponent";
 import { useMapState } from "./hooks/useMapState";
@@ -12,8 +11,7 @@ const PlanAdd = () => {
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
         <div className="w-[40%] flex flex-col">
-          <ActionButtons className="mb-3" />
-          {/* Form */}
+          {/* Task Options / Form */}
           <div className="w-full overflow-auto custom-scrollbar pr-1">
             <TaskForm />
           </div>

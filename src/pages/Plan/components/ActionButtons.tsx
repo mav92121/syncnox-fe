@@ -6,7 +6,7 @@ const ActionButtons = ({ className }: ActionButtonsProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // const isAddActive = location.pathname === "/plan/add";
+  const isAddActive = location.pathname === "/plan/add";
   const isRecentsActive = location.pathname === "/plan/recents";
 
   const handleAddClick = () => {
@@ -16,13 +16,14 @@ const ActionButtons = ({ className }: ActionButtonsProps) => {
   const handleRecentClick = () => {
     navigate("/plan/recents");
   };
+
   return (
     <div className={`flex space-x-4 ${className}`}>
       <Button
         size="small"
-        className={`${!isRecentsActive ? "" : "text-[#7D7D7D]"}`}
+        className={`${isAddActive ? "bg-[#228B22] hover:bg-[#228B22] text-white" : "text-[#7D7D7D]"}`}
         onClick={handleAddClick}
-        type={!isRecentsActive ? "primary" : "default"}
+        type={isAddActive ? "primary" : "default"}
       >
         <svg
           className="w-5 h-5"
@@ -37,7 +38,7 @@ const ActionButtons = ({ className }: ActionButtonsProps) => {
       </Button>
       <Button
         size="small"
-        className={`${isRecentsActive ? "" : "text-[#7D7D7D]"}`}
+        className={`${isRecentsActive ? "bg-[#228B22] hover:bg-[#228B22] text-white" : "text-[#7D7D7D]"}`}
         onClick={handleRecentClick}
         type={isRecentsActive ? "primary" : "default"}
       >
@@ -51,7 +52,7 @@ const ActionButtons = ({ className }: ActionButtonsProps) => {
           <rect x="4" y="6" width="16" height="4" rx="1" />
           <rect x="4" y="14" width="16" height="4" rx="1" />
         </svg>
-        <div className=" text-xs">Recent</div>
+        <div className="text-xs">Recent</div>
       </Button>
     </div>
   );
