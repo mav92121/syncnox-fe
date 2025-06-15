@@ -16,6 +16,7 @@ import {
   message,
   Spin,
   AutoComplete,
+  InputNumber,
 } from "antd";
 import {
   SearchOutlined,
@@ -324,7 +325,7 @@ const TaskForm = () => {
               name="priority"
               rules={[{ required: true }]}
             >
-              <Select placeholder="Select">
+              <Select placeholder="Select" defaultValue={"medium"}>
                 <Select.Option value="low">Low</Select.Option>
                 <Select.Option value="medium">Medium</Select.Option>
                 <Select.Option value="high">High</Select.Option>
@@ -420,11 +421,16 @@ const TaskForm = () => {
                 <Form.Item
                   name={["phone", "number"]}
                   noStyle
+                  required
                   rules={[
                     { required: true, message: "Phone number is required" },
                   ]}
                 >
-                  <Input style={{ width: "70%" }} placeholder="8023456789" />
+                  <InputNumber
+                    required
+                    style={{ width: "70%" }}
+                    placeholder="8023456789"
+                  />
                 </Form.Item>
               </Input.Group>
             </Form.Item>
@@ -446,15 +452,15 @@ const TaskForm = () => {
 
           {/* Row 10: Assign Drivers and Single/Recurring */}
           <div className="grid grid-cols-2 gap-4 mb-[-8px]">
-            <Form.Item label="Assign Drivers" name="drivers" required>
+            <Form.Item label="Assign Drivers" name="drivers">
               <Select placeholder="Select">
                 <Select.Option value="rahul">Rahul +1</Select.Option>
                 {/* Add more options as needed */}
               </Select>
             </Form.Item>
 
-            <Form.Item label="Single or Recurring" name="recurrence" required>
-              <Select placeholder="Select">
+            <Form.Item label="Single or Recurring" name="recurrence">
+              <Select placeholder="Select" defaultValue={"single"}>
                 <Select.Option value="single">Single</Select.Option>
                 <Select.Option value="recurring">Recurring</Select.Option>
               </Select>
@@ -478,8 +484,8 @@ const TaskForm = () => {
 
           {/* Row 12: Payment Status */}
           <div className="">
-            <Form.Item label="Paid/Unpaid" name="paymentStatus" required>
-              <Select placeholder="Select">
+            <Form.Item label="Paid/Unpaid" name="paymentStatus">
+              <Select placeholder="Select" defaultValue={"paid"}>
                 <Select.Option value="paid">Paid</Select.Option>
                 <Select.Option value="unpaid">Unpaid</Select.Option>
               </Select>
