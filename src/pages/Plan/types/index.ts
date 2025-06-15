@@ -41,6 +41,9 @@ export interface Job {
   scheduled_date: string; // ISO datetime string
   job_type: "delivery" | "pickup" | "task";
   delivery_address: string;
+  address_id?: string;
+  lat?: number;
+  lon?: number;
   priority_level: "low" | "medium" | "high";
   first_name?: string; // Optional in JobBase if not explicitly required, but form has it
   last_name?: string;  // Optional in JobBase

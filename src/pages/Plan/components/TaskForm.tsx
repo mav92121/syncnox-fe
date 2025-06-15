@@ -1,4 +1,11 @@
 import {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  type ReactNode,
+} from "react";
+import {
   Form,
   Input,
   Select,
@@ -7,19 +14,49 @@ import {
   Button,
   Upload,
   message,
+  Spin,
+  AutoComplete,
 } from "antd";
-import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  PlusOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
+import type { SelectProps } from "antd/es/select";
 import type { UploadFile } from "antd/es/upload/interface";
 import type { Dayjs } from "dayjs";
 import { usePlanContext } from "../hooks/usePlanContext";
 import type { Job } from "../types";
+
+interface AddressSuggestion {
+  name: string;
+  point: {
+    lat: number;
+    lng: number;
+  };
+  city?: string;
+  country?: string;
+  state?: string;
+  street?: string;
+  housenumber?: string;
+  postcode?: string;
+}
+
+const DEBOUNCE_DELAY = 300; // ms
+const GRAPHHOPPER_API_KEY = import.meta.env.VITE_GRAPHHOPPER_API_KEY;
+const GRAPHHOPPER_API_URL = `${import.meta.env.VITE_GRAPHHOPPER_URL}/geocode`;
 
 // Define an interface for the form values for type safety
 interface TaskFormValues {
   date: Dayjs;
   jobType: "task" | "pickup" | "delivery";
   priority: "low" | "medium" | "high";
-  address: string;
+  address: {
+    name: string;
+    address_id: string;
+    lat: number;
+    lon: number;
+  };
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -43,11 +80,147 @@ const TaskForm = () => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const { addJob } = usePlanContext();
+  const [addressSuggestions, setAddressSuggestions] = useState<
+    AddressSuggestion[]
+  >([]);
+  const [addressPlaceHolder, setAddressPlaceHolder] = useState<
+    string | ReactNode
+  >("Type to search address");
+  const [isSearching, setIsSearching] = useState(false);
+  const searchTimeoutRef = useRef<NodeJS.Timeout>(null);
+
+  const fetchAddressSuggestions = useCallback(
+    async (query: string) => {
+      if (!query.trim()) {
+        setAddressSuggestions([]);
+        return;
+      }
+
+      try {
+        setIsSearching(true);
+        const response = await fetch(
+          `${GRAPHHOPPER_API_URL}?q=${encodeURIComponent(
+            query
+          )}&limit=5&key=${GRAPHHOPPER_API_KEY}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch address suggestions");
+        }
+
+        const data = await response.json();
+        setAddressSuggestions(data.hits || []);
+      } catch (error) {
+        console.error("Error fetching address suggestions:", error);
+        messageApi.error("Failed to load address suggestions");
+        setAddressSuggestions([]);
+      } finally {
+        setIsSearching(false);
+      }
+    },
+    [messageApi]
+  );
+
+  const debouncedSearch = useCallback(
+    (query: string) => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+
+      searchTimeoutRef.current = setTimeout(() => {
+        fetchAddressSuggestions(query);
+      }, DEBOUNCE_DELAY);
+    },
+    [fetchAddressSuggestions]
+  );
+
+  // Clean up timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleAddressSearch = (searchText: string) => {
+    debouncedSearch(searchText);
+  };
+
+  const handleAddressSelect = (value: string) => {
+    const selectedAddress = addressSuggestions.find((addr) => {
+      const displayAddress = [
+        addr.street && addr.housenumber
+          ? `${addr.housenumber} ${addr.street}`
+          : addr.name,
+        addr.city,
+        addr.state,
+        addr.postcode,
+        addr.country,
+      ]
+        .filter(Boolean)
+        .join(", ");
+      return displayAddress === value;
+    });
+
+    if (selectedAddress) {
+      form.setFieldsValue({
+        address: {
+          name: value,
+          address_id: selectedAddress.name,
+          lat: selectedAddress.point.lat,
+          lon: selectedAddress.point.lng,
+        },
+        coordinates: {
+          lat: selectedAddress.point.lat,
+          lng: selectedAddress.point.lng,
+        },
+      });
+      setAddressPlaceHolder(<div style={{ color: "black" }}>{value}</div>);
+    }
+  };
+
+  const addressOptions: SelectProps["options"] = addressSuggestions.map(
+    (addr) => {
+      const displayAddress = [
+        addr.street && addr.housenumber
+          ? `${addr.housenumber} ${addr.street}`
+          : addr.name,
+        addr.city,
+        addr.state,
+        addr.postcode,
+        addr.country,
+      ]
+        .filter(Boolean)
+        .join(", ");
+
+      return {
+        value: displayAddress,
+        label: (
+          <div className="flex flex-col">
+            <span>{addr.name}</span>
+            <span className="text-xs text-gray-500">
+              {[addr.city, addr.state, addr.country].filter(Boolean).join(", ")}
+            </span>
+          </div>
+        ),
+      };
+    }
+  );
   const onFinish = async (values: TaskFormValues) => {
+    // Ensure address is properly set
+    if (!values.address || !values.address.lat || !values.address.lon) {
+      messageApi.warning("Please select an address from the suggestions");
+      return;
+    }
+
     const jobData: Omit<Job, "id" | "created_at" | "updated_at"> = {
       scheduled_date: values.date.toISOString(),
       job_type: values.jobType,
-      delivery_address: values.address,
+      delivery_address: values.address.name, // The formatted address string
+      address_id: values.address.address_id, // The ID from the address object
+      lat: values.address.lat,
+      lon: values.address.lon,
       priority_level: values.priority,
       first_name: values.firstName,
       last_name: values.lastName,
@@ -160,12 +333,31 @@ const TaskForm = () => {
 
             <Form.Item
               label="Address"
+              // name="address"
               name="address"
               rules={[{ required: true, message: "Address is required" }]}
             >
-              <Input
-                placeholder="Select"
-                suffix={<SearchOutlined className="text-gray-400" />}
+              <AutoComplete
+                options={addressOptions}
+                onSearch={handleAddressSearch}
+                onSelect={(value) => {
+                  handleAddressSelect(value);
+                  // Update the form value to match the expected string type
+                  form.setFieldValue("address", {
+                    ...(form.getFieldValue("address") || {}),
+                    name: value,
+                  });
+                }}
+                value={form.getFieldValue("address")?.name || ""}
+                placeholder={addressPlaceHolder}
+                notFoundContent={isSearching ? <Spin size="small" /> : null}
+                suffixIcon={
+                  isSearching ? (
+                    <LoadingOutlined />
+                  ) : (
+                    <SearchOutlined className="text-gray-400" />
+                  )
+                }
               />
             </Form.Item>
           </div>
