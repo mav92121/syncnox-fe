@@ -320,11 +320,7 @@ const TaskForm = () => {
 
           {/* Row 3: Priority and ID */}
           <div className="grid grid-cols-2 gap-4 mb-[-8px]">
-            <Form.Item
-              label="Priority"
-              name="priority"
-              rules={[{ required: true }]}
-            >
+            <Form.Item label="Priority" name="priority">
               <Select placeholder="Select" defaultValue={"medium"}>
                 <Select.Option value="low">Low</Select.Option>
                 <Select.Option value="medium">Medium</Select.Option>
