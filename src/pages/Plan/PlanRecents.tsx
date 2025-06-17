@@ -65,7 +65,25 @@ const PlanRecents = () => {
   const { mapType, setMapType } = useMapState();
   const { jobs, fetchJobs, isLoading, error } = usePlanContext();
   const [transformedTasks, setTransformedTasks] = useState<Task[]>([]);
+  const [mapHeight, setMapHeight] = useState(300); // default height
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const startY = e.clientY;
+    const startHeight = mapHeight;
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const newHeight = startHeight + (moveEvent.clientY - startY);
+      setMapHeight(Math.max(newHeight, 100)); // 100px min height
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  };
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
@@ -107,7 +125,11 @@ const PlanRecents = () => {
             className="h-full w-full"
           />
         </div>
-
+        <div
+          className="p-1 cursor-row-resize"
+          onMouseDown={handleMouseDown}
+          style={{ cursor: "row-resize" }}
+        ></div>
         {/* Table - Takes approximately 60% of the space */}
         <div className="h-3/5 w-full overflow-hidden min-h-0">
           <TasksTable dataSource={transformedTasks} />

@@ -7,7 +7,7 @@ import {
   FileSearchOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Table, Input, Button } from "antd";
+import { Table, Input, Button, Modal } from "antd";
 import type { TableProps } from "antd/es/table";
 import type { ColumnsType } from "antd/es/table";
 import type { Task } from "../types";
@@ -287,7 +287,7 @@ const columns: ColumnsType<Task> = [
 
 const TasksTable = ({ dataSource }: TasksTableProps) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
@@ -296,7 +296,19 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
+  const handelDisableEnabled = () => {
+    if (selectedRowKeys.length > 0) {
+      setIsOpenModal(true);
+    }
+  };
 
+  const handleOk = () => {
+    setIsOpenModal(false);
+  };
+
+  const handleCancel = () => {
+    setIsOpenModal(false);
+  };
   return (
     <div className="flex flex-col w-full shadow overflow-hidden h-full bg-white">
       <div className="flex items-center justify-between flex-shrink-0 pb-2">
@@ -332,7 +344,10 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
             <UploadOutlined />
             Export
           </Button>
-          <Button type="primary">
+          <Button
+            type={selectedRowKeys.length ? `primary` : "default"}
+            onClick={handelDisableEnabled}
+          >
             <svg className="w-4 h-7" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fillRule="evenodd"
@@ -342,6 +357,108 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
             </svg>
             Create New Route
           </Button>
+          {isOpenModal && (
+            <Modal
+              open={isOpenModal}
+              onOk={handleOk}
+              onCancel={handleCancel}
+              footer={null}
+              width={700}
+              centered
+              closeIcon={
+                <span className="text-blue-600 text-sm mr-6">Cancel</span>
+              }
+            >
+              <div className="flex flex-col items-center justify-center py-6">
+                <h2 className="text-2xl font-semibold text-center text-gray-900">
+                  Create a Route
+                </h2>
+                <p className="text-sm text-gray-500 mt-1 mb-6 text-center">
+                  Let’s Get These Deliveries Rollin’ Like a Party on Wheels!
+                </p>
+
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-8">
+                  <img
+                    src="https://img.icons8.com/color/96/000000/marker.png"
+                    alt="map-pin"
+                    className="w-12 h-12"
+                  />
+                </div>
+
+                <div className="w-full max-w-xl">
+                  {/* Route Name */}
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Route Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Name of the Route"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                    />
+                  </div>
+
+                  {/* Optimization Logic */}
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Optimization logic
+                    </label>
+                    <select className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600">
+                      <option>Select Preference</option>
+                      <option>Fastest Route</option>
+                      <option>Shortest Distance</option>
+                    </select>
+                  </div>
+
+                  {/* Assign Team */}
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Assign Team
+                    </label>
+                    <div className="relative">
+                      <select className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600">
+                        <option>Add Team</option>
+                        <option>Team A</option>
+                        <option>Team B</option>
+                      </select>
+                      <div className="absolute right-3 top-1 flex -space-x-2">
+                        <img
+                          src="https://randomuser.me/api/portraits/women/44.jpg"
+                          className="w-6 h-6 rounded-full border-2 border-white"
+                        />
+                        <img
+                          src="https://randomuser.me/api/portraits/women/45.jpg"
+                          className="w-6 h-6 rounded-full border-2 border-white"
+                        />
+                        <img
+                          src="https://randomuser.me/api/portraits/women/46.jpg"
+                          className="w-6 h-6 rounded-full border-2 border-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Button */}
+                  <button className="w-full bg-green-900 text-white py-2 rounded-md text-lg flex justify-center items-center gap-2 hover:bg-green-800 transition">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                    Optimize Route
+                  </button>
+                </div>
+              </div>
+            </Modal>
+          )}
         </div>
       </div>
       {/* Only the table is scrollable */}
