@@ -458,22 +458,17 @@ const TaskForm = () => {
                     },
                   ]}
                 >
-                  <InputNumber
+                  <Input
                     required
                     style={{ width: "70%" }}
                     placeholder="8023456789"
                     maxLength={10}
-                    controls={false}
-                    formatter={(value) => {
-                      // Only allow numbers and limit to 10 digits
-                      const numericValue = value
-                        ?.toString()
-                        .replace(/[^0-9]/g, "");
-                      return numericValue?.slice(0, 10) || "";
-                    }}
-                    parser={(value) => {
-                      // Remove any non-numeric characters
-                      return value?.replace(/[^0-9]/g, "") || "";
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    onInput={(e) => {
+                      // Only allow digits, max 10
+                      const input = e.target as HTMLInputElement;
+                      input.value = input.value.replace(/\D/g, "").slice(0, 10);
                     }}
                   />
                 </Form.Item>
