@@ -15,9 +15,9 @@ export const defaultMapConfig: MapConfig = {
   center: [38.9072, -77.0369], // Washington DC
   zoom: 13,
   markers: [
-    { position: [38.8977, -77.0365], color: "green" }, // National Mall
-    { position: [38.9072, -77.0369], color: "green" }, // White House
-    { position: [38.8899, -77.009], color: "green" }, // Capitol
+    // { position: [38.8977, -77.0365], color: "green" }, // National Mall
+    // { position: [38.9072, -77.0369], color: "green" }, // White House
+    // { position: [38.8899, -77.009], color: "green" }, // Capitol
   ],
 };
 

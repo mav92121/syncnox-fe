@@ -29,6 +29,7 @@ import type { Dayjs } from "dayjs";
 import { usePlanContext } from "../hooks/usePlanContext";
 import type { Job } from "../types";
 import { COUNTRY_CODES } from "../utils/CountryCodes";
+import { useMarkers } from "../context/MarkersContext";
 
 interface AddressSuggestion {
   name: string;
@@ -90,6 +91,7 @@ const TaskForm = () => {
   >("Type to search address");
   const [isSearching, setIsSearching] = useState(false);
   const searchTimeoutRef = useRef<NodeJS.Timeout>(null);
+  const { markers, addMarker, removeMarker } = useMarkers();
 
   const fetchAddressSuggestions = useCallback(
     async (query: string) => {
@@ -263,6 +265,12 @@ const TaskForm = () => {
       const newJob = await addJob(jobData);
       if (newJob) {
         messageApi.success("Job added successfully!");
+
+        addMarker({
+          position: [newJob.lat!, newJob.lon!],
+          color: "green",
+          title: `${newJob.address_id!}`,
+        });
         form.resetFields();
       } else {
         // This case can occur if addJob completes but doesn't return a job (e.g., void return path in PlanContext)

@@ -6,6 +6,7 @@ import PlanAdd from "./pages/Plan/PlanAdd";
 import PlanRecents from "./pages/Plan/PlanRecents";
 import theme from "./theme/themeConfig";
 import { PlanProvider } from "./pages/Plan/context/PlanContext";
+import { MarkersProvider } from "./pages/Plan/context/MarkersContext";
 const Dashboard = () => <div>Dashboard Page</div>;
 
 const router = createBrowserRouter([
@@ -44,7 +45,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <ConfigProvider theme={theme}>
-      <RouterProvider router={router} />
+      <MarkersProvider>
+        <RouterProvider router={router} />
+      </MarkersProvider>
     </ConfigProvider>
   );
 }

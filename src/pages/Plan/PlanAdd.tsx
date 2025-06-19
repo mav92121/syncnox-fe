@@ -3,9 +3,11 @@ import TaskForm from "./components/TaskForm";
 import MapComponent from "./components/MapComponent";
 import { useMapState } from "./hooks/useMapState";
 import { defaultMapConfig } from "./utils/mapConfig";
+import { useMarkers } from "./context/MarkersContext";
 
 const PlanAdd = () => {
   const { mapType, setMapType } = useMapState();
+  const { markers } = useMarkers(); // Get markers from context
 
   return (
     <div className="h-full flex flex-col">
@@ -23,7 +25,7 @@ const PlanAdd = () => {
         <MapComponent
           mapType={mapType}
           setMapType={setMapType}
-          config={defaultMapConfig}
+          config={{ ...defaultMapConfig, markers }} // Combine config with context markers
           className="w-[60%]"
         />
       </div>
