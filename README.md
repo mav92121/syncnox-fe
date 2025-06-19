@@ -1,6 +1,6 @@
 # Syncnox FE
 
-This is the frontend for **Syncnox**, built with **Vite**, **React**, and **TypeScript**.
+This is the frontend for **Syncnox**, built with **Vite**, **React**, and **TypeScript**
 
 ## 🚀 Getting Started
 
