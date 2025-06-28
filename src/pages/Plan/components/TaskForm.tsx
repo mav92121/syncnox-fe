@@ -28,6 +28,7 @@ import type { UploadFile } from "antd/es/upload/interface";
 import type { Dayjs } from "dayjs";
 import { usePlanContext } from "../hooks/usePlanContext";
 import type { Job } from "../types";
+import "./TaskForm.css";
 
 interface AddressSuggestion {
   name: string;
@@ -280,6 +281,17 @@ const TaskForm = () => {
     }
   };
 
+  // Custom required mark component
+  const customRequiredMark = (
+    label: React.ReactNode,
+    { required }: { required: boolean }
+  ) => (
+    <>
+      {label}
+      {required && <span className="text-red-500 ml-1">*</span>}
+    </>
+  );
+
   return (
     <div className="flex flex-col h-full">
       {contextHolder}
@@ -289,8 +301,8 @@ const TaskForm = () => {
           form={form}
           layout="vertical"
           onFinish={onFinish}
-          // requiredMark="optional"
-          // className="space-y-4"
+          className="custom-form"
+          requiredMark={customRequiredMark}
         >
           {/* Row 1: Date and Type */}
           <div className="grid grid-cols-2 gap-4 mb-[-8px]">
@@ -318,7 +330,7 @@ const TaskForm = () => {
           {/* Row 2: Address */}
           <div className="mb-[-8px]"></div>
 
-          {/* Row 3: Priority and ID */}
+          {/* Row 3: Priority and Assign Drivers */}
           <div className="grid grid-cols-2 gap-4 mb-[-8px]">
             <Form.Item label="Priority" name="priority">
               <Select placeholder="Select" defaultValue={"medium"}>
@@ -328,9 +340,18 @@ const TaskForm = () => {
               </Select>
             </Form.Item>
 
+            <Form.Item label="Assign Drivers" name="drivers">
+              <Select placeholder="Select">
+                <Select.Option value="rahul">Rahul +1</Select.Option>
+                {/* Add more options as needed */}
+              </Select>
+            </Form.Item>
+          </div>
+
+          {/* Row 4: Full Width Address */}
+          <div className="mb-[-8px]">
             <Form.Item
               label="Address"
-              // name="address"
               name="address"
               rules={[{ required: true, message: "Address is required" }]}
             >
@@ -339,7 +360,6 @@ const TaskForm = () => {
                 onSearch={handleAddressSearch}
                 onSelect={(value) => {
                   handleAddressSelect(value);
-                  // Update the form value to match the expected string type
                   form.setFieldValue("address", {
                     ...(form.getFieldValue("address") || {}),
                     name: value,
@@ -356,6 +376,41 @@ const TaskForm = () => {
                   )
                 }
               />
+            </Form.Item>
+          </div>
+
+          {/* Row 5: Phone Number */}
+          <div className="mb-[-8px]">
+            <Form.Item
+              label="Phone Number"
+              name="phone"
+              required
+              rules={[{ required: true, message: "Phone number is required" }]}
+            >
+              <Input.Group compact={false} className="flex gap-2">
+                <Form.Item
+                  name={["phone", "countryCode"]}
+                  noStyle
+                  initialValue="+234"
+                >
+                  <Select style={{ width: "30%" }}>
+                    <Select.Option value="+234">+234</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name={["phone", "number"]}
+                  noStyle
+                  rules={[
+                    { required: true, message: "Phone number is required" },
+                  ]}
+                >
+                  <InputNumber
+                    required
+                    style={{ width: "70%" }}
+                    placeholder="8023456789"
+                  />
+                </Form.Item>
+              </Input.Group>
             </Form.Item>
           </div>
 
@@ -401,38 +456,7 @@ const TaskForm = () => {
             </Form.Item>
           </div>
 
-          {/* Row 7: Phone */}
-          <div className="mb-[-8px]">
-            <Form.Item label="Phone Number" name="phone">
-              <Input.Group compact={false} className="flex gap-2">
-                <Form.Item
-                  name={["phone", "countryCode"]}
-                  noStyle
-                  initialValue="+234"
-                >
-                  <Select style={{ width: "30%" }}>
-                    <Select.Option value="+234">+234</Select.Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item
-                  name={["phone", "number"]}
-                  noStyle
-                  required
-                  rules={[
-                    { required: true, message: "Phone number is required" },
-                  ]}
-                >
-                  <InputNumber
-                    required
-                    style={{ width: "70%" }}
-                    placeholder="8023456789"
-                  />
-                </Form.Item>
-              </Input.Group>
-            </Form.Item>
-          </div>
-
-          {/* Row 8: Customer Preferences */}
+          {/* Row 9: Customer Preferences */}
           <div className="mb-[-8px]">
             <Form.Item label="Customer Preferences" name="preferences">
               <Input.TextArea rows={3} placeholder="Type" />
@@ -446,19 +470,19 @@ const TaskForm = () => {
             </Form.Item>
           </div>
 
-          {/* Row 10: Assign Drivers and Single/Recurring */}
+          {/* Row 10: Single/Recurring and Payment Status */}
           <div className="grid grid-cols-2 gap-4 mb-[-8px]">
-            <Form.Item label="Assign Drivers" name="drivers">
-              <Select placeholder="Select">
-                <Select.Option value="rahul">Rahul +1</Select.Option>
-                {/* Add more options as needed */}
-              </Select>
-            </Form.Item>
-
             <Form.Item label="Single or Recurring" name="recurrence">
               <Select placeholder="Select" defaultValue={"single"}>
                 <Select.Option value="single">Single</Select.Option>
                 <Select.Option value="recurring">Recurring</Select.Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item label="Paid/Unpaid" name="paymentStatus">
+              <Select placeholder="Select" defaultValue={"paid"}>
+                <Select.Option value="paid">Paid</Select.Option>
+                <Select.Option value="unpaid">Unpaid</Select.Option>
               </Select>
             </Form.Item>
           </div>
@@ -477,16 +501,6 @@ const TaskForm = () => {
               </Upload.Dragger>
             </Form.Item>
           </div>
-
-          {/* Row 12: Payment Status */}
-          <div className="">
-            <Form.Item label="Paid/Unpaid" name="paymentStatus">
-              <Select placeholder="Select" defaultValue={"paid"}>
-                <Select.Option value="paid">Paid</Select.Option>
-                <Select.Option value="unpaid">Unpaid</Select.Option>
-              </Select>
-            </Form.Item>
-          </div>
         </Form>
       </div>
       <div className="mt-4 sticky bottom-0 bg-white px-2">
@@ -496,6 +510,15 @@ const TaskForm = () => {
           block
           onClick={() => form.submit()}
         >
+          <svg
+            className="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <circle cx="12" cy="12" r="10" strokeWidth="2" />
+            <path strokeWidth="2" d="M12 8v8M8 12h8" />
+          </svg>
           Add
         </Button>
       </div>
