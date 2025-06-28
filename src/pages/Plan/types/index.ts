@@ -34,6 +34,11 @@ export interface Task {
   team: string[];
   files: number;
   paid: string;
+  latitude?: string;
+  longitude?: string;
+  lat?: number | null;
+  lon?: number | null;
+  [key: string]: any; // Add index signature to allow dynamic properties
 }
 
 export interface Job {

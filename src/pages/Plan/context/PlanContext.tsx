@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import apiClient from "../../../services/client"; // Points to src/services/client.ts
 import type { Job } from "../types";
 import { PlanContext } from "./planContextDefinition"; // Import the context
+import type { OptimizationResult } from "../../../services/optimization";
 
 // PlanContextType interface has been moved to ./planContextDefinition.ts
 // PlanContext (createContext call) has been moved to ./planContextDefinition.ts
@@ -45,6 +46,7 @@ export const PlanProvider: React.FC<PlanProviderProps> = ({ children }) => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [optimizationResult, setOptimizationResult] = useState<OptimizationResult | null>(null);
 
   const fetchJobs = useCallback(async () => {
     setIsLoading(true);
@@ -109,7 +111,17 @@ export const PlanProvider: React.FC<PlanProviderProps> = ({ children }) => {
   }, [fetchJobs]);
 
   return (
-    <PlanContext.Provider value={{ jobs, isLoading, error, fetchJobs, addJob }}>
+    <PlanContext.Provider 
+      value={{ 
+        jobs, 
+        isLoading, 
+        error, 
+        optimizationResult,
+        fetchJobs, 
+        addJob,
+        setOptimizationResult 
+      }}
+    >
       {children}
     </PlanContext.Provider>
   );

@@ -11,7 +11,7 @@ const PlanAdd = () => {
     <div className="h-full flex flex-col">
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
-        <div className="w-[40%] flex flex-col">
+        <div className="w-[65%] flex flex-col">
           <ActionButtons className="mb-3" />
           {/* Form */}
           <div className="w-full overflow-auto custom-scrollbar pr-1">
@@ -24,7 +24,7 @@ const PlanAdd = () => {
           mapType={mapType}
           setMapType={setMapType}
           config={defaultMapConfig}
-          className="w-[60%]"
+          className="w-[40%]"
         />
       </div>
     </div>

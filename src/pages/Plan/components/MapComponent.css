@@ -1,0 +1,71 @@
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.leaflet-popup-content {
+  margin: 8px 12px;
+}
+
+.leaflet-popup-close-button {
+  padding: 4px 8px;
+  font-size: 16px;
+  color: #6b7280;
+  transition: color 0.2s;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #374151;
+  background: none;
+}
+
+/* Custom marker styles */
+.custom-marker {
+  background: none;
+  border: none;
+}
+
+/* Custom marker styles */
+.custom-marker {
+  background: none;
+  border: none;
+}
+
+.custom-marker img {
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.custom-marker .marker-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  margin-top: -2px; /* Adjust vertical centering */
+}
+
+/* Animation for route updates */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.leaflet-marker-icon {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.leaflet-popup {
+  animation: fadeIn 0.2s ease-in;
+}

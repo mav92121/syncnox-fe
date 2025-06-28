@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        index: true,
+        path: "/",
         element: <Dashboard />,
       },
       {
@@ -23,19 +23,11 @@ const router = createBrowserRouter([
       },
       {
         path: "plan/add",
-        element: (
-          <PlanProvider>
-            <PlanAdd />
-          </PlanProvider>
-        ),
+        element: <PlanAdd />,
       },
       {
         path: "plan/recents",
-        element: (
-          <PlanProvider>
-            <PlanRecents />
-          </PlanProvider>
-        ),
+        element: <PlanRecents />,
       },
     ],
   },
@@ -44,7 +36,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <ConfigProvider theme={theme}>
-      <RouterProvider router={router} />
+      <PlanProvider>
+        <RouterProvider router={router} />
+      </PlanProvider>
     </ConfigProvider>
   );
 }

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Button, message, Table, Input } from "antd";
+import type { TableProps, TableColumnType } from "antd";
 import {
   SearchOutlined,
   MoreOutlined,
@@ -6,14 +8,16 @@ import {
   DeleteOutlined,
   FileSearchOutlined,
   UploadOutlined,
+  LoadingOutlined,
 } from "@ant-design/icons";
-import { Table, Input, Button } from "antd";
-import type { TableProps } from "antd/es/table";
-import type { ColumnsType } from "antd/es/table";
+import { usePlan } from "../context/planContextDefinition";
+import { optimizeRoutes } from "../../../services/optimization";
+import type { Job as OptimizationJob } from "../../../services/optimization";
 import type { Task } from "../types";
 
 type TableRowSelection<T extends object = object> =
   TableProps<T>["rowSelection"];
+type ColumnsType<T> = TableColumnType<T>[];
 
 interface TasksTableProps {
   dataSource: Task[];
@@ -287,18 +291,163 @@ const columns: ColumnsType<Task> = [
 
 const TasksTable = ({ dataSource }: TasksTableProps) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [isOptimizing, setIsOptimizing] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+  const { jobs, setOptimizationResult } = usePlan();
 
+  // Helper function to find a job by id
+  const getJobById = (id: string) => {
+    return jobs?.find((job) => job.id == id);
+  };
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
+
   const rowSelection: TableRowSelection<Task> = {
     selectedRowKeys,
     onChange: onSelectChange,
   };
 
+  // Helper function to convert 12-hour time to 24-hour format (HH:MM:SS)
+  // const convertTo24HourFormat = (timeStr: string): string => {
+  //   if (!timeStr) return "09:00:00";
+
+  //   // If already in 24-hour format, return as is
+  //   if (/^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/.test(timeStr)) {
+  //     return timeStr.includes(":") && timeStr.split(":").length === 2
+  //       ? `${timeStr}:00`
+  //       : timeStr;
+  //   }
+
+  //   // Convert 12-hour format to 24-hour format
+  //   const time = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  //   if (!time) return "09:00:00";
+
+  //   // Using underscore prefix to indicate intentionally unused variable
+  //   const [_match, _hours, _minutes] = time; // eslint-disable-line @typescript-eslint/no-unused-vars
+  //   const period = time[3].toUpperCase();
+
+  //   let hours = _hours;
+  //   let minutes = _minutes;
+
+  //   if (period === "PM" && hours !== "12") {
+  //     hours = String(parseInt(hours, 10) + 12);
+  //   } else if (period === "AM" && hours === "12") {
+  //     hours = "00";
+  //   }
+
+  //   // Ensure two digits
+  //   hours = hours.padStart(2, "0");
+  //   minutes = minutes.padStart(2, "0");
+
+  //   return `${hours}:${minutes}:00`;
+  // };
+
+  const handleCreateRoute = async () => {
+    console.log("Create Route button clicked");
+    console.log("Selected row keys:", selectedRowKeys);
+
+    if (selectedRowKeys.length === 0) {
+      console.log("No jobs selected, showing warning");
+      messageApi.warning("Please select at least one job to create a route");
+      return;
+    }
+
+    const selectedJobs = dataSource.filter((job) =>
+      selectedRowKeys.includes(job.key as React.Key)
+    );
+
+    console.log("selected jobs -> ", selectedJobs);
+
+    // Use original job data for validation
+    const jobsWithInvalidCoords = selectedJobs.filter((job) => {
+      const jobData = getJobById(job.id) || job;
+      const lat = jobData.lat ?? null;
+      const lng = jobData.lon ?? null;
+      console.log("job data -> ", jobData);
+
+      // Check if coordinates are valid
+      return (
+        lat === null ||
+        lng === null ||
+        isNaN(Number(lat)) ||
+        isNaN(Number(lng)) ||
+        Number(lat) < -90 ||
+        Number(lat) > 90 ||
+        Number(lng) < -180 ||
+        Number(lng) > 180
+      );
+    });
+
+    if (jobsWithInvalidCoords.length > 0) {
+      const jobIds = jobsWithInvalidCoords
+        .map((job) => `#${job.id}`)
+        .join(", ");
+      messageApi.error(
+        `Cannot create route: Jobs ${jobIds} have invalid or missing coordinates. Please check the address and try again.`
+      );
+      return;
+    }
+
+    // Convert selected tasks to optimization jobs format
+    const optimizationJobs: OptimizationJob[] = selectedJobs.map((job) => {
+      const jobData = getJobById(job.id) || job;
+      // const timeWindowStart = jobData.start_time
+      //   ? new Date(jobData.start_time).toLocaleTimeString("en-US", {
+      //       hour12: true,
+      //       hour: "numeric",
+      //       minute: "2-digit",
+      //     })
+      //   : "09:00 AM";
+      // const timeWindowEnd = jobData.end_time
+      //   ? new Date(jobData.end_time).toLocaleTimeString("en-US", {
+      //       hour12: true,
+      //       hour: "numeric",
+      //       minute: "2-digit",
+      //     })
+      //   : "06:00 PM";
+
+      return {
+        id: job.id,
+        location: {
+          lat: jobData.lat || 0,
+          lng: jobData.lon || 0,
+        },
+        duration: jobData.duration_minutes
+          ? jobData.duration_minutes * 60
+          : 1800, // Convert minutes to seconds if available
+        // time_window: {
+        //   start: convertTo24HourFormat(timeWindowStart),
+        //   end: convertTo24HourFormat(timeWindowEnd),
+        // },
+        priority:
+          jobData.priority_level === "high"
+            ? 10
+            : jobData.priority_level === "medium"
+            ? 5
+            : 1,
+      };
+    });
+
+    try {
+      setIsOptimizing(true);
+      const result = await optimizeRoutes(optimizationJobs);
+      setOptimizationResult(result);
+      messageApi.success("Route optimized successfully!");
+    } catch (error) {
+      console.error("Error optimizing route:", error);
+      messageApi.error(
+        "Failed to optimize route. Please ensure all jobs have valid addresses and try again."
+      );
+    } finally {
+      setIsOptimizing(false);
+    }
+  };
+
   return (
     <div className="flex flex-col w-full shadow overflow-hidden h-full bg-white">
+      {contextHolder}
       <div className="flex items-center justify-between flex-shrink-0 pb-2">
         <h4 className="text-xl tracking-tight">Jobs</h4>
         <div className="flex space-x-4 gap-3">
@@ -332,15 +481,29 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
             <UploadOutlined />
             Export
           </Button>
-          <Button type="primary">
-            <svg className="w-4 h-7" viewBox="0 0 20 20" fill="currentColor">
-              <path
-                fillRule="evenodd"
-                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Create New Route
+          <Button
+            type="primary"
+            onClick={handleCreateRoute}
+            disabled={isOptimizing}
+            icon={
+              isOptimizing ? (
+                <LoadingOutlined />
+              ) : (
+                <svg
+                  className="w-4 h-7"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              )
+            }
+          >
+            {isOptimizing ? "Optimizing..." : "Create New Route"}
           </Button>
         </div>
       </div>
@@ -356,6 +519,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
             pagination={false}
             columns={columns}
             dataSource={dataSource}
+            rowKey={(record) => record.id || record.key}
             size="small"
             tableLayout="auto"
             className="min-w-full"
