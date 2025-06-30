@@ -71,7 +71,7 @@ const SideBar = () => {
 
   return (
     <div
-      className={`h-screen bg-white flex flex-col justify-between border-r border-gray-100 shadow-sm overflow-hidden transition-all duration-300 ${
+      className={`h-screen bg-white flex flex-col justify-between border-r border-gray-100 overflow-hidden transition-all duration-300 ${
         isExpended ? "w-[280px]" : "w-[60px]"
       }`}
       onMouseLeave={() => {

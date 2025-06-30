@@ -296,7 +296,7 @@ const TaskForm = () => {
     <div className="flex flex-col h-full">
       {contextHolder}
       <h2 className="text-base font-medium mb-3 px-1">Add Job</h2>
-      <div className="flex-1 overflow-y-auto px-2">
+      <div className="flex-1 overflow-y-auto px-2 custom-scrollbar">
         <Form
           form={form}
           layout="vertical"
