@@ -449,7 +449,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
     <div className="flex flex-col w-full shadow overflow-hidden h-full bg-white">
       {contextHolder}
       <div className="flex items-center justify-between flex-shrink-0 pb-2">
-        <h4 className="text-xl tracking-tight">Jobs</h4>
+        <h4 className="text-md tracking-tight">Jobs</h4>
         <div className="flex space-x-4 gap-3">
           <div className="flex gap-10">
             <Input
