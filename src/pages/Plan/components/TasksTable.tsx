@@ -292,8 +292,18 @@ const columns: ColumnsType<Task> = [
 const TasksTable = ({ dataSource }: TasksTableProps) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isOptimizing, setIsOptimizing] = useState(false);
+  const [searchText, setSearchText] = useState('');
   const [messageApi, contextHolder] = message.useMessage();
   const { jobs, setOptimizationResult } = usePlan();
+
+  // Filter data based on search text
+  const filteredData = searchText
+    ? dataSource.filter(item => 
+        Object.values(item).some(
+          val => val && val.toString().toLowerCase().includes(searchText.toLowerCase())
+        )
+      )
+    : dataSource;
 
   // Helper function to find a job by id
   const getJobById = (id: string) => {
@@ -462,7 +472,8 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
               }
               // className="pl-9 h-[20px]"
               placeholder={"search"}
-              // onChange={(e) => onSearch && onSearch(e.target.value)}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
             />
           </div>
           <div className="border-gray-200 cursor-pointer text-sm px-4 py-2 flex gap-2 items-center">
@@ -518,7 +529,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
             scroll={undefined}
             pagination={false}
             columns={columns}
-            dataSource={dataSource}
+            dataSource={filteredData}
             rowKey={(record) => record.id || record.key}
             size="small"
             tableLayout="auto"
