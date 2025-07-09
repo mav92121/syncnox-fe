@@ -476,15 +476,15 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
               onChange={(e) => setSearchText(e.target.value)}
             />
           </div>
-          <div className="border-gray-200 cursor-pointer text-sm px-4 py-2 flex gap-2 items-center">
+          <div className="border-gray-200 cursor-pointer text-sm flex gap-1 items-center">
             <DeleteOutlined />
             <div>Delete</div>
           </div>
-          <div className="border-gray-200 cursor-pointer text-sm flex gap-2 items-center">
+          <div className="border-gray-200 cursor-pointer text-sm flex gap-1 items-center">
             <FilterOutlined />
             <div>Filters</div>
           </div>
-          <div className="border-gray-200 cursor-pointer text-sm flex gap-2 items-center">
+          <div className="border-gray-200 cursor-pointer text-sm flex gap-1 pr-3 items-center">
             <FileSearchOutlined />
             <div>Verify</div>
           </div>
