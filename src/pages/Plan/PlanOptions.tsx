@@ -1,4 +1,4 @@
-import ActionButtons from "./components/ActionButtons";
+// import ActionButtons from "./components/ActionButtons";
 import TaskOptions from "./components/TaskOptions";
 import MapComponent from "./components/MapComponent";
 import { useMapState } from "./hooks/useMapState";
@@ -10,9 +10,9 @@ const PlanOptions = () => {
   return (
     <div className="h-full flex flex-col">
       {/* Action Buttons */}
-      <div className="pb-2">
+      {/* <div className="pb-2">
         <ActionButtons />
-      </div>
+      </div> */}
 
       {/* Main Content Area */}
       <div className="flex-1 flex relative">
