@@ -292,15 +292,17 @@ const columns: ColumnsType<Task> = [
 const TasksTable = ({ dataSource }: TasksTableProps) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isOptimizing, setIsOptimizing] = useState(false);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
   const { jobs, setOptimizationResult } = usePlan();
 
   // Filter data based on search text
   const filteredData = searchText
-    ? dataSource.filter(item => 
+    ? dataSource.filter((item) =>
         Object.values(item).some(
-          val => val && val.toString().toLowerCase().includes(searchText.toLowerCase())
+          (val) =>
+            val &&
+            val.toString().toLowerCase().includes(searchText.toLowerCase())
         )
       )
     : dataSource;
@@ -476,7 +478,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
               onChange={(e) => setSearchText(e.target.value)}
             />
           </div>
-          <div className="border-gray-200 cursor-pointer text-sm flex gap-1 items-center">
+          {/* <div className="border-gray-200 cursor-pointer text-sm flex gap-1 items-center">
             <DeleteOutlined />
             <div>Delete</div>
           </div>
@@ -484,10 +486,26 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
             <FilterOutlined />
             <div>Filters</div>
           </div>
-          <div className="border-gray-200 cursor-pointer text-sm flex gap-1 pr-3 items-center">
+          <div className="border-gray-200 cursor-pointer text-sm flex gap-1 items-center">
             <FileSearchOutlined />
             <div>Verify</div>
+          </div> */}
+
+          <div className="flex items-center gap-x-4">
+            <div className="cursor-pointer text-sm flex items-center gap-1">
+              <DeleteOutlined />
+              <div>Delete</div>
+            </div>
+            <div className="cursor-pointer text-sm flex items-center gap-1">
+              <FilterOutlined />
+              <div>Filters</div>
+            </div>
+            <div className="cursor-pointer text-sm flex items-center gap-1">
+              <FileSearchOutlined />
+              <div>Verify</div>
+            </div>
           </div>
+
           <Button>
             <UploadOutlined />
             Export
