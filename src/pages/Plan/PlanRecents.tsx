@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Spin } from "antd";
-import ActionButtons from "./components/ActionButtons";
+// import ActionButtons from "./components/ActionButtons";
 import TasksTable from "./components/TasksTable";
 import MapComponent from "./components/MapComponent";
 import { useMapState } from "./hooks/useMapState";
@@ -8,6 +8,7 @@ import { defaultMapConfig } from "./utils/mapConfig";
 import { usePlanContext } from "./hooks/usePlanContext";
 import type { Job, Task } from "./types";
 import dayjs from "dayjs";
+import type { Map as LeafletMap } from "leaflet";
 
 // Helper to capitalize
 const capitalizeFirstLetter = (string: string = "") => {
@@ -65,6 +66,7 @@ const PlanRecents = () => {
   const { mapType, setMapType } = useMapState();
   const { jobs, fetchJobs, isLoading, error } = usePlanContext();
   const [transformedTasks, setTransformedTasks] = useState<Task[]>([]);
+  const mapRef = useRef<LeafletMap | null>(null);
 
   useEffect(() => {
     fetchJobs();
@@ -75,6 +77,14 @@ const PlanRecents = () => {
       setTransformedTasks(mapJobsToTasks(jobs));
     }
   }, [jobs]);
+
+  const handleMapView = (lat: number, lon: number) => {
+    if (mapRef.current && lat && lon) {
+      mapRef.current.setView([lat, lon], 16);
+    } else {
+      console.warn("Map not ready or invalid lat/lon", lat, lon);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -92,9 +102,9 @@ const PlanRecents = () => {
   return (
     <div className="h-full flex flex-col max-w-full overflow-hidden">
       {/* Action Buttons */}
-      <div className="pb-2 flex-shrink-0">
+      {/* <div className="pb-2 flex-shrink-0">
         <ActionButtons />
-      </div>
+      </div> */}
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden min-h-0">
@@ -105,12 +115,17 @@ const PlanRecents = () => {
             setMapType={setMapType}
             config={defaultMapConfig}
             className="h-full w-full"
+            jobs={jobs}
+            mapRef={mapRef}
           />
         </div>
 
         {/* Table - Takes approximately 60% of the space */}
         <div className="h-3/5 w-full overflow-hidden min-h-0">
-          <TasksTable dataSource={transformedTasks} />
+          <TasksTable
+            dataSource={transformedTasks}
+            onMapView={handleMapView}
+          />
         </div>
       </div>
     </div>
