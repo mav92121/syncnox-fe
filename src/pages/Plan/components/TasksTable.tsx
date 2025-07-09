@@ -462,7 +462,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
       {contextHolder}
       <div className="flex items-center justify-between flex-shrink-0 pb-2">
         <h4 className="text-md tracking-tight">Jobs</h4>
-        <div className="flex space-x-4 gap-3">
+        <div className="flex space-x-4 gap-x-4">
           <div className="flex gap-10">
             <Input
               type="text"
@@ -478,34 +478,18 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
               onChange={(e) => setSearchText(e.target.value)}
             />
           </div>
-          {/* <div className="border-gray-200 cursor-pointer text-sm flex gap-1 items-center">
+          <div className="cursor-pointer text-sm flex items-center gap-1">
             <DeleteOutlined />
             <div>Delete</div>
           </div>
-          <div className="border-gray-200 cursor-pointer text-sm flex gap-1 items-center">
+          <div className="cursor-pointer text-sm flex items-center gap-1">
             <FilterOutlined />
             <div>Filters</div>
           </div>
-          <div className="border-gray-200 cursor-pointer text-sm flex gap-1 items-center">
+          <div className="cursor-pointer text-sm flex items-center gap-1">
             <FileSearchOutlined />
             <div>Verify</div>
-          </div> */}
-
-          <div className="flex items-center gap-x-4">
-            <div className="cursor-pointer text-sm flex items-center gap-1">
-              <DeleteOutlined />
-              <div>Delete</div>
-            </div>
-            <div className="cursor-pointer text-sm flex items-center gap-1">
-              <FilterOutlined />
-              <div>Filters</div>
-            </div>
-            <div className="cursor-pointer text-sm flex items-center gap-1">
-              <FileSearchOutlined />
-              <div>Verify</div>
-            </div>
           </div>
-
           <Button>
             <UploadOutlined />
             Export
