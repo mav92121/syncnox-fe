@@ -27,6 +27,11 @@ interface OSRMRoute {
   }>;
 }
 
+// type Props = {
+//   mapRef: React.MutableRefObject<Map | null>;
+//   onMapReady?: () => void; // ✅ optional callback
+// };
+
 // Type definition for decoded polyline coordinates
 type LatLngTuple = [number, number];
 
@@ -46,6 +51,15 @@ const MapUpdater = ({ bounds }: { bounds: L.LatLngBounds | null }) => {
 
   return null;
 };
+
+// const MapRefInitializer = ({ mapRef, onMapReady }: Props) => {
+//   const map = useMap();
+//   useEffect(() => {
+//     mapRef.current = map;
+//     onMapReady?.(); 
+//   }, [map]);
+//   return null;
+// };
 
 const MapRefInitializer = ({ mapRef }: { mapRef: RefObject<Map | null> }) => {
   const map = useMap();
@@ -128,6 +142,7 @@ const MapComponent = ({
   className = "",
   opacity = 1,
   mapRef,
+  // setMapReady,
 }: MapComponentProps) => {
   // Get the optimization result from context
   const { optimizationResult } = usePlanContext();
@@ -330,6 +345,7 @@ const MapComponent = ({
         style={{ height: "100%", width: "100%" }}
       >
         <MapRefInitializer mapRef={mapRef} />
+        {/* <MapRefInitializer mapRef={mapRef} onMapReady={() => setMapReady(true)} /> */}
         <MapUpdater bounds={bounds} />
         <TileLayer
           url={mapUrls[mapType]}

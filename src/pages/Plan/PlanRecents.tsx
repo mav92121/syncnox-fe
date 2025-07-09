@@ -67,6 +67,8 @@ const PlanRecents = () => {
   const { jobs, fetchJobs, isLoading, error } = usePlanContext();
   const [transformedTasks, setTransformedTasks] = useState<Task[]>([]);
   const mapRef = useRef<LeafletMap | null>(null);
+  // const [mapReady, setMapReady] = useState(false); 
+  // const [queuedLatLon, setQueuedLatLon] = useState<{ lat: number; lon: number } | null>(null);
 
   useEffect(() => {
     fetchJobs();
@@ -78,9 +80,34 @@ const PlanRecents = () => {
     }
   }, [jobs]);
 
+// useEffect(() => {
+//   if (queuedLatLon && mapReady && mapRef.current) {
+//     mapRef.current.flyTo([queuedLatLon.lat, queuedLatLon.lon], 16, {
+//       animate: true,
+//       duration: 1.2,
+//     });
+//     setQueuedLatLon(null);
+//   }
+// }, [mapReady, queuedLatLon]);
+
+// const handleMapView = (lat: number, lon: number) => {
+//   if (mapReady && mapRef.current) {
+//     mapRef.current.flyTo([lat, lon], 16, {
+//       animate: true,
+//       duration: 1.2,
+//     });
+//   } else {
+//     setQueuedLatLon({ lat, lon });
+//   }
+// };
+
   const handleMapView = (lat: number, lon: number) => {
     if (mapRef.current && lat && lon) {
-      mapRef.current.setView([lat, lon], 16);
+      mapRef.current.setView([lat, lon], 16, {
+        animate: true,
+        duration: 1.2,
+        easeLinearity: 0.25,
+      });
     } else {
       console.warn("Map not ready or invalid lat/lon", lat, lon);
     }
@@ -117,15 +144,13 @@ const PlanRecents = () => {
             className="h-full w-full"
             jobs={jobs}
             mapRef={mapRef}
+            // setMapReady={setMapReady}
           />
         </div>
 
         {/* Table - Takes approximately 60% of the space */}
         <div className="h-3/5 w-full overflow-hidden min-h-0">
-          <TasksTable
-            dataSource={transformedTasks}
-            onMapView={handleMapView}
-          />
+          <TasksTable dataSource={transformedTasks} onMapView={handleMapView} />
         </div>
       </div>
     </div>
