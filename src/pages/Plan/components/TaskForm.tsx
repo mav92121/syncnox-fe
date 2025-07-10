@@ -29,6 +29,7 @@ import type { Dayjs } from "dayjs";
 import { usePlanContext } from "../hooks/usePlanContext";
 import type { Job } from "../types";
 import "./TaskForm.css";
+import { COUNTRY_CODES } from "@/assets/assets";
 
 interface AddressSuggestion {
   name: string;
@@ -387,14 +388,16 @@ const TaskForm = () => {
               required
               rules={[{ required: true, message: "Phone number is required" }]}
             >
-              <Input.Group compact={false} className="flex gap-2">
+              <Input.Group compact className="flex gap-3">
                 <Form.Item
                   name={["phone", "countryCode"]}
                   noStyle
-                  initialValue="+234"
+                  initialValue={`🇺🇸 +1`}
                 >
-                  <Select style={{ width: "30%" }}>
-                    <Select.Option value="+234">+234</Select.Option>
+                  <Select style={{ width: "20%", marginRight: "22px" }}>
+                  {COUNTRY_CODES.map((item) =>(
+                    <Select.Option value={`${item.flag} ${item.code}`}>{`${item.flag} ${item.code}`}</Select.Option>
+                  ))}
                   </Select>
                 </Form.Item>
                 <Form.Item
@@ -406,7 +409,7 @@ const TaskForm = () => {
                 >
                   <InputNumber
                     required
-                    style={{ width: "70%" }}
+                    style={{ width: "77%" }}
                     placeholder="8023456789"
                   />
                 </Form.Item>
