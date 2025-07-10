@@ -397,7 +397,7 @@ const TaskForm = () => {
                   <Select
                     style={{
                       width: "20%",
-                      marginRight: "20px",
+                      marginRight: "15px",
                     }}
                   >
                     {COUNTRY_CODES.map((item) => (
