@@ -388,16 +388,18 @@ const TaskForm = () => {
               required
               rules={[{ required: true, message: "Phone number is required" }]}
             >
-              <Input.Group compact className="flex">
+              <Input.Group className="flex gap-4">
                 <Form.Item
                   name={["phone", "countryCode"]}
                   noStyle
                   initialValue={`🇺🇸 +1`}
                 >
-                  <Select style={{ width: "20%", marginRight: "5px" }}>
-                  {COUNTRY_CODES.map((item) =>(
-                    <Select.Option value={`${item.flag} ${item.code}`}>{`${item.flag} ${item.code}`}</Select.Option>
-                  ))}
+                  <Select style={{ width: "14%", marginRight: "10px" }}>
+                    {COUNTRY_CODES.map((item) => (
+                      <Select.Option 
+                        value={`${item.flag} ${item.code}`}
+                      >{`${item.flag} ${item.code}`}</Select.Option>
+                    ))}
                   </Select>
                 </Form.Item>
                 <Form.Item
@@ -405,12 +407,19 @@ const TaskForm = () => {
                   noStyle
                   rules={[
                     { required: true, message: "Phone number is required" },
+                    {
+                      pattern: /^[0-9]{7,15}$/,
+                      message:
+                        "Please enter a valid phone number (7-15 digits)",
+                    },
                   ]}
                 >
                   <InputNumber
                     required
-                    style={{ width: "79%" }}
+                    style={{ width: "84%", cursor:"text" }}
                     placeholder="8023456789"
+                    maxLength={15}
+                    className="cursor-text"
                   />
                 </Form.Item>
               </Input.Group>
