@@ -5,6 +5,7 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
+import { LoadScript, Autocomplete, type Libraries } from "@react-google-maps/api";
 import {
   Form,
   Input,
@@ -48,7 +49,8 @@ interface AddressSuggestion {
 const DEBOUNCE_DELAY = 300; // ms
 const GRAPHHOPPER_API_KEY = import.meta.env.VITE_GRAPHHOPPER_API_KEY;
 const GRAPHHOPPER_API_URL = `${import.meta.env.VITE_GRAPHHOPPER_URL}/geocode`;
-
+const libraries: Libraries = ["places"];
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
 // Define an interface for the form values for type safety
 interface TaskFormValues {
   date: Dayjs;
@@ -83,6 +85,7 @@ const TaskForm = () => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const { addJob } = usePlanContext();
+  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const [addressSuggestions, setAddressSuggestions] = useState<
     AddressSuggestion[]
   >([]);
@@ -210,6 +213,37 @@ const TaskForm = () => {
       };
     }
   );
+//   const handleLoad = (autocomplete: google.maps.places.Autocomplete) => {
+//   autocompleteRef.current = autocomplete;
+// };
+
+// const handlePlaceChanged = () => {
+//   const place = autocompleteRef.current?.getPlace();
+//   if (!place || !place.geometry) {
+//     messageApi.error("Please select a valid address");
+//     return;
+//   }
+
+//   const formattedAddress = place.formatted_address || '';
+//   const lat = place.geometry.location?.lat();
+//   const lng = place.geometry.location?.lng();
+
+//   setAddressPlaceHolder(<div style={{ color: 'black' }}>{formattedAddress}</div>);
+
+//   form.setFieldsValue({
+//     address: {
+//       name: formattedAddress,
+//       address_id: place.place_id,
+//       lat,
+//       lon: lng,
+//     },
+//     coordinates: {
+//       lat,
+//       lng,
+//     },
+//   });
+// };
+
   const onFinish = async (values: TaskFormValues) => {
     // Ensure address is properly set
     if (!values.address || !values.address.lat || !values.address.lon) {
@@ -237,7 +271,7 @@ const TaskForm = () => {
             .second(0)
             .millisecond(0)
             .toISOString()
-        : values.date.startOf("day").toISOString(), // Default to start of day if no timeFrom
+        : null ,// values.date.startOf("day").toISOString(), // Default to start of day if no timeFrom
       end_time: values.timeTo
         ? values.date
             .hour(values.timeTo.hour())
@@ -245,7 +279,7 @@ const TaskForm = () => {
             .second(0)
             .millisecond(0)
             .toISOString()
-        : values.date.endOf("day").toISOString(), // Default to end of day if no timeTo
+        : null, // values.date.endOf("day").toISOString(), // Default to end of day if no timeTo
       duration_minutes: values.duration ? parseInt(values.duration, 10) : 0, // Assuming duration is in minutes string
       phone_number: values.phone
         ? `${values.phone.countryCode || ""}-${values.phone.number}`
@@ -377,6 +411,18 @@ const TaskForm = () => {
                   )
                 }
               />
+
+              {/* <LoadScript
+                googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+                libraries={['places']}
+              >
+                <Autocomplete
+                  onLoad={handleLoad}
+                  onPlaceChanged={handlePlaceChanged}
+                >
+                  <Input placeholder="Type to search address" allowClear />
+                </Autocomplete>
+              </LoadScript> */}
             </Form.Item>
           </div>
 
@@ -397,9 +443,10 @@ const TaskForm = () => {
                   <Select
                     style={{
                       width: "23%",
-                      margin: "0 3px"
+                      margin: "0 3px",
                     }}
-                    className=""
+                    showSearch
+                    optionFilterProp="children"
                   >
                     {COUNTRY_CODES.map((item) => (
                       <Select.Option
