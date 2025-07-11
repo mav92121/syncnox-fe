@@ -13,7 +13,7 @@ export interface TimeWindow {
 export interface Vehicle {
   id: string;
   start_location: Location;
-  time_window: TimeWindow;
+  time_window: TimeWindow | null;
 }
 
 export interface Job {

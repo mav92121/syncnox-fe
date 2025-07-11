@@ -6,11 +6,6 @@ import {
   type ReactNode,
 } from "react";
 import {
-  LoadScript,
-  Autocomplete,
-  type Libraries,
-} from "@react-google-maps/api";
-import {
   Form,
   Input,
   Select,
@@ -53,7 +48,7 @@ interface AddressSuggestion {
 const DEBOUNCE_DELAY = 300; // ms
 const GRAPHHOPPER_API_KEY = import.meta.env.VITE_GRAPHHOPPER_API_KEY;
 const GRAPHHOPPER_API_URL = `${import.meta.env.VITE_GRAPHHOPPER_URL}/geocode`;
-// const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
+
 // Define an interface for the form values for type safety
 interface TaskFormValues {
   date: Dayjs;
@@ -88,7 +83,6 @@ const TaskForm = () => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const { addJob } = usePlanContext();
-  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const [addressSuggestions, setAddressSuggestions] = useState<
     AddressSuggestion[]
   >([]);
