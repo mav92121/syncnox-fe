@@ -225,7 +225,7 @@ const TaskForm = () => {
       lat: values.address.lat,
       lon: values.address.lon,
       priority_level: values.priority,
-      first_name: values.firstName, 
+      first_name: values.firstName,
       last_name: values.lastName,
       email: values.email,
       business_name: values.businessName,
@@ -408,7 +408,9 @@ const TaskForm = () => {
                           width: "auto",
                         }}
                         value={`${item.flag} ${item.code}`}
-                      >{`${item.flag} ${item.code}`}</Select.Option>
+                      >
+                        {`${item.flag}`} {`${item.code}`} &nbsp; {`${item.name}`}
+                      </Select.Option>
                     ))}
                   </Select>
                 </Form.Item>
