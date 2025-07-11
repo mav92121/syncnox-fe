@@ -217,7 +217,6 @@ const TaskForm = () => {
       messageApi.warning("Please select an address from the suggestions");
       return;
     }
-
     const jobData: Omit<Job, "id" | "created_at" | "updated_at"> = {
       scheduled_date: values.date.toISOString(),
       job_type: values.jobType,
@@ -226,7 +225,7 @@ const TaskForm = () => {
       lat: values.address.lat,
       lon: values.address.lon,
       priority_level: values.priority,
-      first_name: values.firstName,
+      first_name: values.firstName, 
       last_name: values.lastName,
       email: values.email,
       business_name: values.businessName,
@@ -238,7 +237,7 @@ const TaskForm = () => {
             .second(0)
             .millisecond(0)
             .toISOString()
-        : values.date.endOf('day').toISOString(), // Default to start of day if no timeFrom
+        : null, // Default to start of day if no timeFrom
       end_time: values.timeTo
         ? values.date
             .hour(values.timeTo.hour())
@@ -246,7 +245,7 @@ const TaskForm = () => {
             .second(0)
             .millisecond(0)
             .toISOString()
-        : values.date.endOf('day').toISOString(), // Default to end of day if no timeTo
+        : null, // Default to end of day if no timeTo
       duration_minutes: values.duration ? parseInt(values.duration, 10) : 0, // Assuming duration is in minutes string
       phone_number: values.phone
         ? `${values.phone.countryCode || ""}-${values.phone.number}`
@@ -462,11 +461,11 @@ const TaskForm = () => {
 
           {/* Row 6: Times */}
           <div className="grid grid-cols-3 gap-4 mb-[-8px]">
-            <Form.Item label="From" name="timeFrom">
+            <Form.Item label="From" name="timeFrom" initialValue={undefined}>
               <TimePicker className="w-full" format="HH:mm" />
             </Form.Item>
 
-            <Form.Item label="To" name="timeTo">
+            <Form.Item label="To" name="timeTo" initialValue={undefined}>
               <TimePicker className="w-full" format="HH:mm" />
             </Form.Item>
 

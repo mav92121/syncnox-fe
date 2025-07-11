@@ -18,7 +18,7 @@ const capitalizeFirstLetter = (string: string = "") => {
 const mapJobsToTasks = (jobs: Job[]): Task[] => {
   if (!jobs) return [];
   return jobs.map((job) => {
-    const formatTime = (dateTimeString?: string): string => {
+    const formatTime = (dateTimeString?: string | null): string => {
       if (!dateTimeString) return "N/A";
       return dayjs(dateTimeString).format("hh:mm A");
     };
