@@ -147,14 +147,14 @@ const columns: ColumnsType<Task> = [
     dataIndex: "from",
     key: "from",
     align: "center",
-    render: (time: string) => <div className="text-center px-2">{time}</div>,
+    render: (time: string | null) => <div className="text-center px-2">{time}</div>,
   },
   {
     title: "To",
     dataIndex: "to",
     key: "to",
     align: "center",
-    render: (time: string) => <div className="text-center px-2">{time}</div>,
+    render: (time: string | null) => <div className="text-center px-2">{time}</div>,
   },
   {
     title: "Customer Preferences",
