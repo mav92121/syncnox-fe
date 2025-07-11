@@ -238,7 +238,7 @@ const TaskForm = () => {
             .second(0)
             .millisecond(0)
             .toISOString()
-        : null, // Default to start of day if no timeFrom
+        : values.date.endOf('day').toISOString(), // Default to start of day if no timeFrom
       end_time: values.timeTo
         ? values.date
             .hour(values.timeTo.hour())
@@ -246,7 +246,7 @@ const TaskForm = () => {
             .second(0)
             .millisecond(0)
             .toISOString()
-        : null, // Default to end of day if no timeTo
+        : values.date.endOf('day').toISOString(), // Default to end of day if no timeTo
       duration_minutes: values.duration ? parseInt(values.duration, 10) : 0, // Assuming duration is in minutes string
       phone_number: values.phone
         ? `${values.phone.countryCode || ""}-${values.phone.number}`

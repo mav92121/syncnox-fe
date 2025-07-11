@@ -6,21 +6,21 @@ export interface Location {
 }
 
 export interface TimeWindow {
-  start: string | null;
-  end: string | null;
+  start: string;
+  end: string;
 }
 
 export interface Vehicle {
   id: string;
   start_location: Location;
-  time_window: TimeWindow | null;
+  time_window: TimeWindow;
 }
 
 export interface Job {
   id: string;
   location: Location;
   duration: number;
-  time_window?: TimeWindow | null;
+  time_window?: TimeWindow;
   priority: number;
 }
 
