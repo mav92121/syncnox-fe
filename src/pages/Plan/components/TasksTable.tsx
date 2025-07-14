@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, message, Table, Input } from "antd";
+
 import type { TableProps, TableColumnType } from "antd";
 import {
   SearchOutlined,
@@ -14,7 +15,7 @@ import { usePlan } from "../context/planContextDefinition";
 import { optimizeRoutes } from "../../../services/optimization";
 import type { Job as OptimizationJob } from "../../../services/optimization";
 import type { Task } from "../types";
-// import CreateRouteModalForm from "./CreateRouteModalForm";
+import CreateRouteModalForm from "./CreateRouteModalForm";
 type TableRowSelection<T extends object = object> =
   TableProps<T>["rowSelection"];
 type ColumnsType<T> = TableColumnType<T>[];
@@ -383,7 +384,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
       const jobData = getJobById(job.id) || job;
       const lat = jobData.lat ?? null;
       const lng = jobData.lon ?? null;
-      console.log("job data -> ", jobData);
+      console.log("job data -> ", jobData); 
 
       // Check if coordinates are valid
       return (

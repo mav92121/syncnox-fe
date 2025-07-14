@@ -29,6 +29,7 @@ import type { Dayjs } from "dayjs";
 import { usePlanContext } from "../hooks/usePlanContext";
 import type { Job } from "../types";
 import "./TaskForm.css";
+import { COUNTRY_CODES } from "@/assets/assets";
 
 interface AddressSuggestion {
   name: string;
@@ -209,13 +210,13 @@ const TaskForm = () => {
       };
     }
   );
+
   const onFinish = async (values: TaskFormValues) => {
     // Ensure address is properly set
     if (!values.address || !values.address.lat || !values.address.lon) {
       messageApi.warning("Please select an address from the suggestions");
       return;
     }
-
     const jobData: Omit<Job, "id" | "created_at" | "updated_at"> = {
       scheduled_date: values.date.toISOString(),
       job_type: values.jobType,
@@ -236,7 +237,7 @@ const TaskForm = () => {
             .second(0)
             .millisecond(0)
             .toISOString()
-        : values.date.startOf("day").toISOString(), // Default to start of day if no timeFrom
+        : null, // Default to start of day if no timeFrom
       end_time: values.timeTo
         ? values.date
             .hour(values.timeTo.hour())
@@ -244,7 +245,7 @@ const TaskForm = () => {
             .second(0)
             .millisecond(0)
             .toISOString()
-        : values.date.endOf("day").toISOString(), // Default to end of day if no timeTo
+        : null, // Default to end of day if no timeTo
       duration_minutes: values.duration ? parseInt(values.duration, 10) : 0, // Assuming duration is in minutes string
       phone_number: values.phone
         ? `${values.phone.countryCode || ""}-${values.phone.number}`
@@ -387,14 +388,30 @@ const TaskForm = () => {
               required
               rules={[{ required: true, message: "Phone number is required" }]}
             >
-              <Input.Group compact={false} className="flex gap-2">
+              <Input.Group className="flex gap-3">
                 <Form.Item
                   name={["phone", "countryCode"]}
                   noStyle
-                  initialValue="+234"
+                  initialValue={`🇺🇸 +1`}
                 >
-                  <Select style={{ width: "30%" }}>
-                    <Select.Option value="+234">+234</Select.Option>
+                  <Select
+                    style={{
+                      width: "24%",
+                      marginRight: "2px",
+                    }}
+                    showSearch
+                    optionFilterProp="children"
+                  >
+                    {COUNTRY_CODES.map((item) => (
+                      <Select.Option
+                        style={{
+                          width: "auto",
+                        }}
+                        value={`${item.flag} ${item.code}`}
+                      >
+                        {`${item.flag}`} {`${item.code}`} &nbsp; {`${item.name}`}
+                      </Select.Option>
+                    ))}
                   </Select>
                 </Form.Item>
                 <Form.Item
@@ -402,12 +419,20 @@ const TaskForm = () => {
                   noStyle
                   rules={[
                     { required: true, message: "Phone number is required" },
+                    {
+                      pattern: /^[0-9]{7,15}$/,
+                      message:
+                        "Please enter a valid phone number (7-15 digits)",
+                    },
                   ]}
                 >
                   <InputNumber
+                    type="number"
                     required
-                    style={{ width: "70%" }}
+                    style={{ width: "75%", flex: 1, cursor: "text" }}
                     placeholder="8023456789"
+                    maxLength={15}
+                    pattern="[0-9]*"
                   />
                 </Form.Item>
               </Input.Group>
@@ -438,11 +463,11 @@ const TaskForm = () => {
 
           {/* Row 6: Times */}
           <div className="grid grid-cols-3 gap-4 mb-[-8px]">
-            <Form.Item label="From" name="timeFrom">
+            <Form.Item label="From" name="timeFrom" initialValue={undefined}>
               <TimePicker className="w-full" format="HH:mm" />
             </Form.Item>
 
-            <Form.Item label="To" name="timeTo">
+            <Form.Item label="To" name="timeTo" initialValue={undefined}>
               <TimePicker className="w-full" format="HH:mm" />
             </Form.Item>
 

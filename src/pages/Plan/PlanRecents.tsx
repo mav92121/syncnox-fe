@@ -6,6 +6,7 @@ import MapComponent from "./components/MapComponent";
 import { useMapState } from "./hooks/useMapState";
 import { defaultMapConfig } from "./utils/mapConfig";
 import { usePlanContext } from "./hooks/usePlanContext";
+// import type { OptimizationResult } from "./context/PlanContext";
 import type { Job, Task } from "./types";
 import dayjs from "dayjs";
 import RouteDashboard from "./components/RouteDashboard";
@@ -20,7 +21,7 @@ const capitalizeFirstLetter = (string: string = "") => {
 const mapJobsToTasks = (jobs: Job[]): Task[] => {
   if (!jobs) return [];
   return jobs.map((job) => {
-    const formatTime = (dateTimeString?: string): string => {
+    const formatTime = (dateTimeString?: string | null): string => {
       if (!dateTimeString) return "N/A";
       return dayjs(dateTimeString).format("hh:mm A");
     };
@@ -67,9 +68,8 @@ const PlanRecents = () => {
   const { mapType, setMapType } = useMapState();
   const { jobs, fetchJobs, isLoading, error } = usePlanContext();
   const [transformedTasks, setTransformedTasks] = useState<Task[]>([]);
-  const [optimizationResult, setOptimizationResult] = useState<OptimizationResult | null>(null);
-  console.log(setOptimizationResult);
-  
+  const [optimizationResult, setOptimizationResult] =
+    useState<OptimizationResult | null>(null);
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
@@ -113,21 +113,14 @@ const PlanRecents = () => {
         </div>
 
         {/* Table - Takes approximately 60% of the space */}
-        {/* <div className="h-3/5 w-full overflow-hidden min-h-0">
-          <TasksTable dataSource={transformedTasks} />
-        </div> */}
 
         {optimizationResult ? (
-          <div className="h-3/5 w-full overflow-hidden min-h-0">
-            <RouteDashboard />
-          </div>
+          <RouteDashboard />
         ) : (
           <div className="h-3/5 w-full overflow-hidden min-h-0">
             <TasksTable dataSource={transformedTasks} />
           </div>
         )}
-
-
       </div>
     </div>
   );

@@ -54,8 +54,8 @@ export interface Job {
   last_name?: string;  // Optional in JobBase
   email?: string;      // Optional in JobBase (EmailStr implies required, but let's assume form can omit)
   business_name?: string;
-  start_time: string; // ISO datetime string
-  end_time: string;   // ISO datetime string
+  start_time: string | null; // ISO datetime string
+  end_time: string | null;   // ISO datetime string
   duration_minutes: number;
   phone_number: string;
   customer_preferences?: string;
