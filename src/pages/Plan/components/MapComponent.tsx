@@ -24,6 +24,8 @@ type LatLngTuple = [number, number];
 
 // Component to handle map view updates when bounds change
 const MapUpdater = ({ bounds }: { bounds: L.LatLngBounds | null }) => {
+  console.log(bounds);
+  
   const map = useMap();
 
   useEffect(() => {
