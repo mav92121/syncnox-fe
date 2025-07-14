@@ -6,11 +6,10 @@ import MapComponent from "./components/MapComponent";
 import { useMapState } from "./hooks/useMapState";
 import { defaultMapConfig } from "./utils/mapConfig";
 import { usePlanContext } from "./hooks/usePlanContext";
-// import type { OptimizationResult } from "./context/PlanContext";
 import type { Job, Task } from "./types";
 import dayjs from "dayjs";
 import RouteDashboard from "./components/RouteDashboard";
-import type { OptimizationResult } from "@/services/optimization";
+// import type { OptimizationResult } from "@/services/optimization";
 
 // Helper to capitalize
 const capitalizeFirstLetter = (string: string = "") => {
@@ -68,8 +67,9 @@ const PlanRecents = () => {
   const { mapType, setMapType } = useMapState();
   const { jobs, fetchJobs, isLoading, error } = usePlanContext();
   const [transformedTasks, setTransformedTasks] = useState<Task[]>([]);
-  const [optimizationResult, setOptimizationResult] =
-    useState<OptimizationResult | null>(null);
+  // const [optimizationResult, setOptimizationResult] =
+  //   useState<OptimizationResult | null>(null);
+  const optimizationResult = null;
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);

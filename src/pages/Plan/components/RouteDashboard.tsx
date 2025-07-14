@@ -2,10 +2,7 @@ import { useState } from "react";
 import {
   Calendar,
   Search,
-  FileText,
   Plus,
-  Clock,
-  Filter,
   Phone,
   Edit,
   Home,
@@ -17,16 +14,13 @@ import {
   ListFilter,
 } from "lucide-react";
 import {
-  CloudDownloadOutlined,
-  FieldTimeOutlined,
   MoreOutlined,
-  VerticalLeftOutlined,
-  VerticalRightOutlined,
   WifiOutlined,
 } from "@ant-design/icons";
 
 const RouteDashboard = () => {
-  const [selectedDate, setSelectedDate] = useState("02/08/2025");
+  // const [selectedDate, setSelectedDate] = useState("02/08/2025");
+  const selectedDate="02/08/2025"
   const [activeTab, setActiveTab] = useState("Timeline");
 
   const timeSlots = [
@@ -96,7 +90,7 @@ const RouteDashboard = () => {
     },
   ];
 
-  const getTimePosition = (time: any) => {
+  const getTimePosition = (time: string) => {
     // Safety check for time parameter
     if (!time || typeof time !== "string") {
       return 0;
