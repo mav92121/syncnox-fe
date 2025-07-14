@@ -51,6 +51,7 @@ const NavBar = ({
     { icon: <BellOutlined />, label: "Notifications" },
     { icon: <UserOutlined />, label: "User profile" },
   ];
+  const showBradcrums = window.location.pathname !== "/";
 
   // Use provided icons or fallback to defaults
   const iconsToRender = navIcons || defaultNavIcons;
@@ -59,42 +60,48 @@ const NavBar = ({
     <nav className="border-b border-gray-200">
       <div className="h-[60px] flex items-center justify-between px-6">
         {/* Left side - Navigation */}
-        <div className="flex items-center">
-          {breadcrumbs.length > 0 && (
-            <div className="flex items-center">
-              {breadcrumbs.map((crumb, index) => (
-                <div key={index} className="flex items-center">
-                  {index > 0 && <span className="mx-1 text-gray-300">/</span>}
-                  <span
-                    className={`text-sm ${
-                      index === 0
-                        ? "font-medium text-gray-700"
-                        : "text-gray-500"
-                    } ${
-                      crumb.path ? "cursor-pointer hover:text-blue-500" : ""
-                    }`}
-                    onClick={() => {
-                      if (crumb.path) {
-                        // Handle navigation if needed
-                        console.log(`Navigate to: ${crumb.path}`);
-                      }
-                    }}
-                  >
-                    {crumb.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+        {showBradcrums ? (
+          <div className="flex items-center">
+            {breadcrumbs.length > 0 && (
+              <div className="flex items-center">
+                {breadcrumbs.map((crumb, index) => (
+                  <div key={index} className="flex items-center">
+                    {index > 0 && <span className="mx-1 text-gray-300">/</span>}
+                    <span
+                      className={`text-sm ${
+                        index === 0
+                          ? "font-medium text-gray-700"
+                          : "text-gray-500"
+                      } ${
+                        crumb.path ? "cursor-pointer hover:text-blue-500" : ""
+                      }`}
+                      onClick={() => {
+                        if (crumb.path) {
+                          // Handle navigation if needed
+                          console.log(`Navigate to: ${crumb.path}`);
+                        }
+                      }}
+                    >
+                      {crumb.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
 
-          {/* Alternative title when no breadcrumbs */}
-          {breadcrumbs.length === 0 && title && (
-            <div>
-              <h1 className="text-lg font-medium text-gray-800">{title}</h1>
-              {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
-            </div>
-          )}
-        </div>
+            {/* Alternative title when no breadcrumbs */}
+            {breadcrumbs.length === 0 && title && (
+              <div>
+                <h1 className="text-lg font-medium text-gray-800">{title}</h1>
+                {subtitle && (
+                  <p className="text-sm text-gray-500">{subtitle}</p>
+                )}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div>Dashboard</div>
+        )}
 
         {/* Right side - Search and icons */}
         <div className="flex items-center">

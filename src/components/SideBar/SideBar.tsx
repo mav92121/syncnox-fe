@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { SearchOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { Input } from "antd";
 import "./SideBar.css";
 
 const SideBar = () => {
@@ -39,8 +37,8 @@ const SideBar = () => {
   }, []);
 
   const menuItems = [
+    { icon: "rocket.svg", label: "Plan", alt: "plan" },
     { icon: "recent.svg", label: "Insights", alt: "recent" },
-    { icon: "plan.svg", label: "Plan", alt: "plan" },
     { icon: "schedule.svg", label: "Schedule", alt: "schedule" },
     { icon: "manage.svg", label: "Manage", alt: "manage", hasArrow: true },
     { icon: "analytics.svg", label: "Analytics", alt: "analytics" },
@@ -104,7 +102,7 @@ const SideBar = () => {
         </div>
 
         {/* Search section */}
-        <div className="px-4 mb-6">
+        {/* <div className="px-4 mb-6">
           <div className="relative w-full h-[38px] transition-all duration-300 ease-in-out">
             <Input
               placeholder="Search"
@@ -129,7 +127,7 @@ const SideBar = () => {
               }`}
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Menu items with sleek scrollbar */}
         <div
@@ -145,62 +143,80 @@ const SideBar = () => {
           {menuItems.slice(0, manageIndex + 1).map((item, index) => (
             <Link to={item.alt}>
               <div key={index} className="relative">
-                <div
-                  ref={item.label === "Manage" ? manageItemRef : null}
-                  className={`flex items-center pl-2 py-[10px] my-1 hover:bg-[#F6FFED] cursor-pointer ${
-                    item.label === "Manage" && showManageDropdown
-                      ? "bg-[#F6FFED]"
-                      : ""
-                  }`}
-                  onMouseEnter={() => {
-                    if (item.label === "Manage" && isExpended) {
-                      handleManageHover(true);
-                    }
-                  }}
-                  onMouseLeave={() => {
-                    if (item.label === "Manage") {
-                      handleManageHover(false);
-                    }
-                  }}
-                >
-                  <div className="w-[20px] h-[20px] flex items-center justify-center">
-                    <img
-                      src={`/${item.icon}`}
-                      alt={item.alt}
-                      className="w-[16px] h-[16px] object-contain"
-                    />
-                  </div>
-                  <div
-                    className={`ml-3 whitespace-nowrap overflow-hidden transition-opacity duration-300 text-sm ${
-                      isExpended ? "opacity-100 w-auto" : "opacity-0 w-0"
-                    }`}
-                  >
-                    {item.label}
-                  </div>
-                  {item.hasArrow && isExpended && (
-                    <div className="ml-auto mr-2">
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className={`transform transition-transform ${
-                          showManageDropdown ? "rotate-90" : ""
+                {item.label === "Plan" ? (
+                  <div className="w-full">
+                    <div className="bg-green-950 text-white w-full py-[10px] flex items-center justify-center">
+                      <img
+                        src={item.icon}
+                        alt={item.alt}
+                        className="w-[20px] h-[20px] ml-[10px] filter brightness-0 invert"
+                      />
+                      <span
+                        className={`ml-3 whitespace-nowrap overflow-hidden transition-opacity duration-300 text-sm ${
+                          isExpended ? "opacity-100 w-auto" : "opacity-0 w-0"
                         }`}
                       >
-                        <path
-                          d="M9 6L15 12L9 18"
-                          stroke="#666"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+                        {item.label}
+                      </span>
                     </div>
-                  )}
-                </div>
-
+                  </div>
+                ) : (
+                  <div
+                    ref={item.label === "Manage" ? manageItemRef : null}
+                    className={`flex items-center pl-2 py-[10px] my-1 hover:bg-[#F6FFED] cursor-pointer ${
+                      item.label === "Manage" && showManageDropdown
+                        ? "bg-[#F6FFED]"
+                        : ""
+                    }`}
+                    onMouseEnter={() => {
+                      if (item.label === "Manage" && isExpended) {
+                        handleManageHover(true);
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      if (item.label === "Manage") {
+                        handleManageHover(false);
+                      }
+                    }}
+                  >
+                    <div className="w-[20px] h-[20px] flex items-center justify-center">
+                      <img
+                        src={`/${item.icon}`}
+                        alt={item.alt}
+                        className="w-[16px] h-[16px] object-contain"
+                      />
+                    </div>
+                    <div
+                      className={`ml-3 whitespace-nowrap overflow-hidden transition-opacity duration-300 text-sm ${
+                        isExpended ? "opacity-100 w-auto" : "opacity-0 w-0"
+                      }`}
+                    >
+                      {item.label}
+                    </div>
+                    {item.hasArrow && isExpended && (
+                      <div className="ml-auto mr-2">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className={`transform transition-transform ${
+                            showManageDropdown ? "rotate-90" : ""
+                          }`}
+                        >
+                          <path
+                            d="M9 6L15 12L9 18"
+                            stroke="#666"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                )}
                 {/* Manage dropdown - inline instead of absolute */}
                 {item.label === "Manage" &&
                   isExpended &&

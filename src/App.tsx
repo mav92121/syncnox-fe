@@ -6,7 +6,8 @@ import PlanAdd from "./pages/Plan/PlanAdd";
 import PlanRecents from "./pages/Plan/PlanRecents";
 import theme from "./theme/themeConfig";
 import { PlanProvider } from "./pages/Plan/context/PlanContext";
-const Dashboard = () => <div>Dashboard Page</div>;
+import Dashboard from "./components/Dashboard";
+import Routes from "./components/Routes";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Dashboard />,
+      },
+      {
+        path: "/routes",
+        element: <Routes />,
       },
       {
         path: "plan",

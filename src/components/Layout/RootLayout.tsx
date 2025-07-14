@@ -1,7 +1,6 @@
-import { Outlet } from "react-router-dom";
 import SideBar from "../SideBar/SideBar";
 import NavBar from "../NavBar/NavBar";
-
+import { Outlet } from "react-router-dom";
 const RootLayout = () => {
   return (
     <div className="flex h-screen w-screen overflow-hidden">

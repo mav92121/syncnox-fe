@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, message, Table, Input } from "antd";
+
 import type { TableProps, TableColumnType } from "antd";
 import {
   SearchOutlined,
@@ -14,7 +15,7 @@ import { usePlan } from "../context/planContextDefinition";
 import { optimizeRoutes } from "../../../services/optimization";
 import type { Job as OptimizationJob } from "../../../services/optimization";
 import type { Task } from "../types";
-
+import CreateRouteModalForm from "./CreateRouteModalForm";
 type TableRowSelection<T extends object = object> =
   TableProps<T>["rowSelection"];
 type ColumnsType<T> = TableColumnType<T>[];
@@ -147,14 +148,18 @@ const columns: ColumnsType<Task> = [
     dataIndex: "from",
     key: "from",
     align: "center",
-    render: (time: string | null) => <div className="text-center px-2">{time}</div>,
+    render: (time: string | null) => (
+      <div className="text-center px-2">{time}</div>
+    ),
   },
   {
     title: "To",
     dataIndex: "to",
     key: "to",
     align: "center",
-    render: (time: string | null) => <div className="text-center px-2">{time}</div>,
+    render: (time: string | null) => (
+      <div className="text-center px-2">{time}</div>
+    ),
   },
   {
     title: "Customer Preferences",
@@ -295,7 +300,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
   const [searchText, setSearchText] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
   const { jobs, setOptimizationResult } = usePlan();
-
+  const [open, setOpen] = useState(false);
   // Filter data based on search text
   const filteredData = searchText
     ? dataSource.filter((item) =>
@@ -365,7 +370,9 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
       messageApi.warning("Please select at least one job to create a route");
       return;
     }
-
+    if (selectedRowKeys.length > 0) {
+      setOpen(true);
+    }
     const selectedJobs = dataSource.filter((job) =>
       selectedRowKeys.includes(job.key as React.Key)
     );
@@ -377,7 +384,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
       const jobData = getJobById(job.id) || job;
       const lat = jobData.lat ?? null;
       const lng = jobData.lon ?? null;
-      console.log("job data -> ", jobData);
+      console.log("job data -> ", jobData); 
 
       // Check if coordinates are valid
       return (
@@ -495,9 +502,10 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
             Export
           </Button>
           <Button
-            type="primary"
-            onClick={handleCreateRoute}
-            disabled={isOptimizing}
+            type={selectedRowKeys.length > 0 ? "primary" : "default"}
+            // onClick={`${handleCreateRoute} ${showModal}`}
+            onClick={() => setOpen(true)}
+            disabled={selectedRowKeys.length === 0 || isOptimizing}
             icon={
               isOptimizing ? (
                 <LoadingOutlined />
@@ -516,9 +524,18 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
               )
             }
           >
-            {isOptimizing ? "Optimizing..." : "Create New Route"}
+            {isOptimizing ? `Optimizing...` : "Create New Route"}
           </Button>
         </div>
+        {open ? (
+          <CreateRouteModalForm
+            open={open}
+            onCancel={() => setOpen(false)}
+            onSubmit={handleCreateRoute}
+          />
+        ) : (
+          ""
+        )}
       </div>
       {/* Only the table is scrollable */}
       <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden custom-scrollbar">

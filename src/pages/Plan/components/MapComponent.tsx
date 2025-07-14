@@ -24,6 +24,8 @@ type LatLngTuple = [number, number];
 
 // Component to handle map view updates when bounds change
 const MapUpdater = ({ bounds }: { bounds: L.LatLngBounds | null }) => {
+  console.log(bounds);
+  
   const map = useMap();
 
   useEffect(() => {
@@ -106,7 +108,8 @@ const MapComponent = ({
   
   // Type assertion for optimization result
   const optimizationData = optimizationResult as unknown as OptimizationData | null;
-
+  //
+  
   // Generate a unique key to force remount when optimization data changes
   const mapKey = useMemo(() => 
     `map-${optimizationData?.routes?.length || 0}-${Date.now()}`
@@ -114,8 +117,8 @@ const MapComponent = ({
 
   // Calculate bounds to fit all markers and routes
   const bounds = useMemo(() => {
+    // console.log("optimization data",optimizationData);
     if (!optimizationData?.routes?.length) return null;
-    
     const coords: [number, number][] = [];
     
     optimizationData.routes.forEach(route => {

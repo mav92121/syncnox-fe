@@ -396,8 +396,8 @@ const TaskForm = () => {
                 >
                   <Select
                     style={{
-                      width: "23%",
-                      margin: "0 3px",
+                      width: "24%",
+                      marginRight: "2px",
                     }}
                     showSearch
                     optionFilterProp="children"
