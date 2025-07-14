@@ -14,7 +14,7 @@ import { usePlan } from "../context/planContextDefinition";
 import { optimizeRoutes } from "../../../services/optimization";
 import type { Job as OptimizationJob } from "../../../services/optimization";
 import type { Task } from "../types";
-
+// import CreateRouteModalForm from "./CreateRouteModalForm";
 type TableRowSelection<T extends object = object> =
   TableProps<T>["rowSelection"];
 type ColumnsType<T> = TableColumnType<T>[];
@@ -147,14 +147,18 @@ const columns: ColumnsType<Task> = [
     dataIndex: "from",
     key: "from",
     align: "center",
-    render: (time: string) => <div className="text-center px-2">{time}</div>,
+    render: (time: string | null) => (
+      <div className="text-center px-2">{time}</div>
+    ),
   },
   {
     title: "To",
     dataIndex: "to",
     key: "to",
     align: "center",
-    render: (time: string) => <div className="text-center px-2">{time}</div>,
+    render: (time: string | null) => (
+      <div className="text-center px-2">{time}</div>
+    ),
   },
   {
     title: "Customer Preferences",
@@ -292,15 +296,17 @@ const columns: ColumnsType<Task> = [
 const TasksTable = ({ dataSource }: TasksTableProps) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isOptimizing, setIsOptimizing] = useState(false);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
   const { jobs, setOptimizationResult } = usePlan();
-
+  const [open, setOpen] = useState(false);
   // Filter data based on search text
   const filteredData = searchText
-    ? dataSource.filter(item => 
+    ? dataSource.filter((item) =>
         Object.values(item).some(
-          val => val && val.toString().toLowerCase().includes(searchText.toLowerCase())
+          (val) =>
+            val &&
+            val.toString().toLowerCase().includes(searchText.toLowerCase())
         )
       )
     : dataSource;
@@ -363,7 +369,9 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
       messageApi.warning("Please select at least one job to create a route");
       return;
     }
-
+    if (selectedRowKeys.length > 0) {
+      setOpen(true);
+    }
     const selectedJobs = dataSource.filter((job) =>
       selectedRowKeys.includes(job.key as React.Key)
     );
@@ -460,7 +468,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
       {contextHolder}
       <div className="flex items-center justify-between flex-shrink-0 pb-2">
         <h4 className="text-md tracking-tight">Jobs</h4>
-        <div className="flex space-x-4 gap-3">
+        <div className="flex space-x-4 gap-x-4">
           <div className="flex gap-10">
             <Input
               type="text"
@@ -476,15 +484,15 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
               onChange={(e) => setSearchText(e.target.value)}
             />
           </div>
-          <div className="border-gray-200 cursor-pointer text-sm px-4 py-2 flex gap-2 items-center">
+          <div className="cursor-pointer text-sm flex items-center gap-1">
             <DeleteOutlined />
             <div>Delete</div>
           </div>
-          <div className="border-gray-200 cursor-pointer text-sm flex gap-2 items-center">
+          <div className="cursor-pointer text-sm flex items-center gap-1">
             <FilterOutlined />
             <div>Filters</div>
           </div>
-          <div className="border-gray-200 cursor-pointer text-sm flex gap-2 items-center">
+          <div className="cursor-pointer text-sm flex items-center gap-1">
             <FileSearchOutlined />
             <div>Verify</div>
           </div>
@@ -493,9 +501,10 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
             Export
           </Button>
           <Button
-            type="primary"
-            onClick={handleCreateRoute}
-            disabled={isOptimizing}
+            type={selectedRowKeys.length > 0 ? "primary" : "default"}
+            // onClick={`${handleCreateRoute} ${showModal}`}
+            onClick={() => setOpen(true)}
+            disabled={selectedRowKeys.length === 0 || isOptimizing}
             icon={
               isOptimizing ? (
                 <LoadingOutlined />
@@ -514,9 +523,18 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
               )
             }
           >
-            {isOptimizing ? "Optimizing..." : "Create New Route"}
+            {isOptimizing ? `Optimizing...` : "Create New Route"}
           </Button>
         </div>
+        {open ? (
+          <CreateRouteModalForm
+            open={open}
+            onCancel={() => setOpen(false)}
+            onSubmit={handleCreateRoute}
+          />
+        ) : (
+          ""
+        )}
       </div>
       {/* Only the table is scrollable */}
       <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden custom-scrollbar">
