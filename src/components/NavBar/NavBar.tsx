@@ -2,11 +2,14 @@ import { Input } from "antd";
 import {
   BellOutlined,
   QuestionCircleOutlined,
+  RadarChartOutlined,
   SearchOutlined,
   SettingOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import type { ReactNode } from "react";
+import { CalendarRange, LayoutDashboard, Radar, Route } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 // Define types for breadcrumbs
 interface Breadcrumb {
@@ -100,7 +103,29 @@ const NavBar = ({
             )}
           </div>
         ) : (
-          <div>Dashboard</div>
+          <div className="flex space-x-6 items-center">
+            {[
+              { icon: <LayoutDashboard />, label: "Dashboard", path: "/" },
+              { icon: <Route/>, label: "Routes", path: "/routes" },
+              { icon:  <Radar />, label: "Jobs", path: "/jobs" },
+              { icon: <CalendarRange />, label: "Schedule", path: "/schedule" },
+            ].map((tab, index) => (
+              <NavLink
+                to={tab.path}
+                key={index}
+                className={({ isActive }) =>
+                  `flex items-center gap-1 text-sm cursor-pointer pb-2 transition-all ${
+                    isActive
+                      ? "text-green-900 border-b-2 border-green-900 font-medium"
+                      : "text-gray-400 hover:text-green-800"
+                  }`
+                }
+              >
+                <span>{tab.icon}</span>
+                <span>{tab.label}</span>
+              </NavLink>
+            ))}
+          </div>
         )}
 
         {/* Right side - Search and icons */}
