@@ -6,11 +6,9 @@ import MapComponent from "./components/MapComponent";
 import { useMapState } from "./hooks/useMapState";
 import { defaultMapConfig } from "./utils/mapConfig";
 import { usePlanContext } from "./hooks/usePlanContext";
-// import type { OptimizationResult } from "./context/PlanContext";
 import type { Job, Task } from "./types";
 import dayjs from "dayjs";
 import RouteDashboard from "./components/RouteDashboard";
-import type { OptimizationResult } from "@/services/optimization";
 
 // Helper to capitalize
 const capitalizeFirstLetter = (string: string = "") => {
@@ -66,10 +64,10 @@ const mapJobsToTasks = (jobs: Job[]): Task[] => {
 
 const PlanRecents = () => {
   const { mapType, setMapType } = useMapState();
-  const { jobs, fetchJobs, isLoading, error } = usePlanContext();
+  const { jobs, fetchJobs, isLoading, error, optimizationResult } = usePlanContext();
   const [transformedTasks, setTransformedTasks] = useState<Task[]>([]);
-  const [optimizationResult, setOptimizationResult] =
-    useState<OptimizationResult | null>(null);
+  console.log(optimizationResult);
+  
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
@@ -115,7 +113,9 @@ const PlanRecents = () => {
         {/* Table - Takes approximately 60% of the space */}
 
         {optimizationResult ? (
-          <RouteDashboard />
+          <div className="h-3/5 w-full overflow-hidden min-h-0">
+            <RouteDashboard />
+          </div>
         ) : (
           <div className="h-3/5 w-full overflow-hidden min-h-0">
             <TasksTable dataSource={transformedTasks} />
