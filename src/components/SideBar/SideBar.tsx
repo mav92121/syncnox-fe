@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { SearchOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { Input } from "antd";
 import "./SideBar.css";
 
 const SideBar = () => {

@@ -37,10 +37,11 @@ const MapUpdater = ({ bounds }: { bounds: L.LatLngBounds | null }) => {
 
   useEffect(() => {
     if (bounds) {
-      const isValid =
+      const isvalid =
         bounds.isValid() &&
         !bounds.getNorthEast().equals(bounds.getSouthWest());
-      if (isValid) {
+
+      if (isvalid) {
         try {
           map.flyToBounds(bounds, {
             padding: [50, 50],
@@ -50,7 +51,7 @@ const MapUpdater = ({ bounds }: { bounds: L.LatLngBounds | null }) => {
         } catch (error) {
           console.error("MapUpdater flyToBounds error:", error);
         }
-      } else{
+      } else {
         console.warn("Invalid bounds (equal NE and SW), skipping flyToBounds");
       }
     }
