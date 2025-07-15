@@ -27,6 +27,9 @@ const data = [
   { name: "Canceled", value: 3, color: "#111827" },
 ];
 
+const COLORS = data.map((item) => item.color);
+console.log(COLORS);
+
 const data2 = [
   { name: "Completed", value: 84, color: "#022C22" }, // dark green
   { name: "Remaining", value: 100 - 84, color: "#F3FFF3" }, // light green
@@ -73,7 +76,9 @@ const Dashboard = () => {
           <p className="text-xs text-gray-400 mt-1">
             Increase compared to last week
           </p>
-          <p className="mt-5 text-green-700 cursor-pointer">Reports →</p>
+          <p className="mt-5 text-green-700 cursor-pointer">
+            Reports →
+          </p>
         </div>
 
         {/* Routes Completed */}
@@ -107,7 +112,9 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <p className="text-green-700 mt-8 cursor-pointer">All goals →</p>
+          <p className="text-green-700 mt-8 cursor-pointer">
+            All goals →
+          </p>
         </div>
 
         {/* Truck Status */}
@@ -391,11 +398,8 @@ const Dashboard = () => {
                 key={i}
                 className="flex items-center justify-center px-3 py-2 bg-green-100 text-green-800 text-sm"
               >
-                <img
-                  src={"./Icon (from Tabler.io).svg"}
-                  alt=""
-                  className="mr-1"
-                />
+                
+                <img src={"./Icon (from Tabler.io).svg"} alt="" className="mr-1"/>
                 {route}
               </div>
             ))}
