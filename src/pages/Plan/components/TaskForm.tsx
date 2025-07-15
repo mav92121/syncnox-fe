@@ -409,7 +409,8 @@ const TaskForm = () => {
                         }}
                         value={`${item.flag} ${item.code}`}
                       >
-                        {`${item.flag}`} {`${item.code}`} &nbsp; {`${item.name}`}
+                        {`${item.flag}`} {`${item.code}`} &nbsp;{" "}
+                        {`${item.name}`}
                       </Select.Option>
                     ))}
                   </Select>
@@ -471,13 +472,25 @@ const TaskForm = () => {
               <TimePicker className="w-full" format="HH:mm" />
             </Form.Item>
 
-            <Form.Item label="Job Duration" name="duration">
+            {/* <Form.Item label="Job Duration" name="duration">
               <Select placeholder="Select">
                 <Select.Option value="15">15 minutes</Select.Option>
                 <Select.Option value="30">30 minutes</Select.Option>
                 <Select.Option value="45">45 minutes</Select.Option>
                 <Select.Option value="60">1 hour</Select.Option>
               </Select>
+            </Form.Item> */}
+            <Form.Item
+              label="Job Duration (minutes)"
+              name="duration"
+            >
+              <InputNumber
+                min={1}
+                max={240}
+                placeholder="Enter duration"
+                className="w-full"
+                addonAfter="min"
+              />
             </Form.Item>
           </div>
 
