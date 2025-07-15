@@ -64,9 +64,9 @@ const mapJobsToTasks = (jobs: Job[]): Task[] => {
 
 const PlanRecents = () => {
   const { mapType, setMapType } = useMapState();
-  const { jobs, fetchJobs, isLoading, error, optimizationResult } = usePlanContext();
+  const { jobs, fetchJobs, isLoading, error, optimizationResult } =
+    usePlanContext();
   const [transformedTasks, setTransformedTasks] = useState<Task[]>([]);
-  
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
@@ -120,8 +120,6 @@ const PlanRecents = () => {
             <TasksTable dataSource={transformedTasks} />
           </div>
         )}
-
-
       </div>
     </div>
   );
