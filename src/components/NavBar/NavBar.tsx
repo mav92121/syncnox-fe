@@ -2,7 +2,6 @@ import { Input } from "antd";
 import {
   BellOutlined,
   QuestionCircleOutlined,
-  RadarChartOutlined,
   SearchOutlined,
   SettingOutlined,
   UserOutlined,
