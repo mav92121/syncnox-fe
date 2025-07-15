@@ -2,10 +2,7 @@ import { useState } from "react";
 import {
   Calendar,
   Search,
-  FileText,
   Plus,
-  Clock,
-  Filter,
   Phone,
   Edit,
   Home,
@@ -16,18 +13,12 @@ import {
   ClockFading,
   ListFilter,
 } from "lucide-react";
-import {
-  CloudDownloadOutlined,
-  FieldTimeOutlined,
-  MoreOutlined,
-  VerticalLeftOutlined,
-  VerticalRightOutlined,
-  WifiOutlined,
-} from "@ant-design/icons";
+import { MoreOutlined, WifiOutlined } from "@ant-design/icons";
 
 const RouteDashboard = () => {
   const [selectedDate, setSelectedDate] = useState("02/08/2025");
   const [activeTab, setActiveTab] = useState("Timeline");
+  console.log(setSelectedDate);
 
   const timeSlots = [
     "04:00",
