@@ -11,6 +11,7 @@ const RootLayout = () => {
             { label: "Plan", path: "/plan" },
             { label: "Add Jobs" },
           ]}
+          // title="Dashboard"
         />
         <main className="flex-1 overflow-hidden bg-white px-2 py-2">
           <Outlet />
