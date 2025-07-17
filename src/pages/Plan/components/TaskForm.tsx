@@ -259,7 +259,7 @@ const TaskForm = () => {
         : undefined, // Or file.url if available and preferred
       payment_status: values.paymentStatus!,
     };
-
+    
     try {
       const newJob = await addJob(jobData);
       if (newJob) {

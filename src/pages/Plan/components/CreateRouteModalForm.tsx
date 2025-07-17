@@ -4,25 +4,39 @@ import {
   EnvironmentOutlined,
   CompassOutlined,
 } from "@ant-design/icons";
-
+import { useState } from "react";
 const { Title, Text } = Typography;
 
 interface CreateRouteModalProps {
   open: boolean;
-  onCancel: () => void;
-  onSubmit: (values: any) => void;
+  onClose: () => void;
+  onSubmit: (values: any) => Promise<void>;
 }
 
-const CreateRouteModalForm = ({
+const CreateRouteModalForm: React.FC<CreateRouteModalProps> = ({
   open,
-  onCancel,
+  onClose,
   onSubmit,
 }: CreateRouteModalProps) => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+
+  const handelSubmit = async (values: any) => {
+    try {
+      setLoading(true);
+      await onSubmit(values);
+      onClose();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Modal
       open={open}
-      onCancel={onCancel}
+      onCancel={onClose}
+      
       footer={null}
       closable={false}
       width={1020}
@@ -39,7 +53,7 @@ const CreateRouteModalForm = ({
         <div></div>
         <Button
           type="text"
-          onClick={onCancel}
+          onClick={onClose}
           className="text-blue-500 hover:text-blue-600 font-medium"
         >
           Cancel
@@ -71,7 +85,7 @@ const CreateRouteModalForm = ({
         </div>
       </div>
 
-      <Form form={form} layout="vertical" onFinish={onSubmit}>
+      <Form form={form} layout="vertical" onFinish={handelSubmit}>
         <Form.Item
           label={
             <span className="text-gray-700 font-medium">
@@ -150,7 +164,9 @@ const CreateRouteModalForm = ({
           <Button
             type="primary"
             htmlType="submit"
-            icon={<CompassOutlined style={{ fontSize: "30px" }} />}            
+            icon={<CompassOutlined style={{ fontSize: "30px" }} />}
+            loading={loading}
+            
             size="large"
             className="w-full h-12 bg-green-800 hover:bg-green-700 border-0 rounded-lg font-medium text-base"
           >

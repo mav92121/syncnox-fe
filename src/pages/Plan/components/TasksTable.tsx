@@ -1,5 +1,15 @@
-import { useState } from "react";
-import { Button, message, Table, Input, Drawer, Checkbox, Switch, Dropdown, Modal } from "antd";
+import React, { useCallback, useMemo, useState, memo } from "react";
+import {
+  Button,
+  message,
+  Table,
+  Input,
+  Drawer,
+  Checkbox,
+  Switch,
+  Dropdown,
+  Modal,
+} from "antd";
 import type { TableProps, TableColumnType } from "antd";
 import {
   SearchOutlined,
@@ -18,35 +28,18 @@ import {
   SaveOutlined,
   AppstoreOutlined,
 } from "@ant-design/icons";
+import CreateRouteModalForm from "./CreateRouteModalForm";
+import { usePlan } from "../context/planContextDefinition";
+import type { Task } from "../types";
+import { optimizeRoutes } from "../../../services/optimization";
+import type { Job as OptimizationJob } from "../../../services/optimization";
 
-type TableRowSelection<T extends object = object> = TableProps<T>["rowSelection"];
+type TableRowSelection<T> = TableProps<T>["rowSelection"];
 type ColumnsType<T> = TableColumnType<T>[];
-
-interface Task {
-  key: string;
-  id: string;
-  priority: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  status: string;
-  businessName: string;
-  status2: string;
-  phone: string;
-  serviceDuration: string;
-  from: string | null;
-  to: string | null;
-  customerPreferences: string;
-  notes: string;
-  singleRecurring: string;
-  ratings: number;
-  team: string[];
-  files: string;
-  paid: string;
-}
 
 interface TasksTableProps {
   dataSource: Task[];
+  onMapView: (lat: number, lon: number) => void;
 }
 
 interface ColumnConfig {
@@ -62,119 +55,62 @@ interface ColumnPreset {
   name: string;
   columns: ColumnConfig[];
 }
+interface ColumnItemProps {
+  column: ColumnConfig;
+  onToggleVisibility: (key: string) => void;
+  onDragStart: (
+    e: React.DragEvent<HTMLDivElement>,
+    column: ColumnConfig
+  ) => void;
+  onDragOver: (
+    e: React.DragEvent<HTMLDivElement>,
+    column: ColumnConfig
+  ) => void;
+  onDrop: (e: React.DragEvent<HTMLDivElement>, column: ColumnConfig) => void;
+  index: number;
+  style: React.CSSProperties;
+}
 
-// Sample data for demo
-const sampleData: Task[] = [
-  {
-    key: "1",
-    id: "JOB001",
-    priority: "High",
-    firstName: "John",
-    lastName: "Doe",
-    address: "123 Main St, City, State",
-    status: "Pending",
-    businessName: "ABC Corp",
-    status2: "Unassigned",
-    phone: "(555) 123-4567",
-    serviceDuration: "2 hours",
-    from: "09:00",
-    to: "11:00",
-    customerPreferences: "Morning service preferred",
-    notes: "Customer notes here",
-    singleRecurring: "Single",
-    ratings: 4,
-    team: ["user1", "user2"],
-    files: "",
-    paid: "Paid"
-  },
-  {
-    key: "2",
-    id: "JOB002",
-    priority: "Medium",
-    firstName: "Jane",
-    lastName: "Smith",
-    address: "456 Oak Ave, City, State",
-    status: "In Progress",
-    businessName: "XYZ Inc",
-    status2: "Assigned",
-    phone: "(555) 987-6543",
-    serviceDuration: "1.5 hours",
-    from: "14:00",
-    to: "15:30",
-    customerPreferences: "Afternoon preferred",
-    notes: "Follow up required",
-    singleRecurring: "Recurring",
-    ratings: 5,
-    team: ["user3"],
-    files: "",
-    paid: "Unpaid"
-  }
-];
-
-// Component for editable column title
-const EditableColumnTitle = ({
-  title,
-  onSave,
-}: {
-  title: string;
-  onSave: (newTitle: string) => void;
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editValue, setEditValue] = useState(title);
-
-  const handleSave = () => {
-    if (editValue.trim() && editValue !== title) {
-      onSave(editValue.trim());
-    }
-    setIsEditing(false);
-  };
-
-  const handleCancel = () => {
-    setEditValue(title);
-    setIsEditing(false);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleSave();
-    } else if (e.key === "Escape") {
-      handleCancel();
-    }
-  };
-
-  if (isEditing) {
+const ColumnItem = React.memo(
+  ({
+    column,
+    onToggleVisibility,
+    onDragStart,
+    onDragOver,
+    onDrop,
+    style,
+  }: ColumnItemProps) => {
     return (
-      <div className="flex items-center gap-1">
-        <Input
-          value={editValue}
-          onChange={(e) => setEditValue(e.target.value)}
-          onKeyDown={handleKeyPress}
-          size="small"
-          className="min-w-[80px]"
-          autoFocus
+      <div
+        key={column.key}
+        className={`flex items-center gap-3 p-2 rounded border ${
+          column.visible ? "bg-white" : "bg-gray-50"
+        } cursor-move hover:shadow-sm`}
+        draggable
+        onDragStart={(e) => onDragStart(e, column)}
+        onDragOver={(e) => onDragOver(e, column)}
+        onDrop={(e) => onDrop(e, column)}
+        style={style}
+      >
+        <DragOutlined className="text-gray-400" />
+        <Checkbox
+          checked={column.visible}
+          onChange={() => onToggleVisibility(column.key)}
         />
-        <CheckOutlined
-          className="cursor-pointer text-green-600 hover:text-green-700"
-          onClick={handleSave}
+        <EyeOutlined
+          className={`cursor-pointer ${
+            column.visible ? "text-blue-500" : "text-gray-400"
+          }`}
+          onClick={() => onToggleVisibility(column.key)}
         />
-        <CloseOutlined
-          className="cursor-pointer text-red-600 hover:text-red-700"
-          onClick={handleCancel}
-        />
+        <span className={`flex-1 ${!column.visible ? "text-gray-400" : ""}`}>
+          {column.title}
+        </span>
       </div>
     );
   }
-
-  return (
-    <div className="flex items-center gap-1 group">
-      <span>{title}</span>
-      <EditOutlined
-        className="cursor-pointer text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
-        onClick={() => setIsEditing(true)}
-      />
-    </div>
-  );
-};
+);
+// EditableColumnTitle component is defined later in the file
 
 // Column Configuration Component
 const ColumnConfigPanel = ({
@@ -196,68 +132,123 @@ const ColumnConfigPanel = ({
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [presetName, setPresetName] = useState("");
 
-  const handleDragStart = (e: React.DragEvent, column: ColumnConfig) => {
-    setDraggedItem(column);
-    e.dataTransfer.effectAllowed = "move";
-  };
+  const handleDragStart = useCallback(
+    (e: React.DragEvent<HTMLDivElement>, column: ColumnConfig) => {
+      setDraggedItem(column);
+      e.dataTransfer.effectAllowed = "move";
+    },
+    []
+  );
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
-  };
+  }, []);
 
-  const handleDrop = (e: React.DragEvent, targetColumn: ColumnConfig) => {
-    e.preventDefault();
-    if (!draggedItem || draggedItem.key === targetColumn.key) return;
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>, targetColumn: ColumnConfig) => {
+      e.preventDefault();
+      if (!draggedItem || draggedItem.key === targetColumn.key) return;
 
-    const newColumns = [...columns];
-    const draggedIndex = newColumns.findIndex(col => col.key === draggedItem.key);
-    const targetIndex = newColumns.findIndex(col => col.key === targetColumn.key);
+      const newColumns = [...columns];
+      const draggedIndex = newColumns.findIndex(
+        (col) => col.key === draggedItem.key
+      );
+      const targetIndex = newColumns.findIndex(
+        (col) => col.key === targetColumn.key
+      );
 
-    newColumns.splice(draggedIndex, 1);
-    newColumns.splice(targetIndex, 0, draggedItem);
+      if (draggedIndex === -1 || targetIndex === -1) return;
 
-    // Update order values
-    newColumns.forEach((col, index) => {
-      col.order = index;
-    });
+      const [removed] = newColumns.splice(draggedIndex, 1);
+      newColumns.splice(targetIndex, 0, removed);
 
-    onUpdate(newColumns);
-    setDraggedItem(null);
-  };
+      // Update order values
+      const updatedColumns = newColumns.map((col, index) => ({
+        ...col,
+        order: index,
+      }));
 
-  const toggleVisibility = (columnKey: string) => {
-    const newColumns = columns.map(col =>
-      col.key === columnKey ? { ...col, visible: !col.visible } : col
-    );
-    onUpdate(newColumns);
-  };
+      onUpdate(updatedColumns);
+      setDraggedItem(null);
+    },
+    [columns, draggedItem, onUpdate]
+  );
 
-  const handleSavePreset = () => {
+  const toggleVisibility = useCallback(
+    (columnKey: string) => {
+      onUpdate(
+        columns.map((col) =>
+          col.key === columnKey ? { ...col, visible: !col.visible } : col
+        )
+      );
+    },
+    [columns, onUpdate]
+  );
+  const toggleAllColumns = useCallback(
+    (checked: boolean) => {
+      onUpdate(columns.map((col) => ({ ...col, visible: checked })));
+    },
+    [columns, onUpdate]
+  );
+
+  const handleSavePreset = useCallback(() => {
     if (presetName.trim()) {
       onSavePreset(presetName.trim(), columns);
       setPresetName("");
       setShowSaveModal(false);
     }
-  };
+  }, [presetName, columns, onSavePreset]);
 
-  const presetMenuItems = presets.map(preset => ({
-    key: preset.id,
-    label: (
-      <div className="flex items-center justify-between">
-        <span onClick={() => onLoadPreset(preset)}>{preset.name}</span>
-        <Button
-          type="text"
-          size="small"
-          icon={<DeleteOutlined />}
-          onClick={(e) => {
-            e.stopPropagation();
-            onDeletePreset(preset.id);
-          }}
+  const presetMenuItems = useMemo(
+    () =>
+      presets.map((preset) => ({
+        key: preset.id,
+        label: (
+          <div className="flex items-center justify-between">
+            <span onClick={() => onLoadPreset(preset)}>{preset.name}</span>
+            <Button
+              type="text"
+              size="small"
+              icon={<DeleteOutlined />}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeletePreset(preset.id);
+              }}
+            />
+          </div>
+        ),
+      })),
+    [presets, onLoadPreset, onDeletePreset]
+  );
+  const itemData = useMemo(
+    () => ({
+      columns: [...columns].sort((a, b) => a.order - b.order),
+      onToggleVisibility: toggleVisibility,
+      onDragStart: handleDragStart,
+      onDragOver: handleDragOver,
+      onDrop: handleDrop,
+    }),
+    [columns, toggleVisibility, handleDragStart, handleDragOver, handleDrop]
+  );
+
+  const Row = useCallback(
+    ({ index, style }: { index: number; style: React.CSSProperties }) => {
+      const column = itemData.columns[index];
+      return (
+        <ColumnItem
+          column={column}
+          onToggleVisibility={itemData.onToggleVisibility}
+          onDragStart={itemData.onDragStart}
+          onDragOver={itemData.onDragOver}
+          onDrop={itemData.onDrop}
+          index={index}
+          style={style}
         />
-      </div>
-    ),
-  }));
+      );
+    },
+    [itemData]
+  );
 
   return (
     <div className="p-4">
@@ -268,12 +259,10 @@ const ColumnConfigPanel = ({
             menu={{
               items: presetMenuItems,
             }}
-            trigger={['click']}
+            trigger={["click"]}
             disabled={presets.length === 0}
           >
-            <Button icon={<AppstoreOutlined />}>
-              Load Preset
-            </Button>
+            <Button icon={<AppstoreOutlined />}>Load Preset</Button>
           </Dropdown>
           <Button
             icon={<SaveOutlined />}
@@ -287,49 +276,31 @@ const ColumnConfigPanel = ({
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-2">
           <Switch
-            checked={columns.every(col => col.visible)}
-            onChange={(checked) => {
-              const newColumns = columns.map(col => ({ ...col, visible: checked }));
-              onUpdate(newColumns);
-            }}
+            checked={columns.every((col) => col.visible)}
+            onChange={(e) => toggleAllColumns(e)}
           />
           <span className="text-sm font-medium">Show All Columns</span>
         </div>
       </div>
 
       <div className="space-y-2">
-        <div className="text-sm font-medium text-gray-600 mb-2">
-          Drag to reorder • Click eye to show/hide
-        </div>
-        {columns
-          .sort((a, b) => a.order - b.order)
-          .map((column) => (
-            <div
-              key={column.key}
-              className={`flex items-center gap-3 p-2 rounded border ${
-                column.visible ? 'bg-white' : 'bg-gray-50'
-              } cursor-move hover:shadow-sm`}
-              draggable
-              onDragStart={(e) => handleDragStart(e, column)}
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, column)}
-            >
-              <DragOutlined className="text-gray-400" />
-              <Checkbox
-                checked={column.visible}
-                onChange={() => toggleVisibility(column.key)}
-              />
-              <EyeOutlined
-                className={`cursor-pointer ${
-                  column.visible ? 'text-blue-500' : 'text-gray-400'
-                }`}
-                onClick={() => toggleVisibility(column.key)}
-              />
-              <span className={`flex-1 ${!column.visible ? 'text-gray-400' : ''}`}>
-                {column.title}
-              </span>
-            </div>
-          ))}
+        {itemData.columns.map((column, index) => (
+          <ColumnItem
+            key={column.key}
+            column={column}
+            onToggleVisibility={itemData.onToggleVisibility}
+            onDragStart={itemData.onDragStart}
+            onDragOver={itemData.onDragOver}
+            onDrop={itemData.onDrop}
+            index={index}
+            style={{
+              height: 40,
+              display: "flex",
+              alignItems: "center",
+              padding: "0 16px",
+            }}
+          />
+        ))}
       </div>
 
       <Modal
@@ -340,86 +311,189 @@ const ColumnConfigPanel = ({
           setShowSaveModal(false);
           setPresetName("");
         }}
-        okText="Save"
-        cancelText="Cancel"
       >
-        <div className="py-4">
-          <Input
-            placeholder="Enter preset name"
-            value={presetName}
-            onChange={(e) => setPresetName(e.target.value)}
-            onPressEnter={handleSavePreset}
-          />
-        </div>
+        <Input
+          placeholder="Enter preset name"
+          value={presetName}
+          onChange={(e) => setPresetName(e.target.value)}
+          onPressEnter={handleSavePreset}
+        />
       </Modal>
     </div>
   );
 };
 
-const TasksTable = ({ dataSource = sampleData }: TasksTableProps) => {
+const EditableColumnTitle = memo(
+  ({
+    title,
+    onSave,
+  }: {
+    title: string;
+    onSave: (newTitle: string) => void;
+  }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editValue, setEditValue] = useState(title);
+
+    const handleSave = () => {
+      if (editValue.trim() && editValue !== title) {
+        onSave(editValue.trim());
+      }
+      setIsEditing(false);
+    };
+
+    const handleCancel = () => {
+      setEditValue(title);
+      setIsEditing(false);
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+      if (e.key === "Enter") {
+        handleSave();
+      } else if (e.key === "Escape") {
+        handleCancel();
+      }
+    };
+
+    if (isEditing) {
+      return (
+        <div className="flex items-center gap-1">
+          <Input
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onKeyDown={handleKeyPress}
+            size="small"
+            className="min-w-[80px]"
+            autoFocus
+          />
+          <CheckOutlined
+            className="cursor-pointer text-green-600 hover:text-green-700"
+            onClick={handleSave}
+            aria-label="Save"
+          />
+          <CloseOutlined
+            className="cursor-pointer text-red-600 hover:text-red-700"
+            onClick={handleCancel}
+            aria-label="Cancel"
+          />
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex items-center gap-1 group">
+        <span>{title}</span>
+        <EditOutlined
+          className="cursor-pointer text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+          onClick={() => setIsEditing(true)}
+          aria-label="Edit column title"
+        />
+      </div>
+    );
+  }
+);
+
+const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
   const [columnDrawerOpen, setColumnDrawerOpen] = useState(false);
+  const { jobs, setOptimizationResult } = usePlan();
+  const [open, setOpen] = useState(false);
+  // console.log(dataSource);
 
   // Initialize column configurations
-  const [columnConfigs, setColumnConfigs] = useState<ColumnConfig[]>([
-    { key: "id", title: "Job ID", visible: true, order: 0 },
-    { key: "priority", title: "Priority", visible: true, order: 1 },
-    { key: "firstName", title: "First Name", visible: true, order: 2 },
-    { key: "lastName", title: "Last Name", visible: true, order: 3 },
-    { key: "address", title: "Address", visible: true, order: 4 },
-    { key: "status", title: "Status", visible: true, order: 5 },
-    { key: "businessName", title: "Business Name", visible: false, order: 6 },
-    { key: "status2", title: "Assignment", visible: true, order: 7 },
-    { key: "phone", title: "Phone", visible: false, order: 8 },
-    { key: "serviceDuration", title: "Service Duration", visible: true, order: 9 },
-    { key: "from", title: "From", visible: true, order: 10 },
-    { key: "to", title: "To", visible: true, order: 11 },
-    { key: "customerPreferences", title: "Customer Preferences", visible: false, order: 12 },
-    { key: "notes", title: "Notes", visible: false, order: 13 },
-    { key: "singleRecurring", title: "Type", visible: true, order: 14 },
-    { key: "ratings", title: "Ratings", visible: true, order: 15 },
-    { key: "team", title: "Team", visible: true, order: 16 },
-    { key: "files", title: "Files", visible: false, order: 17 },
-    { key: "paid", title: "Payment", visible: true, order: 18 },
-  ]);
-
+  const initialColumnConfigs = useMemo<ColumnConfig[]>(
+    () => [
+      { key: "id", title: "Job ID", visible: true, order: 0 },
+      { key: "priority", title: "Priority", visible: true, order: 1 },
+      { key: "firstName", title: "First Name", visible: true, order: 2 },
+      { key: "lastName", title: "Last Name", visible: true, order: 3 },
+      { key: "address", title: "Address", visible: true, order: 4 },
+      { key: "status", title: "Status", visible: true, order: 5 },
+      { key: "businessName", title: "Business Name", visible: false, order: 6 },
+      { key: "status2", title: "Assignment", visible: true, order: 7 },
+      { key: "phone", title: "Phone", visible: false, order: 8 },
+      {
+        key: "serviceDuration",
+        title: "Service Duration",
+        visible: true,
+        order: 9,
+      },
+      { key: "from", title: "From", visible: true, order: 10 },
+      { key: "to", title: "To", visible: true, order: 11 },
+      {
+        key: "customerPreferences",
+        title: "Customer Preferences",
+        visible: false,
+        order: 12,
+      },
+      { key: "notes", title: "Notes", visible: false, order: 13 },
+      { key: "singleRecurring", title: "Type", visible: true, order: 14 },
+      { key: "ratings", title: "Ratings", visible: true, order: 15 },
+      { key: "team", title: "Team", visible: true, order: 16 },
+      { key: "files", title: "Files", visible: false, order: 17 },
+      { key: "paid", title: "Payment", visible: true, order: 18 },
+    ],
+    []
+  );
+  const [columnConfigs, setColumnConfigs] =
+    useState<ColumnConfig[]>(initialColumnConfigs);
   const [presets, setPresets] = useState<ColumnPreset[]>([
     {
       id: "default",
       name: "Default View",
-      columns: columnConfigs,
+      columns: initialColumnConfigs,
     },
   ]);
 
   // Function to update column title
   const updateColumnTitle = (key: string, newTitle: string) => {
-    setColumnConfigs(prev => 
-      prev.map(col => 
-        col.key === key ? { ...col, title: newTitle } : col
-      )
+    setColumnConfigs((prev) =>
+      prev.map((col) => (col.key === key ? { ...col, title: newTitle } : col))
     );
     messageApi.success(`Column title updated to "${newTitle}"`);
   };
-
+  const getJobById = useCallback(
+    (id: string) => {
+      return jobs?.find((job) => job.id == id);
+    },
+    [jobs]
+  );
   // Create columns based on configuration
-  const createColumns = (): ColumnsType<Task> => {
+  const createColumns = useCallback((): ColumnsType<Task> => {
     const baseColumns: ColumnsType<Task> = [
       {
         title: "",
         key: "drag",
         align: "center",
         width: 40,
-        render: () => <MoreOutlined className="text-[20px] cursor-pointer" />,
+        render: (_, record) => (
+          <div
+            draggable
+            onDragStart={(e) => {
+              e.dataTransfer.effectAllowed = "move";
+              e.dataTransfer.setData("text/plain", record.id);
+            }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+              }
+            }}
+            aria-label="Drag to reorder"
+          >
+            <MoreOutlined className="text-[20px] cursor-pointer" />
+          </div>
+        ),
       },
     ];
 
     const configuredColumns = columnConfigs
-      .filter(config => config.visible)
+      .filter((config) => config.visible)
       .sort((a, b) => a.order - b.order)
-      .map(config => {
+      .map((config) => {
         const baseColumn: TableColumnType<Task> = {
           title: (
             <EditableColumnTitle
@@ -457,13 +531,25 @@ const TasksTable = ({ dataSource = sampleData }: TasksTableProps) => {
           case "status":
             return {
               ...baseColumn,
-              render: () => (
-                <div className="flex justify-center">
-                  <Button type="link" size="small">
-                    Map View
-                  </Button>
-                </div>
-              ),
+              render: (_text: string, record: Task) => {
+                const job = getJobById(record.id);
+                if (!job || !job.lat || !job.lon) return null;
+                return (
+                  <div className="flex justify-center">
+                    <Button
+                      type="link"
+                      size="small"
+                      onClick={() => {
+                        if (job?.lat && job?.lon) {
+                          onMapView(job.lat, job.lon);
+                        }
+                      }}
+                    >
+                      Map View
+                    </Button>
+                  </div>
+                );
+              },
             };
           case "status2":
             return {
@@ -552,7 +638,9 @@ const TasksTable = ({ dataSource = sampleData }: TasksTableProps) => {
                         d="M12 4v16m8-8H4"
                       />
                     </svg>
-                    <div className="text-gray-500 text-xs font-medium">Attach File</div>
+                    <div className="text-gray-500 text-xs font-medium">
+                      Attach File
+                    </div>
                     <input type="file" className="hidden" />
                   </label>
                 </div>
@@ -587,18 +675,7 @@ const TasksTable = ({ dataSource = sampleData }: TasksTableProps) => {
       });
 
     return [...baseColumns, ...configuredColumns];
-  };
-
-  // Filter data based on search text
-  const filteredData = searchText
-    ? dataSource.filter((item) =>
-        Object.values(item).some(
-          (val) =>
-            val &&
-            val.toString().toLowerCase().includes(searchText.toLowerCase())
-        )
-      )
-    : dataSource;
+  }, [columnConfigs, getJobById, onMapView]);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -607,20 +684,93 @@ const TasksTable = ({ dataSource = sampleData }: TasksTableProps) => {
   const rowSelection: TableRowSelection<Task> = {
     selectedRowKeys,
     onChange: onSelectChange,
+    preserveSelectedRowKeys: true,
   };
 
   const handleCreateRoute = async () => {
+    setOpen(false);
+    console.log("Create Route button clicked");
+    console.log("Selected row keys:", selectedRowKeys);
+
     if (selectedRowKeys.length === 0) {
+      console.log("No jobs selected, showing warning");
       messageApi.warning("Please select at least one job to create a route");
       return;
     }
-    
-    setIsOptimizing(true);
-    // Simulate API call
-    setTimeout(() => {
-      messageApi.success("Route created successfully!");
+    if (selectedRowKeys.length > 0) {
+      setOpen(true);
+    }
+    const selectedJobs = dataSource.filter((job) =>
+      selectedRowKeys.includes(job.key as React.Key)
+    );
+
+    console.log("selected jobs -> ", selectedJobs);
+
+    // Use original job data for validation
+    const jobsWithInvalidCoords = selectedJobs.filter((job) => {
+      const jobData = getJobById(job.id) || job;
+      const lat = jobData.lat ?? null;
+      const lng = jobData.lon ?? null;
+      console.log("job data -> ", jobData);
+
+      // Check if coordinates are valid
+      return (
+        lat === null ||
+        lng === null ||
+        isNaN(Number(lat)) ||
+        isNaN(Number(lng)) ||
+        Number(lat) < -90 ||
+        Number(lat) > 90 ||
+        Number(lng) < -180 ||
+        Number(lng) > 180
+      );
+    });
+
+    if (jobsWithInvalidCoords.length > 0) {
+      const jobIds = jobsWithInvalidCoords
+        .map((job) => `#${job.id}`)
+        .join(", ");
+      messageApi.error(
+        `Cannot create route: Jobs ${jobIds} have invalid or missing coordinates. Please check the address and try again.`
+      );
+      return;
+    }
+
+    // Convert selected tasks to optimization jobs format
+    const optimizationJobs: OptimizationJob[] = selectedJobs.map((job) => {
+      const jobData = getJobById(job.id) || job;
+
+      return {
+        id: job.id,
+        location: {
+          lat: jobData.lat || 0,
+          lng: jobData.lon || 0,
+        },
+        duration: jobData.duration_minutes
+          ? jobData.duration_minutes * 60
+          : 1800, // Convert minutes to seconds if available
+        priority:
+          jobData.priority_level === "high"
+            ? 10
+            : jobData.priority_level === "medium"
+            ? 5
+            : 1,
+      };
+    });
+
+    try {
+      setIsOptimizing(true);
+      const result = await optimizeRoutes(optimizationJobs);
+      setOptimizationResult(result);
+      messageApi.success("Route optimized successfully!");
+    } catch (error) {
+      console.error("Error optimizing route:", error);
+      messageApi.error(
+        "Failed to optimize route. Please ensure all jobs have valid addresses and try again."
+      );
+    } finally {
       setIsOptimizing(false);
-    }, 2000);
+    }
   };
 
   const handleSavePreset = (name: string, columns: ColumnConfig[]) => {
@@ -629,7 +779,7 @@ const TasksTable = ({ dataSource = sampleData }: TasksTableProps) => {
       name,
       columns: [...columns],
     };
-    setPresets(prev => [...prev, newPreset]);
+    setPresets((prev) => [...prev, newPreset]);
     messageApi.success(`Preset "${name}" saved successfully!`);
   };
 
@@ -639,10 +789,27 @@ const TasksTable = ({ dataSource = sampleData }: TasksTableProps) => {
   };
 
   const handleDeletePreset = (presetId: string) => {
-    setPresets(prev => prev.filter(p => p.id !== presetId));
+    setPresets((prev) => prev.filter((p) => p.id !== presetId));
     messageApi.success("Preset deleted successfully!");
   };
 
+  // Memoize the filtered data to prevent unnecessary re-renders
+  const memoizedFilteredData = useMemo(
+    () =>
+      searchText
+        ? dataSource.filter((item) =>
+            Object.values(item).some(
+              (val) =>
+                val &&
+                val.toString().toLowerCase().includes(searchText.toLowerCase())
+            )
+          )
+        : dataSource,
+    [dataSource, searchText]
+  );
+  const columns = useMemo(() => {
+    return createColumns();
+  }, [columnConfigs, getJobById, onMapView]);
   return (
     <div className="flex flex-col w-full shadow overflow-hidden h-full bg-white">
       {contextHolder}
@@ -687,7 +854,7 @@ const TasksTable = ({ dataSource = sampleData }: TasksTableProps) => {
           </Button>
           <Button
             type={selectedRowKeys.length > 0 ? "primary" : "default"}
-            onClick={handleCreateRoute}
+            onClick={() => setOpen(true)}
             disabled={selectedRowKeys.length === 0 || isOptimizing}
             icon={
               isOptimizing ? (
@@ -710,6 +877,15 @@ const TasksTable = ({ dataSource = sampleData }: TasksTableProps) => {
             {isOptimizing ? "Optimizing..." : "Create New Route"}
           </Button>
         </div>
+        {open ? (
+          <CreateRouteModalForm
+            open={open}
+            onClose={() => setOpen(false)}
+            onSubmit={handleCreateRoute}
+          />
+        ) : (
+          ""
+        )}
       </div>
 
       <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden">
@@ -722,8 +898,14 @@ const TasksTable = ({ dataSource = sampleData }: TasksTableProps) => {
             scroll={undefined}
             pagination={false}
             columns={createColumns()}
-            dataSource={filteredData}
-            rowKey={(record) => record.id || record.key}
+            dataSource={memoizedFilteredData.map((item) => ({
+              ...item,
+              key:
+                item.id ||
+                item.key ||
+                `row-${Math.random().toString(36).substr(2, 9)}`,
+            }))}
+            rowKey="key"
             size="small"
             tableLayout="auto"
             className="min-w-full"
