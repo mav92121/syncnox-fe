@@ -65,9 +65,10 @@ const MapRefInitializer = ({ mapRef }: { mapRef: RefObject<Map | null> }) => {
   const map = useMap();
   useEffect(() => {
     if (mapRef && mapRef.current !== map) {
-      (mapRef as any).current = map;
+      // (mapRef as any).current = map;
+      (mapRef.current as Map)?.invalidateSize();
     }
-  }, [map]);
+  }, [map, mapRef]);
   return null;
 };
 
@@ -216,12 +217,14 @@ const MapComponent = ({
 
   // State to store routes from OSRM
   const [routes, setRoutes] = useState<LatLngTuple[][]>([]);
+  const [isLoadingRoute, setIsLoadingRoute] = useState(false);
 
   // Fetch actual route from OSRM
   useEffect(() => {
     if (!optimizationData?.routes?.length) return;
-
+    const controller = new AbortController();
     const fetchRoutes = async () => {
+      setIsLoadingRoute(true);
       const newRoutes: LatLngTuple[][] = [];
 
       for (const route of optimizationData.routes) {
@@ -261,13 +264,17 @@ const MapComponent = ({
       }
 
       setRoutes(newRoutes);
+      setIsLoadingRoute(false);
     };
 
     fetchRoutes();
+    return () => {
+      controller.abort();
+    };
   }, [optimizationData]);
 
   // Get polyline positions for each route
-  const getPolylinePositions = (
+  const getPolylinePositions = useCallback((
     route: Route,
     routeIndex: number
   ): LatLngTuple[] => {
@@ -279,7 +286,7 @@ const MapComponent = ({
     // Fallback to waypoints if no route is available yet
     const waypoints = route.path?.waypoints || route.waypoints || [];
     return waypoints.map((wp) => [wp.lat, wp.lng] as [number, number]);
-  };
+  }, [routes]);
 
   // Create a custom marker with number
   const createNumberedIcon = (number: number) => {
@@ -363,8 +370,8 @@ const MapComponent = ({
       style={{ opacity, height: size.height, width: size.width, position: "relative" }}
     >
       <Resizable
-        width={parseInt(size.width) || 800 }
-        height={parseInt(size.height) || 600}
+        width={parseInt(size.width.toString(), 10) || 800 }
+        height={parseInt(size.height.toString(), 10) || 600}
         onResize={onResize}
         onResizeStart={onResizeStart}
         onResizeStop={onResizeStop}
@@ -399,7 +406,7 @@ const MapComponent = ({
           ))}
           {jobs?.map((job: any, index: any) => (
             <Marker
-              key={`job-marker-${index}`}
+              key={`job-marker-${job.id || index}`}
               position={[job.lat, job.lon]}
               icon={customIcon}
             ></Marker>
