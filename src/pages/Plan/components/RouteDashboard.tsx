@@ -12,13 +12,11 @@ import {
   ListFilter,
   MousePointer2,
 } from "lucide-react";
-import {
-  MoreOutlined,
-} from "@ant-design/icons";
+import { MoreOutlined } from "@ant-design/icons";
 
 const RouteDashboard = () => {
   // const [selectedDate, setSelectedDate] = useState("02/08/2025");
-  const [selectedDate, setSelectedDate]="02/08/2025"
+  const [selectedDate, setSelectedDate] = "02/08/2025";
   const [activeTab, setActiveTab] = useState("Timeline");
   console.log(setSelectedDate);
 
@@ -64,27 +62,6 @@ const RouteDashboard = () => {
         { stop: 5, time: "10:30" },
         { stop: 6, time: "11:00" },
         { stop: 7, time: "11:30" },
-      ],
-    },
-    {
-      id: 2,
-      name: "Courtney Henry",
-      avatar: "https://avatar.iran.liara.run/public/6",
-      driverNumber: "Driver 1",
-      zone: "Zone 1",
-      shiftTime: "12PM - 3PM",
-      vehicle: "TXQ2SXX223",
-      totalStops: "26 Stops",
-      distance: "100.74mi",
-      duration: "23Hrs36Mins",
-      color: "green",
-      timeline: [
-        { stop: "home", time: "07:00", icon: "home" },
-        { stop: 1, time: "08:00" },
-        { stop: 2, time: "08:30" },
-        { stop: 3, time: "09:00" },
-        { stop: 4, time: "09:30" },
-        { stop: 5, time: "10:30" },
       ],
     },
   ];

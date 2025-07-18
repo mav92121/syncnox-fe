@@ -1,11 +1,5 @@
-import React, { useCallback, useMemo, useState, memo } from "react";
-import {
-  Button,
-  message,
-  Table,
-  Input,
-  Checkbox,
-} from "antd";
+import React, { useCallback, useMemo, useState } from "react";
+import { Button, message, Table, Input } from "antd";
 import type { TableProps, TableColumnType } from "antd";
 import {
   SearchOutlined,
@@ -15,12 +9,6 @@ import {
   FileSearchOutlined,
   UploadOutlined,
   LoadingOutlined,
-  EditOutlined,
-  CheckOutlined,
-  CloseOutlined,
-  SettingOutlined,
-  DragOutlined,
-  EyeOutlined,
 } from "@ant-design/icons";
 import CreateRouteModalForm from "./CreateRouteModalForm";
 import { usePlan } from "../context/planContextDefinition";
@@ -36,88 +24,6 @@ interface TasksTableProps {
   onMapView: (lat: number, lon: number) => void;
 }
 
-interface ColumnConfig {
-  key: string;
-  title: string;
-  visible: boolean;
-  order: number;
-  width?: number;
-}
-
-
-// EditableColumnTitle component is defined later in the file
-
-// Column Configuration Component
-
-const EditableColumnTitle = memo(
-  ({
-    title,
-    onSave,
-  }: {
-    title: string;
-    onSave: (newTitle: string) => void;
-  }) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [editValue, setEditValue] = useState(title);
-
-    const handleSave = () => {
-      if (editValue.trim() && editValue !== title) {
-        onSave(editValue.trim());
-      }
-      setIsEditing(false);
-    };
-
-    const handleCancel = () => {
-      setEditValue(title);
-      setIsEditing(false);
-    };
-
-    const handleKeyPress = (e: React.KeyboardEvent) => {
-      if (e.key === "Enter") {
-        handleSave();
-      } else if (e.key === "Escape") {
-        handleCancel();
-      }
-    };
-
-    if (isEditing) {
-      return (
-        <div className="flex items-center gap-1">
-          <Input
-            value={editValue}
-            onChange={(e) => setEditValue(e.target.value)}
-            onKeyDown={handleKeyPress}
-            size="small"
-            className="min-w-[80px]"
-            autoFocus
-          />
-          <CheckOutlined
-            className="cursor-pointer text-green-600 hover:text-green-700"
-            onClick={handleSave}
-            aria-label="Save"
-          />
-          <CloseOutlined
-            className="cursor-pointer text-red-600 hover:text-red-700"
-            onClick={handleCancel}
-            aria-label="Cancel"
-          />
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex items-center gap-1 group">
-        <span>{title}</span>
-        <EditOutlined
-          className="cursor-pointer text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
-          onClick={() => setIsEditing(true)}
-          aria-label="Edit column title"
-        />
-      </div>
-    );
-  }
-);
-
 const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isOptimizing, setIsOptimizing] = useState(false);
@@ -125,62 +31,17 @@ const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
   const [messageApi, contextHolder] = message.useMessage();
   const { jobs, setOptimizationResult } = usePlan();
   const [open, setOpen] = useState(false);
-  // console.log(dataSource);
 
-  // Initialize column configurations
-  const initialColumnConfigs = useMemo<ColumnConfig[]>(
-    () => [
-      { key: "id", title: "Job ID", visible: true, order: 0 },
-      { key: "priority", title: "Priority", visible: true, order: 1 },
-      { key: "firstName", title: "First Name", visible: true, order: 2 },
-      { key: "lastName", title: "Last Name", visible: true, order: 3 },
-      { key: "address", title: "Address", visible: true, order: 4 },
-      { key: "status", title: "Status", visible: true, order: 5 },
-      { key: "businessName", title: "Business Name", visible: false, order: 6 },
-      { key: "status2", title: "Assignment", visible: true, order: 7 },
-      { key: "phone", title: "Phone", visible: false, order: 8 },
-      {
-        key: "serviceDuration",
-        title: "Service Duration",
-        visible: true,
-        order: 9,
-      },
-      { key: "from", title: "From", visible: true, order: 10 },
-      { key: "to", title: "To", visible: true, order: 11 },
-      {
-        key: "customerPreferences",
-        title: "Customer Preferences",
-        visible: false,
-        order: 12,
-      },
-      { key: "notes", title: "Notes", visible: false, order: 13 },
-      { key: "singleRecurring", title: "Type", visible: true, order: 14 },
-      { key: "ratings", title: "Ratings", visible: true, order: 15 },
-      { key: "team", title: "Team", visible: true, order: 16 },
-      { key: "files", title: "Files", visible: false, order: 17 },
-      { key: "paid", title: "Payment", visible: true, order: 18 },
-    ],
-    []
-  );
-  const [columnConfigs, setColumnConfigs] =
-    useState<ColumnConfig[]>(initialColumnConfigs);
-
-  // Function to update column title
-  const updateColumnTitle = (key: string, newTitle: string) => {
-    setColumnConfigs((prev) =>
-      prev.map((col) => (col.key === key ? { ...col, title: newTitle } : col))
-    );
-    messageApi.success(`Column title updated to "${newTitle}"`);
-  };
   const getJobById = useCallback(
     (id: string) => {
       return jobs?.find((job) => job.id == id);
     },
     [jobs]
   );
-  // Create columns based on configuration
+
+  // Create columns with fixed configuration
   const createColumns = useCallback((): ColumnsType<Task> => {
-    const baseColumns: ColumnsType<Task> = [
+    const columns: ColumnsType<Task> = [
       {
         title: "",
         key: "drag",
@@ -206,194 +67,233 @@ const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
           </div>
         ),
       },
+      {
+        title: "Job ID",
+        dataIndex: "id",
+        key: "id",
+        align: "center",
+        ellipsis: true,
+        render: (text: string) => (
+          <div className="text-center px-2" title={text}>
+            {text}
+          </div>
+        ),
+      },
+      {
+        title: "Priority",
+        dataIndex: "priority",
+        key: "priority",
+        align: "center",
+        render: (priority: string) => (
+          <div className="flex justify-center">
+            <span
+              className={`inline-block min-w-[70px] text-center px-3 py-1 text-xs font-semibold ${
+                priority === "Low"
+                  ? "bg-green-100 text-green-700 border border-green-200"
+                  : priority === "Medium"
+                  ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                  : "bg-red-100 text-red-800 border border-red-200"
+              }`}
+            >
+              {priority}
+            </span>
+          </div>
+        ),
+      },
+      {
+        title: "First Name",
+        dataIndex: "firstName",
+        key: "firstName",
+        align: "center",
+        ellipsis: true,
+        render: (text: string) => (
+          <div className="text-center px-2" title={text}>
+            {text}
+          </div>
+        ),
+      },
+      {
+        title: "Last Name",
+        dataIndex: "lastName",
+        key: "lastName",
+        align: "center",
+        ellipsis: true,
+        render: (text: string) => (
+          <div className="text-center px-2" title={text}>
+            {text}
+          </div>
+        ),
+      },
+      {
+        title: "Address",
+        dataIndex: "address",
+        key: "address",
+        align: "center",
+        ellipsis: true,
+        render: (text: string) => (
+          <div className="text-center px-2" title={text}>
+            {text}
+          </div>
+        ),
+      },
+      {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        align: "center",
+        render: (_text: string, record: Task) => {
+          const job = getJobById(record.id);
+          if (!job || !job.lat || !job.lon) return null;
+          return (
+            <div className="flex justify-center">
+              <Button
+                type="link"
+                size="small"
+                onClick={() => {
+                  if (job?.lat && job?.lon) {
+                    onMapView(job.lat, job.lon);
+                  }
+                }}
+              >
+                Map View
+              </Button>
+            </div>
+          );
+        },
+      },
+      {
+        title: "Assignment",
+        dataIndex: "status2",
+        key: "status2",
+        align: "center",
+        render: () => (
+          <div className="flex justify-center">
+            <div className="bg-yellow-50 text-yellow-700 border border-yellow-200 font-semibold px-3 py-1 h-7">
+              Unassigned
+            </div>
+          </div>
+        ),
+      },
+      {
+        title: "Service Duration",
+        dataIndex: "serviceDuration",
+        key: "serviceDuration",
+        align: "center",
+        ellipsis: true,
+        render: (text: string) => (
+          <div className="text-center px-2" title={text}>
+            {text}
+          </div>
+        ),
+      },
+      {
+        title: "From",
+        dataIndex: "from",
+        key: "from",
+        align: "center",
+        ellipsis: true,
+        render: (text: string) => (
+          <div className="text-center px-2" title={text}>
+            {text}
+          </div>
+        ),
+      },
+      {
+        title: "To",
+        dataIndex: "to",
+        key: "to",
+        align: "center",
+        ellipsis: true,
+        render: (text: string) => (
+          <div className="text-center px-2" title={text}>
+            {text}
+          </div>
+        ),
+      },
+      {
+        title: "Type",
+        dataIndex: "singleRecurring",
+        key: "singleRecurring",
+        align: "center",
+        render: (type: string) => (
+          <div className="flex justify-center">
+            <span
+              className={`min-w-[90px] inline-block text-center ${
+                type === "Single"
+                  ? "bg-[#00B875] text-white"
+                  : type === "Recurring"
+                  ? "bg-[#1677FF] text-white"
+                  : "bg-gray-200 text-gray-700"
+              } px-3 py-1 text-xs font-semibold`}
+            >
+              {type}
+            </span>
+          </div>
+        ),
+      },
+      {
+        title: "Ratings",
+        dataIndex: "ratings",
+        key: "ratings",
+        align: "center",
+        render: (rating: number) => (
+          <div className="flex justify-center">
+            <span className="flex items-center gap-0.5">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <svg
+                  key={i}
+                  className={`w-3 h-3 ${
+                    i <= rating ? "text-yellow-400" : "text-gray-300"
+                  }`}
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <polygon points="9.9,1.1 7.6,6.6 1.6,7.3 6.1,11.2 4.8,17.1 9.9,14.1 15,17.1 13.7,11.2 18.2,7.3 12.2,6.6 " />
+                </svg>
+              ))}
+            </span>
+          </div>
+        ),
+      },
+      {
+        title: "Team",
+        dataIndex: "team",
+        key: "team",
+        align: "center",
+        render: (team: string[]) => (
+          <div className="flex justify-center">
+            <span className="flex items-center gap-1">
+              {team.map((_, i) => (
+                <span
+                  key={i}
+                  className="inline-block w-5 h-5 rounded-full bg-gray-200 border border-gray-300"
+                />
+              ))}
+            </span>
+          </div>
+        ),
+      },
+      {
+        title: "Payment",
+        dataIndex: "paid",
+        key: "paid",
+        align: "center",
+        render: (text: string) => (
+          <div className="flex w-[150px] justify-center">
+            <div
+              className={`w-[90px] px-[10px] py-[7px] text-white ${
+                text === "Paid" ? "bg-[#00774C]" : "bg-[#667085]"
+              }`}
+            >
+              {text}
+            </div>
+          </div>
+        ),
+      },
     ];
 
-    const configuredColumns = columnConfigs
-      .filter((config) => config.visible)
-      .sort((a, b) => a.order - b.order)
-      .map((config) => {
-        const baseColumn: TableColumnType<Task> = {
-          title: (
-            <EditableColumnTitle
-              title={config.title}
-              onSave={(newTitle) => updateColumnTitle(config.key, newTitle)}
-            />
-          ),
-          dataIndex: config.key,
-          key: config.key,
-          align: "center" as const,
-          width: config.width,
-        };
-
-        // Add specific renderers based on column type
-        switch (config.key) {
-          case "priority":
-            return {
-              ...baseColumn,
-              render: (priority: string) => (
-                <div className="flex justify-center">
-                  <span
-                    className={`inline-block min-w-[70px] text-center px-3 py-1 text-xs font-semibold ${
-                      priority === "Low"
-                        ? "bg-green-100 text-green-700 border border-green-200"
-                        : priority === "Medium"
-                        ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
-                        : "bg-red-100 text-red-800 border border-red-200"
-                    }`}
-                  >
-                    {priority}
-                  </span>
-                </div>
-              ),
-            };
-          case "status":
-            return {
-              ...baseColumn,
-              render: (_text: string, record: Task) => {
-                const job = getJobById(record.id);
-                if (!job || !job.lat || !job.lon) return null;
-                return (
-                  <div className="flex justify-center">
-                    <Button
-                      type="link"
-                      size="small"
-                      onClick={() => {
-                        if (job?.lat && job?.lon) {
-                          onMapView(job.lat, job.lon);
-                        }
-                      }}
-                    >
-                      Map View
-                    </Button>
-                  </div>
-                );
-              },
-            };
-          case "status2":
-            return {
-              ...baseColumn,
-              render: () => (
-                <div className="flex justify-center">
-                  <div className="bg-yellow-50 text-yellow-700 border border-yellow-200 font-semibold px-3 py-1 h-7">
-                    Unassigned
-                  </div>
-                </div>
-              ),
-            };
-          case "singleRecurring":
-            return {
-              ...baseColumn,
-              render: (type: string) => (
-                <div className="flex justify-center">
-                  <span
-                    className={`min-w-[90px] inline-block text-center ${
-                      type === "Single"
-                        ? "bg-[#00B875] text-white"
-                        : type === "Recurring"
-                        ? "bg-[#1677FF] text-white"
-                        : "bg-gray-200 text-gray-700"
-                    } px-3 py-1 text-xs font-semibold`}
-                  >
-                    {type}
-                  </span>
-                </div>
-              ),
-            };
-          case "ratings":
-            return {
-              ...baseColumn,
-              render: (rating: number) => (
-                <div className="flex justify-center">
-                  <span className="flex items-center gap-0.5">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <svg
-                        key={i}
-                        className={`w-3 h-3 ${
-                          i <= rating ? "text-yellow-400" : "text-gray-300"
-                        }`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <polygon points="9.9,1.1 7.6,6.6 1.6,7.3 6.1,11.2 4.8,17.1 9.9,14.1 15,17.1 13.7,11.2 18.2,7.3 12.2,6.6 " />
-                      </svg>
-                    ))}
-                  </span>
-                </div>
-              ),
-            };
-          case "team":
-            return {
-              ...baseColumn,
-              render: (team: string[]) => (
-                <div className="flex justify-center">
-                  <span className="flex items-center gap-1">
-                    {team.map((_, i) => (
-                      <span
-                        key={i}
-                        className="inline-block w-5 h-5 rounded-full bg-gray-200 border border-gray-300"
-                      />
-                    ))}
-                  </span>
-                </div>
-              ),
-            };
-          case "files":
-            return {
-              ...baseColumn,
-              render: () => (
-                <div className="flex justify-center">
-                  <label className="flex items-center justify-center border-2 border-dashed border-gray-300 cursor-pointer bg-gray-50 hover:bg-gray-100 px-1 py-1.5 w-[100px]">
-                    <svg
-                      className="w-4 h-4 text-gray-400 mr-1.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
-                    <div className="text-gray-500 text-xs font-medium">
-                      Attach File
-                    </div>
-                    <input type="file" className="hidden" />
-                  </label>
-                </div>
-              ),
-            };
-          case "paid":
-            return {
-              ...baseColumn,
-              render: (text: string) => (
-                <div className="flex w-[150px] justify-center">
-                  <div
-                    className={`w-[90px] px-[10px] py-[7px] text-white ${
-                      text === "Paid" ? "bg-[#00774C]" : "bg-[#667085]"
-                    }`}
-                  >
-                    {text}
-                  </div>
-                </div>
-              ),
-            };
-          default:
-            return {
-              ...baseColumn,
-              ellipsis: true,
-              render: (text: string) => (
-                <div className="text-center px-2" title={text}>
-                  {text}
-                </div>
-              ),
-            };
-        }
-      });
-
-    return [...baseColumns, ...configuredColumns];
-  }, [columnConfigs, getJobById, onMapView]);
+    return columns;
+  }, [getJobById, onMapView]);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -479,6 +379,7 @@ const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
     try {
       setIsOptimizing(true);
       const result = await optimizeRoutes(optimizationJobs);
+      console.log("Optimization result:", result);
       setOptimizationResult(result);
       messageApi.success("Route optimized successfully!");
     } catch (error) {
@@ -490,7 +391,6 @@ const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
       setIsOptimizing(false);
     }
   };
-
 
   // Memoize the filtered data to prevent unnecessary re-renders
   const memoizedFilteredData = useMemo(
@@ -506,6 +406,7 @@ const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
         : dataSource,
     [dataSource, searchText]
   );
+
   return (
     <div className="flex flex-col w-full shadow overflow-hidden h-full bg-white">
       {contextHolder}

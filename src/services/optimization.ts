@@ -65,6 +65,7 @@ export interface OptimizationResult {
       east: number;
       west: number;
     };
+    location: string;
   };
 }
 
