@@ -77,12 +77,7 @@ const NavBar = ({
                       } ${
                         crumb.path ? "cursor-pointer hover:text-blue-500" : ""
                       }`}
-                      onClick={() => {
-                        if (crumb.path) {
-                          // Handle navigation if needed
-                          console.log(`Navigate to: ${crumb.path}`);
-                        }
-                      }}
+                      onClick={() => {}}
                     >
                       {crumb.label}
                     </span>
@@ -105,8 +100,8 @@ const NavBar = ({
           <div className="flex space-x-6 items-center">
             {[
               { icon: <LayoutDashboard />, label: "Dashboard", path: "/" },
-              { icon: <Route/>, label: "Routes", path: "/routes" },
-              { icon:  <Radar />, label: "Jobs", path: "/jobs" },
+              { icon: <Route />, label: "Routes", path: "/routes" },
+              { icon: <Radar />, label: "Jobs", path: "/jobs" },
               { icon: <CalendarRange />, label: "Schedule", path: "/schedule" },
             ].map((tab, index) => (
               <NavLink

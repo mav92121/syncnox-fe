@@ -16,7 +16,7 @@ import {
 import { usePlan } from "../context/planContextDefinition";
 import { optimizeRoutes } from "../../../services/optimization";
 import type { Job as OptimizationJob } from "../../../services/optimization";
-import type { Task } from "../types";
+import type { Job, Task } from "../types";
 import CreateRouteModalForm from "./CreateRouteModalForm";
 
 type TableRowSelection<T extends object = object> = TableProps<T>["rowSelection"];
@@ -509,12 +509,11 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
     : dataSource;
 
   // Helper function to find a job by id
-  const getJobById = (id: string) => {
+  const getJobById = (id: string) : Job | undefined => {
     return jobs?.find((job) => job.id == id);
   };
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
@@ -524,11 +523,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
   };
 
   const handleCreateRoute = async () => {
-    console.log("Create Route button clicked");
-    console.log("Selected row keys:", selectedRowKeys);
-
     if (selectedRowKeys.length === 0) {
-      console.log("No jobs selected, showing warning");
       messageApi.warning("Please select at least one job to create a route");
       return;
     }
@@ -539,14 +534,10 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
       selectedRowKeys.includes(job.key as React.Key)
     );
 
-    console.log("selected jobs -> ", selectedJobs);
-
-    // Use original job data for validation
     const jobsWithInvalidCoords = selectedJobs.filter((job) => {
       const jobData = getJobById(job.id) || job;
       const lat = jobData.lat ?? null;
       const lng = jobData.lon ?? null;
-      console.log("job data -> ", jobData);
 
       // Check if coordinates are valid
       return (
@@ -571,7 +562,6 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
       return;
     }
 
-    // Convert selected tasks to optimization jobs format
     const optimizationJobs: OptimizationJob[] = selectedJobs.map((job) => {
       const jobData = getJobById(job.id) || job;
 
@@ -581,9 +571,9 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
           lat: jobData.lat || 0,
           lng: jobData.lon || 0,
         },
-        duration: jobData.duration_minutes
-          ? jobData.duration_minutes * 60
-          : 1800, // Convert minutes to seconds if available
+        duration: jobData?.duration_minutes
+          ? Number(jobData.duration_minutes) * 60
+          : 1800,
         priority:
           jobData.priority_level === "high"
             ? 10

@@ -38,7 +38,7 @@ export interface Task {
   longitude?: string;
   lat?: number | null;
   lon?: number | null;
-  [key: string]: any; // Add index signature to allow dynamic properties
+  [key: string]: string | number | string[] | boolean | null | undefined; // More specific type for dynamic properties
 }
 
 export interface Job {
@@ -82,3 +82,22 @@ export interface ActionButtonsProps {
 export interface TaskOptionsProps {
   onManualAdd: () => void;
 }
+export interface TimelineItem {
+  stop: string | number;
+  time: string;
+  icon?: string;
+}
+export interface DriverInterface {
+  id: number;
+  name: string;
+  avatar: string;
+  driverNumber: string;
+  zone: string;
+  shiftTime: string;
+  vehicle: string;
+  totalStops: string;
+  distance: string;
+  duration: string;
+  color: string;
+  timeline: TimelineItem[];
+} 

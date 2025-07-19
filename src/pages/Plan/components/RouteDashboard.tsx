@@ -12,15 +12,13 @@ import {
   ListFilter,
   MousePointer2,
 } from "lucide-react";
-import {
-  MoreOutlined,
-} from "@ant-design/icons";
+import { MoreOutlined } from "@ant-design/icons";
+import type { DriverInterface, TimelineItem } from "../types";
 
 const RouteDashboard = () => {
   // const [selectedDate, setSelectedDate] = useState("02/08/2025");
-  const [selectedDate, setSelectedDate]="02/08/2025"
+  const selectedDate = "02/08/2025";
   const [activeTab, setActiveTab] = useState("Timeline");
-  console.log(setSelectedDate);
 
   const timeSlots = [
     "04:00",
@@ -42,7 +40,7 @@ const RouteDashboard = () => {
     "12:00",
   ];
 
-  const drivers = [
+  const drivers: DriverInterface[] = [
     {
       id: 1,
       name: "Courtney Henry",
@@ -111,7 +109,7 @@ const RouteDashboard = () => {
     return Math.max(0, Math.min(100, position));
   };
 
-  const renderTimelineBar = (driver: any) => {
+  const renderTimelineBar = (driver: DriverInterface) => {
     const startPos = getTimePosition(driver.timeline[0].time);
     const endPos = getTimePosition(
       driver.timeline[driver.timeline.length - 1].time
@@ -131,7 +129,7 @@ const RouteDashboard = () => {
         />
 
         {/* Timeline stops */}
-        {driver.timeline.map((item: any, index: any) => (
+        {driver.timeline.map((item: TimelineItem, index: number) => (
           <div
             key={index}
             className="absolute top-0 h-8 flex items-center justify-center"

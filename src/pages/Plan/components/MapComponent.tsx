@@ -31,8 +31,6 @@ type LatLngTuple = [number, number];
 
 // Component to handle map view updates when bounds change
 const MapUpdater = ({ bounds }: { bounds: L.LatLngBounds | null }) => {
-  console.log(bounds);
-
   const map = useMap();
 
   useEffect(() => {
@@ -139,7 +137,6 @@ const MapComponent = ({
 
   // Calculate bounds to fit all markers and routes
   const bounds = useMemo(() => {
-    // console.log("optimization data",optimizationData);
     if (!optimizationData?.routes?.length) return null;
     const coords: [number, number][] = [];
 
@@ -159,11 +156,6 @@ const MapComponent = ({
     if (coords.length === 0) return null;
 
     const bounds = L.latLngBounds(coords);
-    console.log("Calculated bounds:", {
-      northEast: bounds.getNorthEast(),
-      southWest: bounds.getSouthWest(),
-    });
-
     return bounds;
   }, [optimizationData]);
 
@@ -285,29 +277,6 @@ const MapComponent = ({
     const index = parseInt(vehicleId.replace(/\D/g, ""), 10) || 0;
     return colors[index % colors.length];
   };
-
-  // Debug: Log optimization data when it changes
-  useEffect(() => {
-    if (optimizationData) {
-      console.log("Optimization data received:", {
-        routesCount: optimizationData.routes?.length,
-        firstRoute: optimizationData.routes?.[0]
-          ? {
-              vehicleId: optimizationData.routes[0].vehicle_id,
-              stopsCount: optimizationData.routes[0].stops?.length,
-              hasPolyline: !!(
-                optimizationData.routes[0].path?.overview_polyline ||
-                optimizationData.routes[0].overview_polyline
-              ),
-              hasWaypoints: !!(
-                optimizationData.routes[0].path?.waypoints?.length ||
-                optimizationData.routes[0].waypoints?.length
-              ),
-            }
-          : "No routes",
-      });
-    }
-  }, [optimizationData]);
 
   return (
     <div
