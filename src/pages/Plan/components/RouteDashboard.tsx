@@ -15,11 +15,9 @@ import {
 import { MoreOutlined } from "@ant-design/icons";
 
 const RouteDashboard = () => {
-  // const [selectedDate, setSelectedDate] = useState("02/08/2025");
-  const [selectedDate, setSelectedDate] = "02/08/2025";
+  const [selectedDate, setSelectedDate] = useState("02/08/2025");
   const [activeTab, setActiveTab] = useState("Timeline");
   console.log(setSelectedDate);
-
   const timeSlots = [
     "04:00",
     "04:30",
@@ -44,7 +42,7 @@ const RouteDashboard = () => {
     {
       id: 1,
       name: "Courtney Henry",
-      avatar: "https://avatar.iran.liara.run/public/6",
+      avatar: "/Image 1.jpg",
       driverNumber: "Driver 1",
       zone: "Zone 1",
       shiftTime: "12PM - 3PM",
@@ -98,7 +96,7 @@ const RouteDashboard = () => {
       <div className="relative h-8 mt-2">
         {/* Timeline bar */}
         <div
-          className={`absolute top-0 h-8 rounded ${
+          className={`relative top-3 h-1 ${
             driver.color === "blue" ? "bg-blue-500" : "bg-green-500"
           }`}
           style={{
@@ -146,12 +144,10 @@ const RouteDashboard = () => {
     <div className="w-full bg-white min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 bg-white border-b">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-10">
           <div className="flex items-center space-x-2">
             <span className="text-xl text-gray-800">Route1201</span>
-            <span className="px-2 py-1 bg-blue-60 text-blue-700 text-sm ml-0.1">
-              NewYork
-            </span>
+            <span className="py-1 px-1.5 text-blue-700 text-sm  bg-blue-50">NewYork</span>
           </div>
           <div className="flex items-center space-x-2 border border-gray-800 px-3 py-1">
             <Calendar className="w-4 h-4 text-gray-500" />
@@ -159,12 +155,12 @@ const RouteDashboard = () => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-20">
-          <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-5">
+          <div className="flex items-center space-x-9">
             <button
               className={`pb-2 border-b-2 ${
                 activeTab === "Timeline"
-                  ? "border-blue-500 text-blue-600"
+                  ? "border-black text-black"
                   : "border-transparent text-gray-500"
               }`}
               onClick={() => setActiveTab("Timeline")}
@@ -174,7 +170,7 @@ const RouteDashboard = () => {
             <button
               className={`pb-2 border-b-2 ${
                 activeTab === "Route"
-                  ? "border-blue-500 text-blue-600"
+                  ? "border-black text-black"
                   : "border-transparent text-gray-500"
               }`}
               onClick={() => setActiveTab("Route")}
@@ -183,9 +179,9 @@ const RouteDashboard = () => {
             </button>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             {/* Search */}
-            <div className="flex items-center px-3 py-1.5 border border-gray-300 w-100 bg-white ">
+            <div className="flex items-center px-3 py-1.5 mr-10 border border-gray-300 w-100 bg-white ">
               <Search className="w-4 h-4 text-gray-400 mr-2" />
               <input
                 type="text"
@@ -205,7 +201,7 @@ const RouteDashboard = () => {
             </button>
 
             {/* Share URL */}
-            <button className="flex items-center space-x-2 px-4 py-2 bg-green-900 text-white  hover:bg-green-800">
+            <button className="flex items-center ml-3 space-x-2 px-4 py-2 bg-green-950 text-white  hover:bg-green-800 ">
               <svg
                 width="19"
                 height="16"
@@ -234,7 +230,7 @@ const RouteDashboard = () => {
               </svg>
               <span className="text-sm font-medium">Share URL</span>
             </button>
-            <button className="flex items-center space-x-2 px-4 py-2 bg-green-900 text-white  hover:bg-green-800">
+            <button className="flex items-center space-x-2 px-4 py-2 ml-3 bg-green-950 text-white  hover:bg-green-800">
               <MousePointer2 className="w-4 h-4" />
               <span className="text-sm font-medium">Share to App</span>
             </button>
@@ -245,7 +241,7 @@ const RouteDashboard = () => {
       {/* Controls */}
       <div className="flex px-6 py-2 bg-gray-50 border-b">
         <div className="flex items-center space-x-2">
-          <button className="flex items-center space-x-2 px-4 py-2 bg-green-800 text-white hover:bg-green-700">
+          <button className="flex items-center space-x-2 px-4 py-2 bg-green-950 text-white border border-green-700  hover:border-gray-700">
             <Plus className="w-4 h-4" />
             <span className="text-sm">Add New Driver</span>
           </button>
@@ -276,7 +272,7 @@ const RouteDashboard = () => {
 
       {/* Timeline Header */}
       <div className="flex bg-white border-b text-xs text-gray-500">
-        <div className="w-130 px-6 py-4 border-r bg-white"></div>
+        <div className="w-114 px-6 py-4 border-r bg-white"></div>
         <div className="flex-1 px-4 py-2 grid grid-cols-17 gap-2">
           {timeSlots.map((time, index) => (
             <div key={index} className="text-center w-17">
@@ -290,7 +286,7 @@ const RouteDashboard = () => {
       <div className="bg-white">
         {drivers.map((driver, index) => (
           <div key={index} className="flex border-b hover:bg-gray-50">
-            <div className="w-130 px-4 py-2 border-r relative">
+            <div className="w-115 px-4 py-2 border-r relative">
               <div
                 className={`absolute top-0 right-0 h-full w-2 ${
                   driver.color === "blue" ? "bg-blue-400" : "bg-green-500"
@@ -303,11 +299,11 @@ const RouteDashboard = () => {
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div className="flex-1">
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-30">
                     <span className="font-medium text-gray-800">
                       {driver.name}
                     </span>
-                    <div className="flex items-center space-x-1">
+                    <div className="flex items-center">
                       <button className="p-1 text-gray-600 hover:text-gray-600 rounded ">
                         <svg
                           width="25"
@@ -376,8 +372,8 @@ const RouteDashboard = () => {
                           />
                         </svg>
                       </button>
-                      <button className="p-1 text-black-400 hover:text-gray-600 rounded font-bold">
-                        <MoreOutlined className="w-4 h-4" />
+                      <button className="p-1 text-black hover:text-gray-600 ">
+                        <MoreOutlined />
                       </button>
                     </div>
                   </div>
@@ -395,30 +391,30 @@ const RouteDashboard = () => {
               <div className="mt-3 flex flex-cols-2 gap-4 text-xs text-gray-600">
                 <div>
                   <div>Shift Time</div>
-                  <div className="text-[11px] font-normal text-gray-800">
+                  <div className="text-[12px] font-medium text-gray-950">
                     {driver.shiftTime}
                   </div>
                 </div>
                 <div>
                   <div>Vehicle</div>
-                  <div className=" text-gray-800">{driver.vehicle}</div>
+                  <div className=" text-gray-800 font-medium">{driver.vehicle}</div>
                 </div>
                 <div>
                   <div>Total Stops</div>
-                  <div className=" text-gray-800">{driver.totalStops}</div>
+                  <div className=" text-gray-800 font-medium">{driver.totalStops}</div>
                 </div>
                 <div>
                   <div>Distance</div>
-                  <div className=" text-gray-800">{driver.distance}</div>
+                  <div className=" text-gray-800 font-medium">{driver.distance}</div>
                 </div>
                 <div>
                   <div className="">Duration</div>
-                  <div className="text-gray-800">{driver.duration}</div>
+                  <div className="text-gray-800 font-medium">{driver.duration}</div>
                 </div>
               </div>
             </div>
 
-            <div className="flex-1 px-6 py-4 relative">
+            <div className="flex-1 px-10 py-10 relative">
               {/* Time grid background */}
               <div className="absolute inset-0 flex">
                 {Array.from({ length: 17 }).map((_, i) => (

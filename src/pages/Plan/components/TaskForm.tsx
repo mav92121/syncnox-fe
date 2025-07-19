@@ -396,8 +396,8 @@ const TaskForm = () => {
                 >
                   <Select
                     style={{
-                      width: "24%",
-                      marginRight: "2px",
+                      width: "31%",
+                      marginRight: "6px",
                     }}
                     showSearch
                     optionFilterProp="children"
@@ -430,7 +430,7 @@ const TaskForm = () => {
                   <InputNumber
                     type="number"
                     required
-                    style={{ width: "75%", flex: 1, cursor: "text" }}
+                    style={{ width: "68%", flex: 1, cursor: "text" }}
                     placeholder="8023456789"
                     maxLength={15}
                     pattern="[0-9]*"
@@ -481,7 +481,7 @@ const TaskForm = () => {
               </Select>
             </Form.Item> */}
             <Form.Item
-              label="Job Duration (minutes)"
+              label="Job Duration"
               name="duration"
             >
               <InputNumber

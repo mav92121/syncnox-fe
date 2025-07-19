@@ -69,7 +69,6 @@ const PlanRecents = () => {
     usePlanContext();
   const [transformedTasks, setTransformedTasks] = useState<Task[]>([]);
   const mapRef = useRef<LeafletMap | null>(null);
-  console.log("optimizationResult", optimizationResult);
 
   const handleMapView = (lat: number, lon: number) => {
     if (mapRef.current && lat && lon) {
