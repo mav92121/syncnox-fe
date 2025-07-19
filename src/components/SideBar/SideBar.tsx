@@ -37,14 +37,14 @@ const SideBar = () => {
   }, []);
 
   const menuItems = [
-    { icon: "/rocket.svg", label: "Plan", alt: "plan" },
+    { icon: "./rocket.svg", label: "Plan", alt: "plan" },
     { icon: "./recent.svg", label: "Insights", alt: "recent" },
     { icon: "./schedule.svg", label: "Schedule", alt: "schedule" },
     { icon: "./manage.svg", label: "Manage", alt: "manage", hasArrow: true },
     { icon: "./analytics.svg", label: "Analytics", alt: "analytics" },
     { icon: "./tracking.svg", label: "Live Tracking & Alerts", alt: "tracking" },
-    { icon: "deals.svg", label: "Deals", alt: "deals" },
-    { icon: "export.svg", label: "Export", alt: "export" },
+    { icon: "./deals.svg", label: "Deals", alt: "deals" },
+    { icon: "./export.svg", label: "Export", alt: "export" },
   ];
 
   const manageDropdownItems = [
@@ -248,7 +248,7 @@ const SideBar = () => {
           {/* Render menu items after Manage */}
           {menuItems.slice(manageIndex + 1).map((item, index) => (
             <Link to={item.alt} key={index}>
-              <div  className="relative">
+              <div className="relative">
                 <div className="flex items-center pl-2 py-[10px] my-1 cursor-pointer hover:bg-[#F6FFED]">
                   <div className="w-[20px] h-[20px] flex items-center justify-center">
                     <img
