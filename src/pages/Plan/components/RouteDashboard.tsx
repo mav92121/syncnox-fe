@@ -338,7 +338,7 @@ const RouteDashboard = () => {
                           <path
                             d="M9.98907 11.0176L16.0504 11.0176"
                             stroke="#333333"
-                            stroke-width="2.02043"
+                            strokeWidth="2.02043"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                           />
