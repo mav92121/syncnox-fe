@@ -6,7 +6,7 @@ import {
   Polyline,
   useMap,
 } from "react-leaflet";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState, type RefObject, useRef, useCallback } from "react";
 import L from "leaflet";
 import { renderToString } from "react-dom/server";
 import MapTypeControl from "./MapTypeControl";
@@ -15,6 +15,9 @@ import { usePlanContext } from "../hooks/usePlanContext";
 import { mapUrls, mapAttributions } from "../utils/mapConfig";
 import "leaflet/dist/leaflet.css";
 import "./MapComponent.css";
+import type { Map as Map } from "leaflet";
+import { Resizable } from "react-resizable";
+import "react-resizable/css/styles.css";
 
 // Type for OSRM response
 interface OSRMRoute {
@@ -31,8 +34,6 @@ type LatLngTuple = [number, number];
 
 // Component to handle map view updates when bounds change
 const MapUpdater = ({ bounds }: { bounds: L.LatLngBounds | null }) => {
-  console.log(bounds);
-
   const map = useMap();
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const MapUpdater = ({ bounds }: { bounds: L.LatLngBounds | null }) => {
       const isvalid =
         bounds.isValid() &&
         !bounds.getNorthEast().equals(bounds.getSouthWest());
-
+      console.log("bounds -> ", bounds);
       if (isvalid) {
         try {
           map.flyToBounds(bounds, {
@@ -57,6 +58,17 @@ const MapUpdater = ({ bounds }: { bounds: L.LatLngBounds | null }) => {
     }
   }, [bounds, map]);
 
+  return null;
+};
+
+const MapRefInitializer = ({ mapRef }: { mapRef: RefObject<Map | null> }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (mapRef && mapRef.current !== map) {
+      // (mapRef as any).current = map;
+      (mapRef.current as Map)?.invalidateSize();
+    }
+  }, [map, mapRef]);
   return null;
 };
 
@@ -103,7 +115,7 @@ declare global {
 }
 
 // Fix for default marker icons in Next.js
-const DefaultIcon = L.icon({
+const DefaultIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
   iconRetinaUrl:
     "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
@@ -116,16 +128,52 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+const customIcon = new L.Icon({
+  iconUrl: "/marker.svg",
+  iconSize: [20, 30],
+  iconAnchor: [15, 40],
+  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+  popupAnchor: [0, -40],
+});
+
 const MapComponent = ({
   mapType,
   setMapType,
   config,
   className = "",
   opacity = 1,
+  jobs,
+  mapRef,
 }: MapComponentProps) => {
+  const [size, setSize] = useState({ width: "100%", height: "100%" });
+  const [isResizing, setIsResizing] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+
+  const onResize = useCallback((event: any, { size: newSize }: { size: { width: number; height: number } }) => {
+    setSize({
+      width: `${newSize.width}px`,
+      height: `${newSize.height}px`,
+    });
+  }, []);
+
+  const onResizeStart = useCallback(() => {
+    setIsResizing(true);
+  }, []);
+
+  const onResizeStop = useCallback(() => {
+    setIsResizing(false);
+    // Force update the map size after resizing
+    setTimeout(() => {
+      const map = mapRef?.current;
+      if (map) {
+        map.invalidateSize();
+      }
+    }, 0);
+  }, [mapRef]);
+  
   // Get the optimization result from context
   const { optimizationResult } = usePlanContext();
-
   // Type assertion for optimization result
   const optimizationData =
     optimizationResult as unknown as OptimizationData | null;
@@ -169,12 +217,14 @@ const MapComponent = ({
 
   // State to store routes from OSRM
   const [routes, setRoutes] = useState<LatLngTuple[][]>([]);
+  const [isLoadingRoute, setIsLoadingRoute] = useState(false);
 
   // Fetch actual route from OSRM
   useEffect(() => {
     if (!optimizationData?.routes?.length) return;
-
+    const controller = new AbortController();
     const fetchRoutes = async () => {
+      setIsLoadingRoute(true);
       const newRoutes: LatLngTuple[][] = [];
 
       for (const route of optimizationData.routes) {
@@ -214,13 +264,17 @@ const MapComponent = ({
       }
 
       setRoutes(newRoutes);
+      setIsLoadingRoute(false);
     };
 
     fetchRoutes();
+    return () => {
+      controller.abort();
+    };
   }, [optimizationData]);
 
   // Get polyline positions for each route
-  const getPolylinePositions = (
+  const getPolylinePositions = useCallback((
     route: Route,
     routeIndex: number
   ): LatLngTuple[] => {
@@ -232,7 +286,7 @@ const MapComponent = ({
     // Fallback to waypoints if no route is available yet
     const waypoints = route.path?.waypoints || route.waypoints || [];
     return waypoints.map((wp) => [wp.lat, wp.lng] as [number, number]);
-  };
+  }, [routes]);
 
   // Create a custom marker with number
   const createNumberedIcon = (number: number) => {
@@ -311,84 +365,108 @@ const MapComponent = ({
 
   return (
     <div
+      ref={containerRef}
       className={`relative ${className}`}
-      style={{ opacity, height: "100%", width: "100%" }}
+      style={{ opacity, height: size.height, width: size.width, position: "relative" }}
     >
-      <MapContainer
-        key={mapKey}
-        center={bounds?.getCenter() || [51.505, -0.09]}
-        zoom={13}
-        className="h-full w-full"
-        zoomControl={true}
-        bounds={bounds || undefined}
-        boundsOptions={{ padding: [50, 50] }}
-        style={{ height: "100%", width: "100%" }}
+      <Resizable
+        width={parseInt(size.width.toString(), 10) || 800 }
+        height={parseInt(size.height.toString(), 10) || 600}
+        onResize={onResize}
+        onResizeStart={onResizeStart}
+        onResizeStop={onResizeStop}
+        resizeHandles={['se','sw','ne','nw','e','w','n','s']}
+        minConstraints={[400,300]}
+        maxConstraints={[2000,2000]}
       >
-        <MapUpdater bounds={bounds} />
-        <TileLayer
-          url={mapUrls[mapType]}
-          attribution={mapAttributions[mapType]}
-          opacity={opacity}
-        />
-        {/* Default markers */}
-        {config.markers.map((marker, index) => (
-          <Marker key={`default-${index}`} position={marker.position} />
-        ))}
+      <div style={{height:"100%",width:"100%",position:"relative", opacity: isResizing ? 0.7 : 1, transition: isResizing ? "none": "opacity 0.3s ease"}}>
+        <MapContainer
+          key={mapKey}
+          center={bounds?.getCenter() || [51.505, -0.09]}
+          zoom={13}
+          className="h-full w-full"
+          zoomControl={true}
+          bounds={bounds || undefined}
+          boundsOptions={{ padding: [50, 50] }}
+          style={{ height: "100%", width: "100%" }}
+          ref={(map) =>{if(mapRef){
+            (mapRef as any).current = map;
+          }}}
+        >
+          <MapRefInitializer mapRef={mapRef} />
+          <MapUpdater bounds={bounds} />
+          <TileLayer
+            url={mapUrls[mapType]}
+            attribution={mapAttributions[mapType]}
+            opacity={opacity}
+          />
+          {/* Default markers */}
+          {config.markers.map((marker, index) => (
+            <Marker key={`default-${index}`} position={marker.position} />
+          ))}
+          {jobs?.map((job: any, index: any) => (
+            <Marker
+              key={`job-marker-${job.id || index}`}
+              position={[job.lat, job.lon]}
+              icon={customIcon}
+            ></Marker>
+          ))}
+          {/* Optimized routes */}
+          {optimizationData?.routes.map((route, routeIndex) => {
+            const routeColor = getRouteColor(route.vehicle_id);
+            const positions = getPolylinePositions(route, routeIndex);
 
-        {/* Optimized routes */}
-        {optimizationData?.routes.map((route, routeIndex) => {
-          const routeColor = getRouteColor(route.vehicle_id);
-          const positions = getPolylinePositions(route, routeIndex);
+            return (
+              <div key={`route-${routeIndex}`}>
+                {/* Route polyline */}
+                {positions.length > 1 && (
+                  <Polyline
+                    positions={positions}
+                    pathOptions={{
+                      color: routeColor,
+                      weight: 4,
+                      opacity: 0.8,
+                      lineCap: "round",
+                      lineJoin: "round",
+                    }}
+                  />
+                )}
 
-          return (
-            <div key={`route-${routeIndex}`}>
-              {/* Route polyline */}
-              {positions.length > 1 && (
-                <Polyline
-                  positions={positions}
-                  pathOptions={{
-                    color: routeColor,
-                    weight: 4,
-                    opacity: 0.8,
-                    lineCap: "round",
-                    lineJoin: "round",
-                  }}
-                />
-              )}
+                {/* Stops with numbers */}
+                {route.stops.map((stop, stopIndex) => {
+                  const stopNumber = stopIndex + 1;
+                  const icon = createNumberedIcon(stopNumber);
 
-              {/* Stops with numbers */}
-              {route.stops.map((stop, stopIndex) => {
-                const stopNumber = stopIndex + 1;
-                const icon = createNumberedIcon(stopNumber);
-
-                return (
-                  <Marker
-                    key={`stop-${routeIndex}-${stopIndex}`}
-                    position={[stop.location.lat, stop.location.lng]}
-                    icon={icon}
-                  >
-                    <Popup>
-                      <div className="text-sm">
-                        <div className="font-semibold">Stop {stopNumber}</div>
-                        <div>Job: {stop.job_id}</div>
-                        <div>
-                          Arrival:{" "}
-                          {new Date(stop.arrival_time).toLocaleTimeString()}
+                  return (
+                    <Marker
+                      key={`stop-${routeIndex}-${stopIndex}`}
+                      position={[stop.location.lat, stop.location.lng]}
+                      icon={icon}
+                    >
+                      <Popup>
+                        <div className="text-sm">
+                          <div className="font-semibold">Stop {stopNumber}</div>
+                          <div>Job: {stop.job_id}</div>
+                          <div>
+                            Arrival:{" "}
+                            {new Date(stop.arrival_time).toLocaleTimeString()}
+                          </div>
+                          <div>
+                            Duration: {Math.round(stop.service_time / 60)} min
+                          </div>
                         </div>
-                        <div>
-                          Duration: {Math.round(stop.service_time / 60)} min
-                        </div>
-                      </div>
-                    </Popup>
-                  </Marker>
-                );
-              })}
-            </div>
-          );
-        })}
+                      </Popup>
+                    </Marker>
+                  );
+                })}
+              </div>
+            );
+          })}
 
-        <MapTypeControl mapType={mapType} setMapType={setMapType} />
-      </MapContainer>
+          <MapTypeControl mapType={mapType} setMapType={setMapType} />
+        </MapContainer>
+      </div>
+      </Resizable>
     </div>
   );
 };

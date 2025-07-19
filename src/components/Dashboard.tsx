@@ -27,9 +27,6 @@ const data = [
   { name: "Canceled", value: 3, color: "#111827" },
 ];
 
-const COLORS = data.map((item) => item.color);
-console.log(COLORS);
-
 const data2 = [
   { name: "Completed", value: 84, color: "#022C22" }, // dark green
   { name: "Remaining", value: 100 - 84, color: "#F3FFF3" }, // light green
