@@ -100,35 +100,6 @@ const SideBar = () => {
             )}
           </div>
         </div>
-
-        {/* Search section */}
-        {/* <div className="px-4 mb-6">
-          <div className="relative w-full h-[38px] transition-all duration-300 ease-in-out">
-            <Input
-              placeholder="Search"
-              prefix={
-                <SearchOutlined
-                  style={{ fontSize: "16px" }}
-                  className="text-gray-400"
-                />
-              }
-              className={`transition-all duration-300 ${
-                isExpended
-                  ? "w-full opacity-100"
-                  : "w-[38px] opacity-0 border-0 bg-transparent pointer-events-none"
-              }`}
-            />
-            <SearchOutlined
-              style={{ fontSize: "17px" }}
-              className={`text-gray-400 absolute top-1/2 transform -translate-y-1/2 transition-all duration-300 ${
-                isExpended
-                  ? "opacity-0 pointer-events-none"
-                  : "opacity-100 left-1/2 -translate-x-1/2"
-              }`}
-            />
-          </div>
-        </div> */}
-
         {/* Menu items with sleek scrollbar */}
         <div
           className="flex-1 px-2 sidebar-menu"
@@ -147,9 +118,9 @@ const SideBar = () => {
                   <div className="w-full">
                     <div className="bg-green-950 text-white w-full py-[10px] flex items-center justify-center">
                       <img
-                        src={item.icon}
+                        src={`/${item.icon}`}
                         alt={item.alt}
-                        className="w-[20px] h-[20px] ml-[10px] filter brightness-0 invert"
+                        className="w-[20px] h-[20px] ml-[10px] object-contain"
                       />
                       <span
                         className={`ml-3 whitespace-nowrap overflow-hidden transition-opacity duration-300 text-sm ${
