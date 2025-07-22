@@ -37,13 +37,13 @@ const SideBar = () => {
   }, []);
 
   const menuItems = [
-    { icon: "./rocket.svg", label: "Plan", alt: "plan" },
-    { icon: "./recent.svg", label: "Insights", alt: "recent" },
-    { icon: "./schedule.svg", label: "Schedule", alt: "schedule" },
-    { icon: "./manage.svg", label: "Manage", alt: "manage", hasArrow: true },
-    { icon: "./analytics.svg", label: "Analytics", alt: "analytics" },
-    { icon: "./tracking.svg", label: "Live Tracking & Alerts", alt: "tracking" },
-    { icon: "./deals.svg", label: "Deals", alt: "deals" },
+    { icon: "/rocket.svg", label: "Plan", alt: "plan" },
+    { icon: "recent.svg", label: "Insights", alt: "recent" },
+    { icon: "schedule.svg", label: "Schedule", alt: "schedule" },
+    { icon: "manage.svg", label: "Manage", alt: "manage", hasArrow: true },
+    { icon: "analytics.svg", label: "Analytics", alt: "analytics" },
+    { icon: "tracking.svg", label: "Live Tracking & Alerts", alt: "tracking" },
+    { icon: "deals.svg", label: "Deals", alt: "deals" },
     { icon: "./export.svg", label: "Export", alt: "export" },
   ];
 
