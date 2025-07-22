@@ -99,7 +99,7 @@ const NavBar = ({
         ) : (
           <div className="flex space-x-6 items-center">
             {[
-              { icon: <LayoutDashboard />, label: "Dashboard", path: "/" },
+              { icon: <LayoutDashboard />, label: "Dashboards", path: "/" },
               { icon: <Route />, label: "Routes", path: "/routes" },
               { icon: <Radar />, label: "Jobs", path: "/jobs" },
               { icon: <CalendarRange />, label: "Schedule", path: "/schedule" },
