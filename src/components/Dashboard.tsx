@@ -61,9 +61,9 @@ const Dashboard = () => {
   console.log(total);
 
   return (
-    <div className="p-2 space-y-2 bg-gray-50 min-h-screen w-full">
+    <div className="p-2 space-y-3 bg-gray-50 min-h-screen w-full">
       {/* Top Metrics */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-4 gap-2">
         {/* Total Routes */}
         <div className=" bg-white p-3 pl-14">
           <p className="mt-4 text-2xl font-bold mb-2">Total Routes</p>
@@ -175,7 +175,7 @@ const Dashboard = () => {
       </div>
 
       {/* Middle Section */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2">
         {/* Customers */}
         <div className="bg-white p-4">
           <div className="flex justify-between items-center mb-4">
@@ -327,7 +327,7 @@ const Dashboard = () => {
       </div>
 
       {/* Bottom Section */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-3">
         {/* Chats */}
         <div className="bg-white p-4">
           <h3 className="text-lg font-semibold mb-2">Chats</h3>
@@ -353,7 +353,7 @@ const Dashboard = () => {
         </div>
 
         {/* Top States */}
-        <div className="bg-white p-4 ">
+        <div className="bg-white p-4">
           <h3 className="text-lg font-semibold mb-4">Top states</h3>
           <div className="space-y-3">
             {[
@@ -378,7 +378,7 @@ const Dashboard = () => {
         </div>
 
         {/* New Routes */}
-        <div className="bg-white p-4 ">
+        <div className="bg-white p-4">
           <h3 className="text-lg font-semibold mb-4">New Routes</h3>
           <div className="grid grid-cols-3 gap-2">
             {[

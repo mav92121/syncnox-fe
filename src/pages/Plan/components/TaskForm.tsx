@@ -486,7 +486,7 @@ const TaskForm = () => {
             >
               <InputNumber
                 min={1}
-                max={240}
+                max={Infinity}
                 placeholder="Enter duration"
                 className="w-full"
                 addonAfter="min"

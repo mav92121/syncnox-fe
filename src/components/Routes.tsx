@@ -257,7 +257,7 @@ const Routes: React.FC = () => {
         <Input
           placeholder="Search routes..."
           prefix={<SearchOutlined className="text-gray-300" />}
-          className="w-64"
+          className="w-64 ml-360"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
