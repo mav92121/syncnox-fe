@@ -1,6 +1,7 @@
-import React from "react";
-import { Table, Tag, Avatar, Progress, Button, Rate } from "antd";
+import React, { useState } from "react";
+import { Table, Tag, Avatar, Progress, Button, Rate, Input } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { SearchOutlined } from "@ant-design/icons";
 
 interface RouteData {
   key: string;
@@ -16,7 +17,7 @@ interface RouteData {
   completed: number;
   failed: number;
   attempted: number;
-  status: string;
+  status: "In Transit" | "Delayed" | "Scheduled" | "Completed" | string;
   rating: number;
 }
 
@@ -58,79 +59,107 @@ const data: RouteData[] = [
 ];
 
 const Routes: React.FC = () => {
+  const [searchText, setSearchText] = useState("");
+
   const columns: ColumnsType<RouteData> = [
     {
       title: "Single/Recurring",
       dataIndex: "type",
-      align:"center",
-      render: (type: string) => (
+      key: "type",
+      align: "center",
+      render: (type: RouteData["type"]) => (
         <div className="flex justify-center">
           <span
-          className={`inline-block min-w-[70px] text-center px-3 py-1 text-xs font-semibold ${
-            type === "Single"
-              ? "bg-green-100 border border-green-200"
-              : type === "Recurring"
-              ? "bg-blue-100  border "
-              : "bg-red-100 text-red-800 border border-red-200"
-          }`}
-        >
-          {type}
-        </span>
+            className={`inline-block min-w-[70px] text-center py-1 px-2 text-xs font-semibold ${
+              type === "Single"
+                ? "bg-green-100 text-green-700 border border-green-200"
+                : "bg-blue-100 text-blue-700 border border-blue-200"
+            }`}
+          >
+            {type}
+          </span>
         </div>
       ),
     },
     {
       title: "Route ID",
       dataIndex: "routeId",
-      align:"center",
+      key: "routeId",
+      align: "center",
+      ellipsis: true,
+      render: (text: string) => (
+        <div className="text-center px-2" title={text}>
+          {text}
+        </div>
+      ),
     },
     {
       title: "Map View",
-      align:"center",
+      key: "mapView",
+      align: "center",
       render: () => (
-        <div className="bg-blue-100">
-          <Button type="link" size="small">Map View</Button>
+        <div className="flex justify-center">
+          <Button type="link" size="small">
+            Map View
+          </Button>
         </div>
       ),
     },
     {
       title: "Assigned Team",
       dataIndex: "team",
-      align:"center",
-      render: (team: any) => (
-        <Avatar.Group>
-          {team.map((member: any, i: any) => (
-            <Avatar key={i}>{member}</Avatar>
-          ))}
-        </Avatar.Group>
+      key: "team",
+      align: "center",
+      render: (team: string[]) => (
+        <div className="flex justify-center">
+          <Avatar.Group>
+            {team.map((member: string, index: number) => (
+              <Avatar key={index}>{member}</Avatar>
+            ))}
+          </Avatar.Group>
+        </div>
       ),
     },
     {
       title: "Assigned Vehicles",
       dataIndex: "vehicles",
-      align:"center",
+      key: "vehicles",
+      align: "center",
+      ellipsis: true,
+      render: (text: string) => (
+        <div className="text-center px-2" title={text}>
+          {text}
+        </div>
+      ),
     },
     {
       title: "Total Distance",
       dataIndex: "distance",
-      align:"center",
+      key: "distance",
+      align: "center",
+      className: "whitespace-nowrap",
     },
     {
       title: "Total Estimated Time",
       dataIndex: "time",
-      align:"center",
+      key: "time",
+      align: "center",
+      className: "whitespace-nowrap",
     },
     {
       title: "Trips",
       dataIndex: "trips",
-      align:"center",
+      key: "trips",
+      align: "center",
+      className: "whitespace-nowrap",
     },
     {
       title: "Progress",
       dataIndex: "progress",
-      align:"center",
-      render: (val) => (
-        <div className="grid">
+      key: "progress",
+      align: "center",
+      render: (val: number) => (
+        <div className="grid grid-cols   items-center">
           <Progress percent={val} size="small" />
           <span className="text-xs text-gray-400">Route Completed</span>
         </div>
@@ -139,64 +168,109 @@ const Routes: React.FC = () => {
     {
       title: "Total Stops",
       dataIndex: "stops",
-      align:"center",
+      key: "stops",
+      align: "center",
+      className: "whitespace-nowrap",
     },
     {
       title: "Completed Stops",
       dataIndex: "completed",
-      align:"center",
-      render: (val) => (
+      key: "completed",
+      align: "center",
+      className: "whitespace-nowrap",
+      render: (val: number) => (
         <span className="text-green-600 font-semibold">{val}</span>
       ),
     },
     {
       title: "Failed Stops",
       dataIndex: "failed",
-      align:"center",
-      render: (val) => (
+      key: "failed",
+      align: "center",
+      className: "whitespace-nowrap",
+      render: (val: number) => (
         <span className="text-red-500 font-semibold">{val}</span>
       ),
     },
     {
       title: "Attempted Stops",
       dataIndex: "attempted",
-      align:"center",
-      render: (val) => (
+      key: "attempted",
+      align: "center",
+      className: "whitespace-nowrap",
+      render: (val: number) => (
         <span className="text-blue-600 font-semibold">{val}</span>
       ),
     },
     {
       title: "Status",
       dataIndex: "status",
-      align:"center",
-      render: (status) => {
-        const colorMap: any = {
+      key: "status",
+      align: "center",
+      render: (status: string) => {
+        const colorMap: Record<string, string> = {
           "In Transit": "orange",
           Delayed: "red",
           Scheduled: "blue",
           Completed: "green",
         };
         return (
-          <div className="lfex justify-center">
-            <Tag
-              color={colorMap[status] || "gray"}
-              style={{ fontSize: "17px", padding: "7px 14px" }}
-            >
-              {status}
-            </Tag>
-          </div>
+          <Tag color={colorMap[status] || "gray"} className="px-3 py-1">
+            {status}
+          </Tag>
         );
       },
     },
     {
       title: "Ratings",
       dataIndex: "rating",
-      render: (stars) =>
-        stars > 0 ? <Rate disabled defaultValue={stars} /> : <Tag>★</Tag>,
+      key: "rating",
+      align: "center",
+      render: (rating: number) => (
+        <div className="flex justify-center">
+          {rating > 0 ? (
+            <Rate
+              disabled
+              defaultValue={rating}
+              className="whitespace-nowrap"
+              style={{ lineHeight: "1" }}
+            />
+          ) : (
+            <Tag className="bg-gray-100">N/A</Tag>
+          )}
+        </div>
+      ),
     },
   ];
 
-  return <Table columns={columns} dataSource={data} pagination={false} />;
+  const filteredData = data.filter((item) =>
+    Object.values(item).some(
+      (val) =>
+        val && val.toString().toLowerCase().includes(searchText.toLowerCase())
+    )
+  );
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-semibold">Routes</h2>
+        <Input
+          placeholder="Search routes..."
+          prefix={<SearchOutlined className="text-gray-300" />}
+          className="w-64 ml-360"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+      </div>
+      <Table
+        columns={columns}
+        dataSource={filteredData}
+        pagination={false}
+        rowKey="key"
+        scroll={{ x: "max-content" }}
+      />
+    </div>
+  );
 };
 
 export default Routes;
