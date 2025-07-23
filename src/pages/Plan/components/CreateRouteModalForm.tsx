@@ -1,6 +1,7 @@
 import { Modal, Form, Input, Select, Button, Typography, Avatar } from "antd";
 import {
   TeamOutlined,
+  EnvironmentOutlined,
   CompassOutlined,
 } from "@ant-design/icons";
 
@@ -24,16 +25,17 @@ const CreateRouteModalForm = ({
       onCancel={onCancel}
       footer={null}
       closable={false}
-      width={850}
+      width={1020}
       centered
       styles={{
         content: {
-          borderRadius: "12px",
+          borderRadius: "16px",
+          padding: "32px",
         },
       }}
     >
       {/* Header with Cancel button */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-8">
         <div></div>
         <Button
           type="text"
@@ -45,8 +47,8 @@ const CreateRouteModalForm = ({
       </div>
 
       {/* Title and subtitle */}
-      <div className="text-center">
-        <Title level={2} className=" text-gray-800">
+      <div className="text-center mb-8">
+        <Title level={2} className="mb-2 text-gray-800">
           Create a Route
         </Title>
         <Text className="text-gray-500 text-base">
@@ -55,9 +57,13 @@ const CreateRouteModalForm = ({
       </div>
 
       {/* Map icon placeholder */}
-      <div className="flex justify-center">
+      <div className="flex justify-center mb-8">
         <div className="relative">
-          <img src="/map.svg" alt="" />
+          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+              <EnvironmentOutlined className="text-red-500 text-2xl" />
+            </div>
+          </div>
           {/* Map lines decoration */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-20 h-20 border-2 border-gray-300 rounded-full opacity-30"></div>

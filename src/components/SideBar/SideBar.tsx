@@ -1,177 +1,168 @@
-import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
-import "./SideBar.css";
+import { Input } from "antd";
+import {
+  BellOutlined,
+  QuestionCircleOutlined,
+  SearchOutlined,
+  SettingOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import type { ReactNode } from "react";
+import { CalendarRange, Radar, Rocket, Route } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
-const SideBar = () => {
-  const [isExpended, setIsExpended] = useState(false);
-  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+// Define types for breadcrumbs
+interface Breadcrumb {
+  label: string;
+  path?: string;
+}
 
-  // Clean up any timers on unmount
-  useEffect(() => {
-    return () => {
-      if (closeTimerRef.current) {
-        clearTimeout(closeTimerRef.current);
-      }
-    };
-  }, []);
+// Define types for navigation icons
+interface NavIcon {
+  icon: ReactNode;
+  label?: string;
+  onClick?: () => void;
+}
 
-  const menuItems = [
-    { icon: "rocket.svg", label: "Plan", alt: "plan" },
-    { icon: "recent.svg", label: "Insights", alt: "recent" },
-    { icon: "schedule.svg", label: "Schedule", alt: "schedule" },
-    { icon: "analytics.svg", label: "Analytics", alt: "analytics" },
-    { icon: "tracking.svg", label: "Live Tracking & Alerts", alt: "tracking" },
-    { icon: "settings.svg", label: "Settings", alt: "settings" },
+// Expanded props interface
+interface NavBarProps {
+  breadcrumbs?: Breadcrumb[];
+  title?: string;
+  subtitle?: string;
+  onSearch?: (value: string) => void;
+  searchPlaceholder?: string;
+  searchWidth?: number;
+  navIcons?: NavIcon[];
+}
+
+const NavBar = ({
+  breadcrumbs = [],
+  title,
+  subtitle,
+  onSearch,
+  searchPlaceholder = "Search",
+  searchWidth = 428,
+  navIcons,
+}: NavBarProps) => {
+  const iconClassName =
+    "w-[32px] h-[32px] flex items-center justify-center text-base text-gray-600 hover:bg-gray-50 cursor-pointer";
+
+  // Default icons if none provided
+  const defaultNavIcons: NavIcon[] = [
+    { icon: <SettingOutlined />, label: "Settings" },
+    { icon: <QuestionCircleOutlined />, label: "Help" },
+    { icon: <BellOutlined />, label: "Notifications" },
+    { icon: <UserOutlined />, label: "User profile" },
   ];
+  const showBradcrums = window.location.pathname !== "/";
 
-  const bottomMenuItems = [
-    { icon: "settings.svg", label: "Settings", alt: "settings" },
-    {
-      icon: "logout.svg",
-      label: "Log out",
-      alt: "logout",
-      textColor: "text-red-500",
-    },
-  ];
+  // Use provided icons or fallback to defaults
+  const iconsToRender = navIcons || defaultNavIcons;
 
   return (
-    <div
-      className={`h-screen bg-white flex flex-col justify-between border-r border-gray-100 overflow-hidden transition-all duration-300 ${
-        isExpended ? "w-[280px]" : "w-[60px]"
-      }`}
-      onMouseLeave={() => {
-        setIsExpended(false);
-        // setShowManageDropdown(false);
-        if (closeTimerRef.current) {
-          clearTimeout(closeTimerRef.current);
-          closeTimerRef.current = null;
-        }
-      }}
-      onMouseEnter={() => setIsExpended(true)}
-    >
-      {/* Main content section */}
-      <div className="flex flex-col flex-1 overflow-hidden">
-        {/* Logo section */}
-        <div className="pt-3 px-4 mb-4">
-          <div className="logo transition-all duration-300 ease-in-out">
-            {isExpended ? (
-              <Link to="/">
-                <div className="flex items-center cursor-pointer">
-                  <img src="/syncnox.svg" alt="SYNCNOX" className="h-[38px]" />
-                </div>
-              </Link>
-            ) : (
-              <div className="flex justify-center">
-                <img src="/logo.svg" alt="Logo" className="w-[28px] h-[38px]" />
+    <nav className="border-b border-gray-200">
+      <div className="h-[60px] flex items-center justify-between px-6">
+        {/* Left side - Navigation */}
+        {showBradcrums ? (
+          <div className="flex items-center">
+            {breadcrumbs.length > 0 && (
+              <div className="flex items-center">
+                {breadcrumbs.map((crumb, index) => (
+                  <div key={index} className="flex items-center">
+                    {index > 0 && <span className="mx-1 text-gray-300">/</span>}
+                    <span
+                      className={`text-sm ${
+                        index === 0
+                          ? "font-medium text-gray-700"
+                          : "text-gray-500"
+                      } ${
+                        crumb.path ? "cursor-pointer hover:text-blue-500" : ""
+                      }`}
+                      onClick={() => {
+                        if (crumb.path) {
+                          // Handle navigation if needed
+                          console.log(`Navigate to: ${crumb.path}`);
+                        }
+                      }}
+                    >
+                      {crumb.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Alternative title when no breadcrumbs */}
+            {breadcrumbs.length === 0 && title && (
+              <div>
+                <h1 className="text-lg font-medium text-gray-800">{title}</h1>
+                {subtitle && (
+                  <p className="text-sm text-gray-500">{subtitle}</p>
+                )}
               </div>
             )}
           </div>
-        </div>
-        {/* Menu items with sleek scrollbar */}
-        <div
-          className="flex-1 px-2 sidebar-menu"
-          style={{
-            overflowY: "auto",
-            overflowX: "hidden",
-            scrollbarWidth: "thin",
-            scrollbarColor: "#E2E8F0 transparent",
-          }}
-        >
-          {/* Render menu items before Manage */}
-          {menuItems.map((item, index) => (
-            <Link to={item.alt}>
-              <div key={index} className="relative">
-                {item.label === "Plan" ? (
-                  <div className="w-full">
-                    <div className="bg-green-950 text-white w-full py-[10px] flex items-center justify-center">
-                      <img
-                        src={`/${item.icon}`}
-                        alt={item.alt}
-                        className="w-[20px] h-[20px] ml-[10px] object-contain"
-                      />
-                      <span
-                        className={`ml-3 whitespace-nowrap overflow-hidden transition-opacity duration-300 text-sm ${
-                          isExpended ? "opacity-100 w-auto" : "opacity-0 w-0"
-                        }`}
-                      >
-                        {item.label}
-                      </span>
-                    </div>
-                  </div>
-                ) : (
-                  <div
-                    className={`flex items-center pl-2 py-[10px] my-1 hover:bg-[#F6FFED] cursor-pointer`}
-                  >
-                    <div className="w-[20px] h-[20px] flex items-center justify-center">
-                      <img
-                        src={`/${item.icon}`}
-                        alt={item.alt}
-                        className="w-[16px] h-[16px] object-contain"
-                      />
-                    </div>
-                    <div
-                      className={`ml-3 whitespace-nowrap overflow-hidden transition-opacity duration-300 text-sm ${
-                        isExpended ? "opacity-100 w-auto" : "opacity-0 w-0"
-                      }`}
-                    >
-                      {item.label}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
+        ) : ( 
+          <div className="flex space-x-8 items-center">
+            {[
+              { icon: <Rocket />, label: "Dashboard", path: "/" },
+              { icon: <Route/>, label: "Routes", path: "/routes" },
+              { icon:  <Radar />, label: "Jobs", path: "/jobs" },
+              { icon: <CalendarRange />, label: "Schedule", path: "/schedule" },
+            ].map((tab, index) => (
+              <NavLink
+                to={tab.path}
+                key={index}
+                className={({ isActive }) =>
+                  `flex items-center gap-1 cursor-pointer pb-1 transition-all ${
+                    isActive
+                      ? "text-green-900 border-b-2 border-green-900"
+                      : "text-gray-400 hover:text-green-800"
+                  }`
+                }
+              >
+                <span className="pr-1 font-medium">{tab.icon}</span>
+                <span className="font-normal">{tab.label}</span>
+              </NavLink>
+            ))}
+          </div>
+        )}
 
-      {/* Bottom section with user profile and settings */}
-      <div className="border-t border-gray-200 pt-3 pb-4 px-2">
-        {/* User profile */}
-        <div
-          className={`flex items-center px-2 mb-3 ${
-            isExpended ? "" : "justify-center"
-          }`}
-        >
-          <div className="w-[32px] h-[32px] rounded-full overflow-hidden">
-            <img
-              src="/avatar.svg"
-              alt="Gustavo Xavier"
-              className="w-full h-full object-cover"
+        {/* Right side - Search and icons */}
+        <div className="flex items-center">
+          <div className="relative" style={{ width: `${searchWidth}px` }}>
+            <div className="absolute left-0 top-0 bottom-0 flex items-center justify-center w-9 pointer-events-none">
+              <SearchOutlined className="text-gray-400 text-sm" />
+            </div>
+            <Input
+              type="text"
+              suffix={
+                <SearchOutlined
+                  style={{ fontSize: "16px" }}
+                  className="text-gray-400"
+                />
+              }
+              className="pl-9"
+              placeholder={searchPlaceholder}
+              onChange={(e) => onSearch && onSearch(e.target.value)}
             />
           </div>
-          {isExpended && (
-            <div className="ml-2">
-              <p className="text-sm font-medium">Gustavo Xavier</p>
-              <p className="text-xs text-gray-500">Admin</p>
-            </div>
-          )}
-        </div>
 
-        {/* Bottom menu items */}
-        {bottomMenuItems.map((item, index) => (
-          <div
-            key={index}
-            className="flex items-center pl-2 py-[10px] hover:bg-[#F6FFED] cursor-pointer"
-          >
-            <div className="w-[20px] h-[20px] flex items-center justify-center">
-              <img
-                src={`/${item.icon}`}
-                alt={item.alt}
-                className="w-[16px] h-[16px] object-contain"
-              />
-            </div>
-            <div
-              className={`ml-3 whitespace-nowrap overflow-hidden transition-opacity duration-300 ${
-                item.textColor || "text-gray-700"
-              } text-sm ${isExpended ? "opacity-100 w-auto" : "opacity-0 w-0"}`}
-            >
-              {item.label}
-            </div>
+          <div className="flex items-center ml-4">
+            {iconsToRender.map((navIcon, index) => (
+              <div
+                key={index}
+                className={`${iconClassName} ml-1`}
+                onClick={navIcon.onClick}
+                title={navIcon.label}
+              >
+                {navIcon.icon}
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
-export default SideBar;
+export default NavBar;
