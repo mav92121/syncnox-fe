@@ -73,6 +73,8 @@ export interface MapComponentProps {
   config: MapConfig;
   className?: string;
   opacity?: number;
+  jobs?:any,
+  mapRef?:any,
 }
 
 export interface ActionButtonsProps {
