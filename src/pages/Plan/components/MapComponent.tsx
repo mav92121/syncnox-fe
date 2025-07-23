@@ -41,7 +41,7 @@ const MapUpdater = ({ bounds }: { bounds: L.LatLngBounds | null }) => {
       const isvalid =
         bounds.isValid() &&
         !bounds.getNorthEast().equals(bounds.getSouthWest());
-      console.log("bounds -> ", bounds);
+      
       if (isvalid) {
         try {
           map.flyToBounds(bounds, {
@@ -187,7 +187,7 @@ const MapComponent = ({
 
   // Calculate bounds to fit all markers and routes
   const bounds = useMemo(() => {
-    // console.log("optimization data",optimizationData);
+    
     if (!optimizationData?.routes?.length) return null;
     const coords: [number, number][] = [];
 
