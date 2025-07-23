@@ -1,41 +1,52 @@
 import { Modal, Form, Input, Select, Button, Typography, Avatar } from "antd";
 import {
   TeamOutlined,
-  EnvironmentOutlined,
   CompassOutlined,
 } from "@ant-design/icons";
-
+import { useState } from "react";
 const { Title, Text } = Typography;
 
 interface CreateRouteModalProps {
   open: boolean;
   onCancel: () => void;
-  onSubmit: (values: any) => void;
+  onSubmit: (values: any) => Promise<void>;
 }
 
-const CreateRouteModalForm = ({
+const CreateRouteModalForm: React.FC<CreateRouteModalProps> = ({
   open,
   onCancel,
   onSubmit,
 }: CreateRouteModalProps) => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+
+  const handelSubmit = async (values: any) => {
+    try {
+      setLoading(true);
+      await onSubmit(values);
+      onCancel();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Modal
       open={open}
       onCancel={onCancel}
       footer={null}
       closable={false}
-      width={1020}
+      width={840}
       centered
       styles={{
         content: {
-          borderRadius: "16px",
-          padding: "32px",
+          padding: "23px",
         },
       }}
     >
       {/* Header with Cancel button */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center">
         <div></div>
         <Button
           type="text"
@@ -47,8 +58,8 @@ const CreateRouteModalForm = ({
       </div>
 
       {/* Title and subtitle */}
-      <div className="text-center mb-8">
-        <Title level={2} className="mb-2 text-gray-800">
+      <div className="text-center">
+        <Title level={2} className="text-gray-800">
           Create a Route
         </Title>
         <Text className="text-gray-500 text-base">
@@ -57,21 +68,13 @@ const CreateRouteModalForm = ({
       </div>
 
       {/* Map icon placeholder */}
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center">
         <div className="relative">
-          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
-            <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-              <EnvironmentOutlined className="text-red-500 text-2xl" />
-            </div>
-          </div>
-          {/* Map lines decoration */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-20 h-20 border-2 border-gray-300 rounded-full opacity-30"></div>
-          </div>
+          <img src="/map.svg" alt="MAP" />
         </div>
       </div>
 
-      <Form form={form} layout="vertical" onFinish={onSubmit}>
+      <Form form={form} layout="vertical" onFinish={handelSubmit}>
         <Form.Item
           label={
             <span className="text-gray-700 font-medium">
@@ -80,12 +83,12 @@ const CreateRouteModalForm = ({
           }
           name="routeName"
           rules={[{ required: true, message: "Route name is required" }]}
-          className="mb-6"
+          className=""
         >
           <Input
             placeholder="Name of the Route"
             size="large"
-            className="rounded-lg border-gray-300"
+            className="border-gray-300"
           />
         </Form.Item>
 
@@ -96,12 +99,11 @@ const CreateRouteModalForm = ({
             </span>
           }
           name="optimization"
-          className="mb-6"
+          className=""
         >
           <Select
             placeholder="Select Preference"
             size="large"
-            className="rounded-lg"
             suffixIcon={<TeamOutlined className="text-blue-400" />}
           >
             <Select.Option value="distance">Shortest Distance</Select.Option>
@@ -111,11 +113,13 @@ const CreateRouteModalForm = ({
         </Form.Item>
 
         <Form.Item
-          label={<span className="text-black-700 font-medium">Assign Team</span>}
+          label={
+            <span className="text-black-700 font-medium">Assign Team</span>
+          }
           name="team"
-          className="mb-8"
+          className=""
         >
-          <div className="flex items-center justify-between p-4 border border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer">
+          <div className="flex items-center justify-between p-4 border border-gray-300 hover:border-blue-400 cursor-pointer">
             <div className="flex items-center">
               <Button
                 type="text"
@@ -127,13 +131,13 @@ const CreateRouteModalForm = ({
             </div>
             <div className="flex items-center space-x-1">
               <Avatar size="small" className="bg-blue-500">
-                A
+                <img src="./Avatar.jpg" alt="" />
               </Avatar>
               <Avatar size="small" className="bg-green-500">
-                B
+                <img src="./Avatar.jpg" alt="" />
               </Avatar>
               <Avatar size="small" className="bg-orange-500">
-                C
+                <img src="./Avatar.jpg" alt="" />
               </Avatar>
               <Button
                 type="text"
@@ -150,7 +154,8 @@ const CreateRouteModalForm = ({
           <Button
             type="primary"
             htmlType="submit"
-            icon={<CompassOutlined style={{ fontSize: "30px" }} />}            
+            icon={<CompassOutlined style={{ fontSize: "30px" }} />}
+            loading={loading}
             size="large"
             className="w-full h-12 bg-green-800 hover:bg-green-700 border-0 rounded-lg font-medium text-base"
           >
