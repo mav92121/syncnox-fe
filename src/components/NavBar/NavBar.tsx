@@ -7,7 +7,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import type { ReactNode } from "react";
-import { CalendarRange, LayoutDashboard, Radar, Rocket, Route } from "lucide-react";
+import { CalendarRange, Radar, Rocket, Route } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 // Define types for breadcrumbs
