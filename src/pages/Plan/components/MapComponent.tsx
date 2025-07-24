@@ -128,7 +128,7 @@ const MapComponent = ({
   const optimizationData =
     optimizationResult as unknown as OptimizationData | null;
   //
-
+  console.log("optimizationData", optimizationData);
   // Generate a unique key to force remount when optimization data changes
   const mapKey = useMemo(
     () => `map-${optimizationData?.routes?.length || 0}-${Date.now()}`,
