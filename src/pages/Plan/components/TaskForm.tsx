@@ -430,7 +430,7 @@ const TaskForm = () => {
                   <InputNumber
                     type="number"
                     required
-                    style={{ width: "68%", flex: 2, cursor: "text" }}
+                    style={{ width: "66%", flex:1, cursor: "text" }}
                     placeholder="8023456789"
                     maxLength={15}
                     pattern="[0-9]*"
