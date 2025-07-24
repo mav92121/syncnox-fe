@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Spin } from "antd";
 import ActionButtons from "./components/ActionButtons";
 import TasksTable from "./components/TasksTable";
@@ -9,7 +9,6 @@ import { usePlanContext } from "./hooks/usePlanContext";
 import type { Job, Task } from "./types";
 import dayjs from "dayjs";
 import RouteDashboard from "./components/RouteDashboard";
-import type { Map as LeafletMap } from "leaflet";
 
 // Helper to capitalize
 const capitalizeFirstLetter = (string: string = "") => {
@@ -68,19 +67,6 @@ const PlanRecents = () => {
   const { jobs, fetchJobs, isLoading, error, optimizationResult } =
     usePlanContext();
   const [transformedTasks, setTransformedTasks] = useState<Task[]>([]);
-  const mapRef = useRef<LeafletMap | null>(null);
-
-  const handleMapView = (lat: number, lon: number) => {
-    if (mapRef.current && lat && lon) {
-      mapRef.current.setView([lat, lon], 16, {
-        animate: true,
-        duration: 1.2,
-        easeLinearity: 0.25,
-      });
-    } else {
-      console.warn("Map not ready or invalid lat/lon", lat, lon);
-    }
-  };
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
@@ -120,8 +106,6 @@ const PlanRecents = () => {
             setMapType={setMapType}
             config={defaultMapConfig}
             className="h-full w-full"
-            jobs={jobs}
-            mapRef={mapRef}
           />
         </div>
 
@@ -133,10 +117,7 @@ const PlanRecents = () => {
           </div>
         ) : (
           <div className="h-3/5 w-full overflow-hidden min-h-0">
-            <TasksTable
-              dataSource={transformedTasks}
-              onMapView={handleMapView}
-            />
+            <TasksTable dataSource={transformedTasks} />
           </div>
         )}
       </div>
