@@ -8,85 +8,56 @@ import {
   Redo2,
   CloudDownload,
   ClipboardList,
-  ClockFading,
   ListFilter,
   MousePointer2,
+  History,
 } from "lucide-react";
 import { MoreOutlined } from "@ant-design/icons";
 import type { DriverInterface, TimelineItem } from "../types";
+import type { OptimizationResult } from "../../../services/optimization";
 
-const RouteDashboard = () => {
+interface RouteDashboardProps {
+  optimizationResult: OptimizationResult;
+}
+
+const RouteDashboard = ({ optimizationResult }: RouteDashboardProps) => {
   // const [selectedDate, setSelectedDate] = useState("02/08/2025");
   const selectedDate = "02/08/2025";
   const [activeTab, setActiveTab] = useState("Timeline");
+  console.log("optimizationResult", optimizationResult);
 
-  const timeSlots = [
-    "04:00",
-    "04:30",
-    "05:00",
-    "05:30",
-    "06:00",
-    "06:30",
-    "07:00",
-    "07:30",
-    "08:00",
-    "08:30",
-    "09:00",
-    "09:30",
-    "10:00",
-    "10:30",
-    "11:00",
-    "11:30",
-    "12:00",
-  ];
+  const drivers = optimizationResult.routes.map((route, index) => {
+    const timeline = route.stops.map((stop, i) => {
+      const stopTime = new Date(stop.arrival_time).toISOString().slice(11, 16); // "HH:mm"
+      return {
+        stop: i === 0 ? "home" : i,
+        time: stopTime,
+        icon: i === 0 ? "home" : undefined,
+      };
+    });
 
-  const drivers: DriverInterface[] = [
-    {
-      id: 1,
-      name: "Courtney Henry",
+    const totalStops = route.stops.length;
+    const totalDistanceMiles = (route.total_distance / 1609.34).toFixed(2);
+    const totalHours = Math.floor(route.total_duration / 3600);
+    const totalMins = Math.floor((route.total_duration % 3600) / 60);
+
+    return {
+      id: index + 1,
+      name: `Driver ${index + 1}`,
       avatar: "https://avatar.iran.liara.run/public/6",
-      driverNumber: "Driver 1",
-      zone: "Zone 1",
-      shiftTime: "12PM - 3PM",
-      vehicle: "TXQ2SXX223",
-      totalStops: "26 Stops",
-      distance: "100.74mi",
-      duration: "23Hrs36Mins",
-      color: "blue",
-      timeline: [
-        { stop: "home", time: "05:00", icon: "home" },
-        { stop: 1, time: "06:30" },
-        { stop: 2, time: "07:00" },
-        { stop: 3, time: "07:30" },
-        { stop: 4, time: "08:00" },
-        { stop: 5, time: "10:30" },
-        { stop: 6, time: "11:00" },
-        { stop: 7, time: "11:30" },
-      ],
-    },
-    {
-      id: 2,
-      name: "Courtney Henry",
-      avatar: "https://avatar.iran.liara.run/public/6",
-      driverNumber: "Driver 1",
-      zone: "Zone 1",
-      shiftTime: "12PM - 3PM",
-      vehicle: "TXQ2SXX223",
-      totalStops: "26 Stops",
-      distance: "100.74mi",
-      duration: "23Hrs36Mins",
-      color: "green",
-      timeline: [
-        { stop: "home", time: "07:00", icon: "home" },
-        { stop: 1, time: "08:00" },
-        { stop: 2, time: "08:30" },
-        { stop: 3, time: "09:00" },
-        { stop: 4, time: "09:30" },
-        { stop: 5, time: "10:30" },
-      ],
-    },
-  ];
-
+      driverNumber: `Driver ${index + 1}`,
+      zone: `Zone ${index + 1}`,
+      shiftTime: "09:00AM - 12:00PM",
+      vehicle: route.vehicle_id,
+      totalStops: `${totalStops} Stops`,
+      distance: `${totalDistanceMiles}mi`,
+      duration: `${totalHours}Hrs ${totalMins}Mins`,
+      color: index % 2 === 0 ? "blue" : "green",
+      timeline,
+    };
+  });
+  console.log(drivers);
+  
   const getTimePosition = (time: string) => {
     // Safety check for time parameter
     if (!time || typeof time !== "string") {
@@ -94,7 +65,8 @@ const RouteDashboard = () => {
     }
 
     const [hours, minutes] = time.split(":").map(Number);
-
+    
+    
     // Validate hours and minutes
     if (isNaN(hours) || isNaN(minutes)) {
       return 0;
@@ -109,8 +81,9 @@ const RouteDashboard = () => {
     return Math.max(0, Math.min(100, position));
   };
 
-  const renderTimelineBar = (driver: DriverInterface) => {
+  const renderTimelineBar = (driver: any) => {
     const startPos = getTimePosition(driver.timeline[0].time);
+    
     const endPos = getTimePosition(
       driver.timeline[driver.timeline.length - 1].time
     );
@@ -119,7 +92,7 @@ const RouteDashboard = () => {
       <div className="relative h-8 mt-2">
         {/* Timeline bar */}
         <div
-          className={`absolute top-0 h-8 rounded ${
+          className={`absolute top-3 h-1 rounded ${
             driver.color === "blue" ? "bg-blue-500" : "bg-green-500"
           }`}
           style={{
@@ -142,7 +115,7 @@ const RouteDashboard = () => {
               <div
                 className={`w-8 h-8 ${
                   driver.color === "blue" ? "bg-blue-500" : "bg-green-500"
-                } rounded flex items-center justify-center`}
+                } flex items-center justify-center`}
               >
                 <Home className="w-4 h-4 text-white" />
               </div>
@@ -152,7 +125,7 @@ const RouteDashboard = () => {
                   driver.color === "blue"
                     ? "border-blue-500 bg-blue-100 text-blue-600"
                     : "border-green-500 bg-green-100 text-green-600"
-                } rounded flex items-center justify-center text-sm font-medium`}
+                } flex items-center justify-center text-sm font-medium`}
               >
                 {item.stop}
               </div>
@@ -164,9 +137,9 @@ const RouteDashboard = () => {
   };
 
   return (
-    <div className="w-full bg-white min-h-screen">
+    <div className="w-full min-h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 bg-white border-b">
+      <div className="flex items-center justify-between px-6 py-4 ">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <span className="text-xl text-gray-800">Route1201</span>
@@ -264,7 +237,9 @@ const RouteDashboard = () => {
       </div>
 
       {/* Controls */}
-      <div className="flex px-6 py-2 bg-gray-50 border-b">
+      {/* Controls Row */}
+      <div className="flex items-center justify-between px-4 py-2 bg-gray-50 border-b">
+        {/* Left Controls */}
         <div className="flex items-center space-x-2">
           <button className="flex items-center space-x-2 px-4 py-2 bg-green-800 text-white hover:bg-green-700">
             <Plus className="w-4 h-4" />
@@ -278,40 +253,41 @@ const RouteDashboard = () => {
             <Redo2 className="w-6 h-6" />
           </button>
           <button className="p-2 text-gray-500 hover:text-gray-700 rounded">
-            <ClockFading className="w-6 h-6" />
+            <History className="w-6 h-6" />
           </button>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 ml-4">
             <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-black">
               <ListFilter className="w-5 h-5" />
               <span>Filter</span>
             </button>
-
             <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-black">
               <ListFilter className="w-5 h-5" />
               <span>30 Mins</span>
             </button>
           </div>
         </div>
+
+        {/* Right Time Header */}
+
+        
+          <div className="flex-1 px-14 grid grid-flow-col text-xs text-gray-500 py-2">
+            {drivers[0].timeline.map((time, index) => (
+              <div key={index} className="text-center">
+                {time.time}
+              </div>
+            ))}
+          </div>
+        
       </div>
 
       {/* Timeline Header */}
-      <div className="flex bg-white border-b text-xs text-gray-500">
-        <div className="w-130 px-6 py-4 border-r bg-white"></div>
-        <div className="flex-1 px-4 py-2 grid grid-cols-17 gap-2">
-          {timeSlots.map((time, index) => (
-            <div key={index} className="text-center w-17">
-              {time}
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* Driver Rows */}
       <div className="bg-white">
         {drivers.map((driver, index) => (
           <div key={index} className="flex border-b hover:bg-gray-50">
-            <div className="w-130 px-4 py-2 border-r relative">
+            <div className="w-135 px-4 py-2 border-r relative">
               <div
                 className={`absolute top-0 right-0 h-full w-2 ${
                   driver.color === "blue" ? "bg-blue-400" : "bg-green-500"
@@ -324,7 +300,7 @@ const RouteDashboard = () => {
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div className="flex-1">
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-32">
                     <span className="font-medium text-gray-800">
                       {driver.name}
                     </span>
@@ -442,7 +418,7 @@ const RouteDashboard = () => {
             <div className="flex-1 px-6 py-4 relative">
               {/* Time grid background */}
               <div className="absolute inset-0 flex">
-                {Array.from({ length: 17 }).map((_, i) => (
+                {Array.from({ length: 16 }).map((_, i) => (
                   <div
                     key={i}
                     className={`flex-1 ${

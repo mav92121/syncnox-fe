@@ -129,7 +129,7 @@ const PlanRecents = () => {
 
         {optimizationResult ? (
           <div className="h-3/5 w-full overflow-hidden min-h-0">
-            <RouteDashboard />
+            <RouteDashboard optimizationResult={optimizationResult}/>
           </div>
         ) : (
           <div className="h-3/5 w-full overflow-hidden min-h-0">
