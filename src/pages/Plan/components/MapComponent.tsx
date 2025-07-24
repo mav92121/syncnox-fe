@@ -15,11 +15,7 @@ import { usePlanContext } from "../hooks/usePlanContext";
 import { mapUrls, mapAttributions } from "../utils/mapConfig";
 import "leaflet/dist/leaflet.css";
 import "./MapComponent.css";
-<<<<<<< Updated upstream
 import type { Map } from "leaflet";
-=======
-import type { Map as Map } from "leaflet";
->>>>>>> Stashed changes
 
 // Type for OSRM response
 interface OSRMRoute {
