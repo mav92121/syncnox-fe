@@ -307,11 +307,8 @@ const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
 
   const handleCreateRoute = async () => {
     setOpen(false);
-    console.log("Create Route button clicked");
-    console.log("Selected row keys:", selectedRowKeys);
 
     if (selectedRowKeys.length === 0) {
-      console.log("No jobs selected, showing warning");
       messageApi.warning("Please select at least one job to create a route");
       return;
     }
@@ -322,14 +319,11 @@ const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
       selectedRowKeys.includes(job.key as React.Key)
     );
 
-    console.log("selected jobs -> ", selectedJobs);
-
     // Use original job data for validation
     const jobsWithInvalidCoords = selectedJobs.filter((job) => {
       const jobData = getJobById(job.id) || job;
       const lat = jobData.lat ?? null;
       const lng = jobData.lon ?? null;
-      console.log("job data -> ", jobData);
 
       // Check if coordinates are valid
       return (
@@ -379,7 +373,6 @@ const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
     try {
       setIsOptimizing(true);
       const result = await optimizeRoutes(optimizationJobs);
-      console.log("Optimization result:", result);
       setOptimizationResult(result);
       messageApi.success("Route optimized successfully!");
     } catch (error) {
