@@ -8,9 +8,7 @@ const RootLayout = () => {
   const getBreadcrumbs = () => {
     if (location.pathname.startsWith("/plan")) {
       return [{ label: "Plan", path: "/plan" }, { label: "Add Jobs" }];
-    } else if (location.pathname.startsWith("/routes")) {
-      return [{ label: "Routes", path: "/routes" }];
-    } else if (location.pathname === "/") {
+    } else if (location.pathname === "/" || location.pathname === "/routes") {
       return []; // Dashboard has no breadcrumbs
     } else {
       return [{ label: "Unknown Page" }];
