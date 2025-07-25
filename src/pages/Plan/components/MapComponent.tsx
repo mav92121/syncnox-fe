@@ -6,7 +6,7 @@ import {
   Polyline,
   useMap,
 } from "react-leaflet";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState, type RefObject } from "react";
 import L from "leaflet";
 import { renderToString } from "react-dom/server";
 import MapTypeControl from "./MapTypeControl";
@@ -15,7 +15,7 @@ import { usePlanContext } from "../hooks/usePlanContext";
 import { mapUrls, mapAttributions } from "../utils/mapConfig";
 import "leaflet/dist/leaflet.css";
 import "./MapComponent.css";
-
+import type { Map } from "leaflet";
 // Type for OSRM response
 interface OSRMRoute {
   routes: Array<{
@@ -55,6 +55,16 @@ const MapUpdater = ({ bounds }: { bounds: L.LatLngBounds | null }) => {
     }
   }, [bounds, map]);
 
+  return null;
+};
+
+const MapRefInitializer = ({ mapRef }: { mapRef: RefObject<Map | null> }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (mapRef && mapRef.current !== map) {
+      (mapRef as any).current = map;
+    }
+  }, [map]);
   return null;
 };
 
@@ -114,12 +124,22 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+const customIcon = new L.Icon({
+  iconUrl: "/marker.svg",
+  iconSize: [20, 30],
+  iconAnchor: [15, 40],
+  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+  popupAnchor: [0, -40],
+});
+
 const MapComponent = ({
   mapType,
   setMapType,
   config,
   className = "",
   opacity = 1,
+  mapRef,
+  jobs,
 }: MapComponentProps) => {
   // Get the optimization result from context
   const { optimizationResult } = usePlanContext();
@@ -293,6 +313,7 @@ const MapComponent = ({
         boundsOptions={{ padding: [50, 50] }}
         style={{ height: "100%", width: "100%" }}
       >
+        <MapRefInitializer mapRef={mapRef} />
         <MapUpdater bounds={bounds} />
         <TileLayer
           url={mapUrls[mapType]}
@@ -303,7 +324,13 @@ const MapComponent = ({
         {config.markers.map((marker, index) => (
           <Marker key={`default-${index}`} position={marker.position} />
         ))}
-
+        {jobs?.map((job: any, index: any) => (
+          <Marker
+            key={`job-marker-${index}`}
+            position={[job.lat, job.lon]}
+            icon={customIcon}
+          ></Marker>
+        ))}
         {/* Optimized routes */}
         {optimizationData?.routes.map((route, routeIndex) => {
           const routeColor = getRouteColor(route.vehicle_id);
