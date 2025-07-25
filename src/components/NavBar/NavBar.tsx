@@ -7,7 +7,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import type { ReactNode } from "react";
-import { CalendarRange, LayoutDashboard, Radar, Route } from "lucide-react";
+import { CalendarRange, Radar, Rocket, Route } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 // Define types for breadcrumbs
@@ -77,7 +77,12 @@ const NavBar = ({
                       } ${
                         crumb.path ? "cursor-pointer hover:text-blue-500" : ""
                       }`}
-                      onClick={() => {}}
+                      onClick={() => {
+                        if (crumb.path) {
+                          // Handle navigation if needed
+                          console.log(`Navigate to: ${crumb.path}`);
+                        }
+                      }}
                     >
                       {crumb.label}
                     </span>
@@ -96,27 +101,27 @@ const NavBar = ({
               </div>
             )}
           </div>
-        ) : (
-          <div className="flex space-x-6 items-center">
+        ) : ( 
+          <div className="flex space-x-8 items-center">
             {[
-              { icon: <LayoutDashboard />, label: "Dashboard", path: "/" },
-              { icon: <Route />, label: "Routes", path: "/routes" },
-              { icon: <Radar />, label: "Jobs", path: "/jobs" },
+              { icon: <Rocket />, label: "Dashboard", path: "/" },
+              { icon: <Route/>, label: "Routes", path: "/routes" },
+              { icon:  <Radar />, label: "Jobs", path: "/jobs" },
               { icon: <CalendarRange />, label: "Schedule", path: "/schedule" },
             ].map((tab, index) => (
               <NavLink
                 to={tab.path}
                 key={index}
                 className={({ isActive }) =>
-                  `flex items-center gap-1 text-sm cursor-pointer pb-2 transition-all ${
+                  `flex items-center gap-1 cursor-pointer pb-1 transition-all ${
                     isActive
-                      ? "text-green-900 border-b-2 border-green-900 font-medium"
+                      ? "text-green-900 border-b-2 border-green-900"
                       : "text-gray-400 hover:text-green-800"
                   }`
                 }
               >
-                <span>{tab.icon}</span>
-                <span>{tab.label}</span>
+                <span className="pr-1 font-medium">{tab.icon}</span>
+                <span className="font-normal">{tab.label}</span>
               </NavLink>
             ))}
           </div>
