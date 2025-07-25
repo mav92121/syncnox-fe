@@ -199,11 +199,11 @@ const RouteDashboard = ({ optimizationResult }: RouteDashboardProps) => {
             </button>
 
             {/* Share URL */}
-            <button className="flex items-center space-x-2 px-4 py-2 bg-green-900 text-white  hover:bg-green-800">
+            <button className="flex items-center space-x-2 px-4 py-2 bg-green-950 text-white  hover:bg-green-800">
               <img src="/Icon.svg" alt="" />
               <span className="text-sm font-medium">Share URL</span>
             </button>
-            <button className="flex items-center space-x-2 px-4 py-2 bg-green-900 text-white  hover:bg-green-800">
+            <button className="flex items-center space-x-2 px-4 py-2 bg-green-950 text-white  hover:bg-green-800">
               <MousePointer2 className="w-4 h-4" />
               <span className="text-sm font-medium">Share to App</span>
             </button>
@@ -216,7 +216,7 @@ const RouteDashboard = ({ optimizationResult }: RouteDashboardProps) => {
       <div className="flex items-center justify-between px-4 py-2 bg-gray-50 border-b">
         {/* Left Controls */}
         <div className="flex items-center space-x-2">
-          <button className="flex items-center space-x-2 px-4 py-2 bg-green-800 text-white hover:bg-green-700">
+          <button className="flex items-center space-x-2 px-4 py-2 bg-green-950 text-white hover:bg-green-700">
             <Plus className="w-4 h-4" />
             <span className="text-sm">Add New Driver</span>
           </button>
