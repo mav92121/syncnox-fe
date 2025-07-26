@@ -17,7 +17,7 @@ interface RouteData {
   completed: number;
   failed: number;
   attempted: number;
-  status: "In Transit" | "Delayed" | "Scheduled" | "Completed" | string;
+  status: string;
   rating: number;
 }
 

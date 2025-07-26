@@ -55,8 +55,6 @@ const NavBar = ({
   ];
   const showBreadcrumbs = breadcrumbs.length > 0;
 
-  // const showNavTabs = true;
-
   // Use provided icons or fallback to defaults
   const iconsToRender = navIcons || defaultNavIcons;
 
