@@ -454,9 +454,9 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
             Export
           </Button>
           <Button
-            type={open ? "primary": "default"}
+            type="primary"
             onClick={() => setOpen(true)}
-            disabled={isOptimizing}
+            disabled={isOptimizing || selectedRowKeys.length === 0}
             icon={
               isOptimizing ? (
                 <LoadingOutlined />
@@ -478,13 +478,11 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
             {isOptimizing ? "Optimizing..." : "Create New Route"}
           </Button>
         </div>
-        {open && (
-          <CreateRouteModalForm
-            open={open}
-            onClose={() => setOpen(false)}
-            onSubmit={handleCreateRoute}
-          />
-        )}
+        <CreateRouteModalForm
+          open={open}
+          onClose={() => setOpen(false)}
+          handleCreateRoute={handleCreateRoute}
+        />
       </div>
       {/* Only the table is scrollable */}
       <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden custom-scrollbar">
