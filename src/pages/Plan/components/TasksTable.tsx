@@ -211,6 +211,30 @@ const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
         ),
       },
       {
+        title: "Customer Preferences",
+        dataIndex: "customerPreferences",
+        key: "customerPreferences",
+        align: "center",
+        ellipsis: true,
+        render: (preference: string) => (
+          <div className="text-center px-2" title={preference}>
+            {preference}
+          </div>
+        ),
+      },
+      {
+        title: "Notes",
+        dataIndex: "notes",
+        key: "notes",
+        align: "center",
+        ellipsis: true,
+        render: (notes: string) => (
+          <div className="text-center px-2" title={notes}>
+            {notes}
+          </div>
+        ),
+      },
+      {
         title: "Type",
         dataIndex: "singleRecurring",
         key: "singleRecurring",
@@ -364,7 +388,7 @@ const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
           lng: jobData.lon || 0,
         },
         duration: jobData.duration_minutes
-          ? jobData.duration_minutes * 60
+          ? Number(jobData.duration_minutes) * 60
           : 1800, // Convert minutes to seconds if available
         priority:
           jobData.priority_level === "high"
