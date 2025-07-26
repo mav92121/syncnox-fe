@@ -14,6 +14,7 @@ import { usePlan } from "../context/planContextDefinition";
 import { optimizeRoutes } from "../../../services/optimization";
 import type { Job as OptimizationJob } from "../../../services/optimization";
 import type { Task } from "../types";
+import CreateRouteModalForm from "./CreateRouteModalForm";
 
 type TableRowSelection<T extends object = object> =
   TableProps<T>["rowSelection"];
@@ -295,6 +296,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
   const [searchText, setSearchText] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
   const { jobs, setOptimizationResult } = usePlan();
+  const [open, setOpen] = useState(false);
 
   // Filter data based on search text
   const filteredData = searchText
@@ -453,8 +455,8 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
           </Button>
           <Button
             type="primary"
-            onClick={handleCreateRoute}
-            disabled={isOptimizing}
+            onClick={() => setOpen(true)}
+            disabled={isOptimizing || selectedRowKeys.length === 0}
             icon={
               isOptimizing ? (
                 <LoadingOutlined />
@@ -476,6 +478,11 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
             {isOptimizing ? "Optimizing..." : "Create New Route"}
           </Button>
         </div>
+        <CreateRouteModalForm
+          open={open}
+          onClose={() => setOpen(false)}
+          handleCreateRoute={handleCreateRoute}
+        />
       </div>
       {/* Only the table is scrollable */}
       <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden custom-scrollbar">
