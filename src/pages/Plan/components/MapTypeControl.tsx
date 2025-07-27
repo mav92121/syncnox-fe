@@ -37,8 +37,8 @@ const MapTypeControl: React.FC<MapTypeControlProps> = ({
       <div className="bg-white shadow-md overflow-hidden flex transition-all duration-300 ease-in-out">
         <Button
           size="small"
-          onClick={() => setMapType("osm")}
-          type={mapType === "osm" ? "primary" : "default"}
+          onClick={() => setMapType("roadmap")}
+          type={mapType === "roadmap" ? "primary" : "default"}
         >
           Map
         </Button>
