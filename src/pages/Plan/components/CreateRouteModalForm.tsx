@@ -124,7 +124,7 @@ const CreateRouteModalForm: React.FC<CreateRouteModalProps> = ({
             htmlType="submit"
             icon={<CompassOutlined style={{ fontSize: "15px" }} />}
             loading={loading}
-            size="small"
+            size="middle"
             className="w-full h-12 bg-green-800 hover:bg-green-700 border-0 rounded-lg font-medium text-base"
           >
             Optimize Route

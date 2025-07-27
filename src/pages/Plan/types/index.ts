@@ -1,5 +1,5 @@
 // Map related types
-export type MapType = "osm" | "satellite";
+export type MapType = "roadmap" | "satellite";
 
 export interface MapMarker {
   position: [number, number];
