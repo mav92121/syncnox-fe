@@ -139,24 +139,24 @@ const RouteDashboard = ({ optimizationResult }: RouteDashboardProps) => {
   return (
     <div className="w-full min-h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 ">
-        <div className="flex items-center space-x-4">
+      <div className="flex items-center justify-between px-6 py-4 w-full overflow-x-auto">
+        <div className="flex-shrink-0 flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <span className="text-xl text-gray-800">Route1201</span>
-            <span className="px-2 py-1 bg-blue-60 text-blue-700 text-sm ml-0.1">
+            <span className="text-xl text-gray-800 whitespace-nowrap">Route1201</span>
+            <span className="px-2 py-1 bg-blue-50 text-blue-700 text-sm whitespace-nowrap">
               NewYork
             </span>
           </div>
-          <div className="flex items-center space-x-2 border border-gray-800 px-3 py-1">
-            <Calendar className="w-4 h-4 text-gray-500" />
+          <div className="hidden md:flex items-center space-x-2 border border-gray-800 px-3 py-1 whitespace-nowrap">
+            <Calendar className="w-4 h-4 text-gray-500 flex-shrink-0" />
             <span className="text-sm text-gray-500">{selectedDate}</span>
           </div>
         </div>
 
-        <div className="flex items-center space-x-20 pl-10">
+        <div className="flex-1 flex items-center justify-between min-w-0 px-10">
           <div className="flex items-center space-x-6">
             <button
-              className={`pb-2 border-b-2 ${
+              className={`pb-2 border-b-2 whitespace-nowrap ${
                 activeTab === "Timeline"
                   ? "border-black text-black"
                   : "border-transparent text-gray-500"
@@ -166,7 +166,7 @@ const RouteDashboard = ({ optimizationResult }: RouteDashboardProps) => {
               Timeline
             </button>
             <button
-              className={`pb-2 border-b-2 ${
+              className={`pb-2 border-b-2 whitespace-nowrap ${
                 activeTab === "Route"
                   ? "border-black text-black"
                   : "border-transparent text-gray-500"
@@ -177,36 +177,40 @@ const RouteDashboard = ({ optimizationResult }: RouteDashboardProps) => {
             </button>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 flex-shrink-0">
             {/* Search */}
-            <div className="flex items-center px-3 py-1.5 border border-gray-300 w-100 bg-white ">
-              <Search className="w-4 h-4 text-gray-400 mr-2" />
+            <div className="flex items-center px-3 py-1.5 border border-gray-300 w-100 bg-white min-w-[200px] max-w-[300px]">
+              <Search className="w-4 h-4 text-gray-400 mr-2 flex-shrink-0" />
               <input
                 type="text"
                 placeholder="Search"
-                className="w-full border-none outline-none text-sm text-gray-700 placeholder-gray-400 bg-transparent"
+                className="w-full border-none outline-none text-sm text-gray-700 placeholder-gray-400 bg-transparent min-w-0"
               />
             </div>
 
             {/* Manifest & Export */}
-            <button className="flex items-center justify-between space-x-2 text-gray-600 hover:text-black px-2 py-1">
-              <ClipboardList className="w-6 h-6" />
-              <span className="text-md">Manifest</span>
-            </button>
-            <button className="flex items-center space-x-2 text-gray-600 hover:text-black px-2 py-1">
-              <CloudDownload className="w-6 h-6" />
-              <span className="text-md">Export</span>
-            </button>
+            <div className="hidden md:flex items-center space-x-4">
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-black px-2 py-1 whitespace-nowrap">
+                <ClipboardList className="w-5 h-5" />
+                <span className="text-sm">Manifest</span>
+              </button>
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-black px-2 py-1 whitespace-nowrap">
+                <CloudDownload className="w-5 h-5" />
+                <span className="text-sm">Export</span>
+              </button>
+            </div>
 
             {/* Share URL */}
-            <button className="flex items-center space-x-2 px-4 py-2 bg-green-950 text-white  hover:bg-green-800">
-              <img src="/Icon.svg" alt="" />
-              <span className="text-sm font-medium">Share URL</span>
-            </button>
-            <button className="flex items-center space-x-2 px-4 py-2 bg-green-950 text-white  hover:bg-green-800">
-              <MousePointer2 className="w-4 h-4" />
-              <span className="text-sm font-medium">Share to App</span>
-            </button>
+            <div className="flex items-center space-x-5">
+              <button className="flex items-center space-x-2 px-3 py-2 bg-green-950 text-white hover:bg-green-900 text-sm whitespace-nowrap">
+                <img src="/Icon.svg" alt="" className="w-5 h-5" />
+                <span>Share URL</span>
+              </button>
+              <button className="flex items-center space-x-2 px-3 py-2 bg-green-950 text-white hover:bg-green-900 text-sm whitespace-nowrap">
+                <MousePointer2 className="w-5 h-5" />
+                <span>Share to App</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
