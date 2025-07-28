@@ -58,9 +58,9 @@ const growthData = [
 ];
 const Dashboard = () => {
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+    <div className="p-2 space-y-3 bg-gray-50 min-h-screen">
       {/* Top Metrics */}
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-4 gap-3">
         {/* Total Routes */}
         <div className=" bg-white p-3 pl-14">
           <p className="mt-4 text-2xl font-bold mb-2">Total Routes</p>
@@ -74,7 +74,7 @@ const Dashboard = () => {
         </div>
 
         {/* Routes Completed */}
-        <div className="bg-white p-4 rounded-lg text-center">
+        <div className="bg-white p-4 text-center">
           <p className="text-2xl font-semibold mb-2">Routes Completed</p>
 
           {/* Gauge-style Half Circle */}
@@ -108,7 +108,7 @@ const Dashboard = () => {
         </div>
 
         {/* Truck Status */}
-        <div className="bg-white pr-2 rounded-lg">
+        <div className="bg-white pr-2">
           <div className="mt-3 ml-2 flex justify-between items-center mb-4">
             <h3 className="font-medium text-1.9xl">Loading Trucks</h3>
             <span className="text-blue-600 text-sm cursor-pointer">
@@ -158,7 +158,7 @@ const Dashboard = () => {
         </div>
 
         {/* Top Month */}
-        <div className="bg-white p-4 rounded-lg">
+        <div className="bg-white p-4">
           <p className="text-sm text-gray-500 mb-8">Top month</p>
           <div className="mt-27">
             <p className=" text-2xl font-bold">November</p>
@@ -168,9 +168,9 @@ const Dashboard = () => {
       </div>
 
       {/* Middle Section */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-3">
         {/* Customers */}
-        <div className="bg-white p-4 rounded-lg">
+        <div className="bg-white p-4">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold">Customers</h3>
 
@@ -243,7 +243,7 @@ const Dashboard = () => {
         </div>
 
         {/* Growth Chart */}
-        <div className="bg-white p-4 rounded-lg">
+        <div className="bg-white p-4">
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold">Growth</h3>
@@ -320,9 +320,9 @@ const Dashboard = () => {
       </div>
 
       {/* Bottom Section */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-3">
         {/* Chats */}
-        <div className="bg-white p-4 rounded-lg">
+        <div className="bg-white p-4">
           <h3 className="text-lg font-semibold mb-2">Chats</h3>
           <p className="text-sm text-gray-500 mb-4">2 unread messages</p>
           <div className="flex space-x-4">
@@ -346,7 +346,7 @@ const Dashboard = () => {
         </div>
 
         {/* Top States */}
-        <div className="bg-white p-4 rounded-lg">
+        <div className="bg-white p-4">
           <h3 className="text-lg font-semibold mb-4">Top states</h3>
           <div className="space-y-3">
             {[
@@ -371,7 +371,7 @@ const Dashboard = () => {
         </div>
 
         {/* New Routes */}
-        <div className="bg-white p-4 rounded-lg">
+        <div className="bg-white p-4">
           <h3 className="text-lg font-semibold mb-4">New Routes</h3>
           <div className="grid grid-cols-3 gap-2">
             {[
