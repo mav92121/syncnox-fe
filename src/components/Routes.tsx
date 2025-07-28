@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Table, Tag, Avatar, Progress, Button, Rate, Input } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { SearchOutlined } from "@ant-design/icons";
+import { ArrowLeft } from "lucide-react";
 
 interface RouteData {
   key: string;
@@ -17,7 +18,7 @@ interface RouteData {
   completed: number;
   failed: number;
   attempted: number;
-  status: "In Transit" | "Delayed" | "Scheduled" | "Completed" | string;
+  status: string;
   rating: number;
 }
 
@@ -88,7 +89,7 @@ const Routes: React.FC = () => {
       align: "center",
       ellipsis: true,
       render: (text: string) => (
-        <div className="text-center px-2" title={text}>
+        <div className="text-center" title={text}>
           {text}
         </div>
       ),
@@ -127,7 +128,7 @@ const Routes: React.FC = () => {
       align: "center",
       ellipsis: true,
       render: (text: string) => (
-        <div className="text-center px-2" title={text}>
+        <div className="text-center" title={text}>
           {text}
         </div>
       ),
@@ -159,7 +160,7 @@ const Routes: React.FC = () => {
       key: "progress",
       align: "center",
       render: (val: number) => (
-        <div className="grid grid-cols   items-center">
+        <div className="grid grid-cols-1 items-center whitespace-nowrap">
           <Progress percent={val} size="small" />
           <span className="text-xs text-gray-400">Route Completed</span>
         </div>
@@ -233,7 +234,7 @@ const Routes: React.FC = () => {
               disabled
               defaultValue={rating}
               className="whitespace-nowrap"
-              style={{ lineHeight: "1" }}
+              style={{ fontSize: "20px" }}
             />
           ) : (
             <Tag className="bg-gray-100">N/A</Tag>
@@ -253,21 +254,31 @@ const Routes: React.FC = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">Routes</h2>
+        {/* Left section: Icon + Title */}
+        <div className="flex items-center gap-x-2 ml-3">
+          <img src="/Group 326.svg" alt="Routes Icon" className="h-6 w-6" />
+          <h2 className="text-gray-500 font-medium">Recent Routes</h2>
+        </div>
+
+        {/* Right section: Search Input */}
         <Input
           placeholder="Search routes..."
-          prefix={<SearchOutlined className="text-gray-300" />}
-          className="w-64 ml-360"
+          prefix={<SearchOutlined className="text-gray-400" />}
+          className="!w-72 !text-sm !border-gray-300"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
+          allowClear
         />
       </div>
+
       <Table
         columns={columns}
         dataSource={filteredData}
         pagination={false}
         rowKey="key"
-        scroll={{ x: "max-content" }}
+        size="small"
+        tableLayout="auto"
+        className="min-w-full"
       />
     </div>
   );
