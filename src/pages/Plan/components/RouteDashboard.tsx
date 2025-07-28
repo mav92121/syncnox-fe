@@ -140,9 +140,11 @@ const RouteDashboard = ({ optimizationResult }: RouteDashboardProps) => {
     <div className="w-full min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 w-full overflow-x-auto">
-        <div className="flex-shrink-0 flex items-center space-x-4">
+        <div className="flex items-center space-x-4 flex-shrink-0">
           <div className="flex items-center space-x-2">
-            <span className="text-xl text-gray-800 whitespace-nowrap">Route1201</span>
+            <span className="text-xl text-gray-800 whitespace-nowrap">
+              Route1201
+            </span>
             <span className="px-2 py-1 bg-blue-50 text-blue-700 text-sm whitespace-nowrap">
               NewYork
             </span>
@@ -153,8 +155,8 @@ const RouteDashboard = ({ optimizationResult }: RouteDashboardProps) => {
           </div>
         </div>
 
-        <div className="flex-1 flex items-center justify-between min-w-0 px-10">
-          <div className="flex items-center space-x-6">
+        <div className="flex-1 flex items-center justify-between min-w-0">
+          <div className="flex items-center space-x-6 ml-40">
             <button
               className={`pb-2 border-b-2 whitespace-nowrap ${
                 activeTab === "Timeline"
@@ -179,7 +181,7 @@ const RouteDashboard = ({ optimizationResult }: RouteDashboardProps) => {
 
           <div className="flex items-center space-x-4 flex-shrink-0">
             {/* Search */}
-            <div className="flex items-center px-3 py-1.5 border border-gray-300 w-100 bg-white min-w-[200px] max-w-[300px]">
+            <div className="flex items-center px-3 py-1.5 border border-gray-300 w-100 bg-white min-w-[200px] max-w-[300px] ml-20">
               <Search className="w-4 h-4 text-gray-400 mr-2 flex-shrink-0" />
               <input
                 type="text"
@@ -217,31 +219,42 @@ const RouteDashboard = ({ optimizationResult }: RouteDashboardProps) => {
 
       {/* Controls */}
       {/* Controls Row */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-50 border-b">
+      <div className="flex items-center justify-between px-4 py-2.5">
         {/* Left Controls */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1.5">
           <button className="flex items-center space-x-2 px-4 py-2 bg-green-950 text-white hover:bg-green-700">
             <Plus className="w-4 h-4" />
             <span className="text-sm">Add New Driver</span>
           </button>
 
-          <button className="p-2 text-gray-500 hover:text-gray-700 rounded">
-            <Undo2 className="w-6 h-6" />
-          </button>
-          <button className="p-2 text-gray-500 hover:text-gray-700 rounded">
-            <Redo2 className="w-6 h-6" />
-          </button>
-          <button className="p-2 text-gray-500 hover:text-gray-700 rounded">
-            <History className="w-6 h-6" />
-          </button>
+          <div className="flex items-center border-gray-200 pl-1">
+            <button
+              className="p-2 text-gray-500 hover:bg-gray-100 rounded-md transition-colors"
+              title="Undo"
+            >
+              <Undo2 className="w-6 h-6" />
+            </button>
+            <button
+              className="p-2 text-gray-500 hover:bg-gray-100 rounded-md transition-colors"
+              title="Redo"
+            >
+              <Redo2 className="w-6 h-6" />
+            </button>
+            <button
+              className="p-2 text-gray-500 hover:bg-gray-100 rounded-md transition-colors"
+              title="History"
+            >
+              <History className="w-6 h-6" />
+            </button>
+          </div>
 
           <div className="flex items-center space-x-4 ml-4">
             <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-black">
-              <ListFilter className="w-5 h-5" />
+              <ListFilter className="w-6 h-6" />
               <span>Filter</span>
             </button>
             <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-black">
-              <ListFilter className="w-5 h-5" />
+              <ListFilter className="w-6 h-6" />
               <span>30 Mins</span>
             </button>
           </div>
