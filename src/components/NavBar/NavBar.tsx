@@ -95,8 +95,8 @@ const NavBar = ({
               </div>
             )}
           </div>
-        ) : (
-          <div className="flex space-x-6 items-center">
+        ) : ( 
+          <div className="flex space-x-8 items-center">
             {[
               { icon: <Rocket />, label: "Dashboard", path: "/" },
               { icon: <Route />, label: "Routes", path: "/routes" },
@@ -107,15 +107,15 @@ const NavBar = ({
                 to={tab.path}
                 key={index}
                 className={({ isActive }) =>
-                  `flex items-center gap-1 text-sm cursor-pointer pb-2 transition-all ${
+                  `flex items-center gap-1 cursor-pointer pb-1 transition-all ${
                     isActive
-                      ? "text-green-900 border-b-2 border-green-900 font-medium"
+                      ? "text-green-900 border-b-2 border-green-900"
                       : "text-gray-400 hover:text-green-800"
                   }`
                 }
               >
-                <span>{tab.icon}</span>
-                <span>{tab.label}</span>
+                <span className="pr-1 font-medium">{tab.icon}</span>
+                <span className="font-normal">{tab.label}</span>
               </NavLink>
             ))}
           </div>

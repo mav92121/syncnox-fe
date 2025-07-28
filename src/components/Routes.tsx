@@ -253,13 +253,17 @@ const Routes: React.FC = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">Routes</h2>
+        <div className="flex items-center gap-x-2 ml-3">
+          <img src="/Group 326.svg" alt="Route Icon" className="h-6 w-6" />
+          <h2 className="text-gray-500 font-medium">Recent Routes</h2>
+        </div>
         <Input
           placeholder="Search routes..."
-          prefix={<SearchOutlined className="text-gray-300" />}
-          className="w-64 ml-360"
+          prefix={<SearchOutlined className="text-gray-400" />}
+          className="!w-72 !text-sm !border-gray-300"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
+          allowClear
         />
       </div>
       <Table
@@ -267,7 +271,9 @@ const Routes: React.FC = () => {
         dataSource={filteredData}
         pagination={false}
         rowKey="key"
-        scroll={{ x: "max-content" }}
+        size="small"
+        tableLayout="auto"
+        className="min-w-full"
       />
     </div>
   );
