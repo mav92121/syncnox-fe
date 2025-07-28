@@ -468,15 +468,11 @@ const TasksTable = ({ dataSource, onMapView }: TasksTableProps) => {
             {isOptimizing ? "Optimizing..." : "Create New Route"}
           </Button>
         </div>
-        {open ? (
-          <CreateRouteModalForm
-            open={open}
-            onCancel={() => setOpen(false)}
-            onSubmit={handleCreateRoute}
-          />
-        ) : (
-          ""
-        )}
+        <CreateRouteModalForm
+          open={open}
+          onClose={() => setOpen(false)}
+          handleCreateRoute={handleCreateRoute}
+        />
       </div>
 
       <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden">

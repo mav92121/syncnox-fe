@@ -1,71 +1,54 @@
+import { useState } from "react";
+import { TeamOutlined, CompassOutlined } from "@ant-design/icons";
 import { Modal, Form, Input, Select, Button, Typography, Avatar } from "antd";
-import {
-  TeamOutlined,
-  CompassOutlined,
-} from "@ant-design/icons";
-
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 interface CreateRouteModalProps {
   open: boolean;
-  onCancel: () => void;
-  onSubmit: (values: any) => void;
+  onClose: () => void;
+  handleCreateRoute: () => Promise<void>;
 }
 
-const CreateRouteModalForm = ({
+const CreateRouteModalForm: React.FC<CreateRouteModalProps> = ({
   open,
-  onCancel,
-  onSubmit,
+  onClose,
+  handleCreateRoute,
 }: CreateRouteModalProps) => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+
+  const handelSubmit = async () => {
+    try {
+      setLoading(true);
+      await handleCreateRoute();
+      onClose();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Modal
       open={open}
-      onCancel={onCancel}
+      onCancel={onClose}
       footer={null}
-      closable={false}
-      width={850}
+      width={843}
       centered
-      styles={{
-        content: {
-          borderRadius: "12px",
-        },
-      }}
     >
-      {/* Header with Cancel button */}
-      <div className="flex justify-between items-center">
-        <div></div>
-        <Button
-          type="text"
-          onClick={onCancel}
-          className="text-blue-500 hover:text-blue-600 font-medium"
-        >
-          Cancel
-        </Button>
-      </div>
-
       {/* Title and subtitle */}
       <div className="text-center">
-        <Title level={2} className=" text-gray-800">
+        <Title level={3} className="text-gray-800">
           Create a Route
         </Title>
-        <Text className="text-gray-500 text-base">
-          Let's Get These Deliveries Rollin' Like a Party on Wheels!
-        </Text>
       </div>
 
       {/* Map icon placeholder */}
       <div className="flex justify-center">
-        <div className="relative">
-          <img src="/map.svg" alt="" />
-          {/* Map lines decoration */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-20 h-20 border-2 border-gray-300 rounded-full opacity-30"></div>
-          </div>
-        </div>
+        <img src="/map.svg" alt="MAP" className="w-[150px] h-[150px]" />
       </div>
 
-      <Form form={form} layout="vertical" onFinish={onSubmit}>
+      <Form form={form} layout="vertical" onFinish={handelSubmit}>
         <Form.Item
           label={
             <span className="text-gray-700 font-medium">
@@ -74,12 +57,11 @@ const CreateRouteModalForm = ({
           }
           name="routeName"
           rules={[{ required: true, message: "Route name is required" }]}
-          className="mb-6"
         >
           <Input
             placeholder="Name of the Route"
-            size="large"
-            className="rounded-lg border-gray-300"
+            size="small"
+            className="border-gray-300"
           />
         </Form.Item>
 
@@ -90,26 +72,22 @@ const CreateRouteModalForm = ({
             </span>
           }
           name="optimization"
-          className="mb-6"
         >
           <Select
             placeholder="Select Preference"
-            size="large"
-            className="rounded-lg"
-            suffixIcon={<TeamOutlined className="text-blue-400" />}
+            size="small"
+            suffixIcon={<TeamOutlined />}
           >
             <Select.Option value="distance">Shortest Distance</Select.Option>
             <Select.Option value="duration">Fastest Time</Select.Option>
-            <Select.Option value="custom">Custom Logic</Select.Option>
           </Select>
         </Form.Item>
 
         <Form.Item
-          label={<span className="text-black-700 font-medium">Assign Team</span>}
+          label={<span className="font-medium">Assign Team</span>}
           name="team"
-          className="mb-8"
         >
-          <div className="flex items-center justify-between p-4 border border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer">
+          <div className="flex items-center justify-between border border-gray-300 hover:border-blue-400 cursor-pointer">
             <div className="flex items-center">
               <Button
                 type="text"
@@ -144,8 +122,9 @@ const CreateRouteModalForm = ({
           <Button
             type="primary"
             htmlType="submit"
-            icon={<CompassOutlined style={{ fontSize: "30px" }} />}            
-            size="large"
+            icon={<CompassOutlined style={{ fontSize: "15px" }} />}
+            loading={loading}
+            size="middle"
             className="w-full h-12 bg-green-800 hover:bg-green-700 border-0 rounded-lg font-medium text-base"
           >
             Optimize Route

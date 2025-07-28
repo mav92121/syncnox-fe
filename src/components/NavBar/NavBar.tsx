@@ -53,7 +53,7 @@ const NavBar = ({
     { icon: <BellOutlined />, label: "Notifications" },
     { icon: <UserOutlined />, label: "User profile" },
   ];
-  const showBradcrums = window.location.pathname !== "/";
+  const showBreadcrumbs = breadcrumbs.length > 0;
 
   // Use provided icons or fallback to defaults
   const iconsToRender = navIcons || defaultNavIcons;
@@ -62,7 +62,7 @@ const NavBar = ({
     <nav className="border-b border-gray-200">
       <div className="h-[60px] flex items-center justify-between px-6">
         {/* Left side - Navigation */}
-        {showBradcrums ? (
+        {showBreadcrumbs ? (
           <div className="flex items-center">
             {breadcrumbs.length > 0 && (
               <div className="flex items-center">
@@ -77,12 +77,6 @@ const NavBar = ({
                       } ${
                         crumb.path ? "cursor-pointer hover:text-blue-500" : ""
                       }`}
-                      onClick={() => {
-                        if (crumb.path) {
-                          // Handle navigation if needed
-                          console.log(`Navigate to: ${crumb.path}`);
-                        }
-                      }}
                     >
                       {crumb.label}
                     </span>
@@ -105,8 +99,8 @@ const NavBar = ({
           <div className="flex space-x-8 items-center">
             {[
               { icon: <Rocket />, label: "Dashboard", path: "/" },
-              { icon: <Route/>, label: "Routes", path: "/routes" },
-              { icon:  <Radar />, label: "Jobs", path: "/jobs" },
+              { icon: <Route />, label: "Routes", path: "/routes" },
+              { icon: <Radar />, label: "Jobs", path: "/jobs" },
               { icon: <CalendarRange />, label: "Schedule", path: "/schedule" },
             ].map((tab, index) => (
               <NavLink
