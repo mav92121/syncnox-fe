@@ -9,6 +9,8 @@ import { PlanProvider } from "./pages/Plan/context/PlanContext";
 import Dashboard from "./components/Dashboard";
 import Routes from "./components/Routes";
 import Jobs from "./components/Jobs";
+import type { Task } from "./pages/Plan/types";
+import tasks from "./pages/Plan/tableData";
 
 const router = createBrowserRouter([
   {
@@ -25,7 +27,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/jobs",
-        element: <Jobs />,
+        element: <Jobs dataSource={tasks} />,
       },
       {
         path: "plan",
