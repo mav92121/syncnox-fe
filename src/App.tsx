@@ -8,6 +8,9 @@ import theme from "./theme/themeConfig";
 import { PlanProvider } from "./pages/Plan/context/PlanContext";
 import Dashboard from "./components/Dashboard";
 import Routes from "./components/Routes";
+import Jobs from "./components/Jobs";
+
+import tasks from "./pages/Plan/tableData";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/routes",
         element: <Routes />,
+      },
+      {
+        path: "/jobs",
+        element: <Jobs />,
       },
       {
         path: "plan",
