@@ -5,7 +5,7 @@ const TaskOptions = () => {
   const navigate = useNavigate();
 
   const handleManualAdd = () => {
-    navigate("/plan/add");
+    navigate("/plan?tab=add");
   };
   return (
     <div className="flex flex-col gap-5 items-center justify-center w-full max-w-md mx-auto">
