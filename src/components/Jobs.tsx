@@ -1,47 +1,80 @@
-import { useState } from "react";
-import { Table, Button, Input } from "antd";
+import { useState, useEffect } from "react";
+import { Table, Button, Input, Spin } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { SearchOutlined } from "@ant-design/icons";
-
-export interface Task {
-  key: string;
-  id: string;
-  priority: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  status: string;
-  businessName: string;
-  status2: string;
-  phone: string;
-  serviceDuration: string;
-  from: string;
-  to: string;
-  customerPreferences: string;
-  notes: string;
-  singleRecurring: string;
-  ratings: number;
-  team: string[];
-  files: number;
-  paid: string;
-  latitude?: string;
-  longitude?: string;
-  lat?: number | null;
-  lon?: number | null;
-  [key: string]: string | number | string[] | boolean | null | undefined;
-}
+import { usePlanContext } from "../pages/Plan/hooks/usePlanContext";
+import type {Job, Task} from "../pages/Plan/types"
+import dayjs from "dayjs";
 
 
-interface JobsProps {
-  dataSource: Task[];
-}
 
-const Jobs = ({ dataSource }: JobsProps) => {
+const capitalizeFirstLetter = (string: string = "") => {
+  if (!string) return "";
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+};
+
+const mapJobsToTasks = (jobs: Job[]): Task[] => {
+  if (!jobs) return [];
+  return jobs.map((job) => {
+    const formatTime = (dateTimeString?: string | null): string => {
+      if (!dateTimeString) return "N/A";
+      return dayjs(dateTimeString).format("hh:mm A");
+    };
+
+    const formatServiceDuration = (minutes?: number): string => {
+      if (minutes === undefined || minutes === null) return "N/A";
+      if (minutes < 60) return `${minutes} Minutes`;
+      const hours = Math.floor(minutes / 60);
+      const mins = minutes % 60;
+      return `${hours} Hour${hours > 1 ? "s" : ""}${
+        mins > 0 ? ` ${mins} Minutes` : ""
+      }`;
+    };
+
+    const taskId = String(job.id || Math.random().toString(36).substr(2, 9));
+
+    return {
+      key: taskId,
+      id: taskId,
+      priority: capitalizeFirstLetter(job.priority_level),
+      firstName: job.first_name || "N/A",
+      lastName: job.last_name || "N/A",
+      address: job.delivery_address,
+      status: "Scheduled", // Default or map from a Job status if available
+      businessName: job.business_name || "N/A",
+      status2: "Unassigned", // Default or map
+      phone: job.phone_number,
+      serviceDuration: formatServiceDuration(job.duration_minutes),
+      from: formatTime(job.start_time),
+      to: formatTime(job.end_time),
+      customerPreferences: job.customer_preferences || "N/A",
+      notes: job.additional_notes || "N/A",
+      singleRecurring:
+        job.recurrence_type === "one_time" ? "Single" : "Recurring",
+      ratings: 0, // Default
+      team: [], // Default
+      files: job.documents?.length || 0,
+      paid: capitalizeFirstLetter(job.payment_status),
+    };
+  });
+};
+
+const Jobs = () => {
   const [searchText, setSearchText] = useState("");
+  const { jobs, isLoading, error, fetchJobs } = usePlanContext();
+  const [tasks, setTasks] = useState<Task[]>([]);
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
 
+  // Map jobs to tasks when jobs data changes
+  useEffect(() => {
+    if (jobs) {
+      setTasks(mapJobsToTasks(jobs));
+    }
+  }, [jobs]);
   // Debug: Log the dataSource to check what we're receiving
-  console.log("Jobs dataSource:", dataSource);
-
+  console.log("Jobs data:", { jobs, tasks, isLoading, error });
   // Columns configuration
   const columns: ColumnsType<Task> = [
     {
@@ -266,17 +299,29 @@ const Jobs = ({ dataSource }: JobsProps) => {
   ];
 
   // Search logic
-  const filteredData = searchText
-    ? dataSource.filter((item) =>
-        Object.values(item).some((val) =>
-          typeof val === "string"
-            ? val.toLowerCase().includes(searchText.toLowerCase())
-            : Array.isArray(val)
-            ? val.join(",").toLowerCase().includes(searchText.toLowerCase())
-            : val?.toString().toLowerCase().includes(searchText.toLowerCase())
-        )
-      )
-    : dataSource;
+  const filteredData = tasks.filter(task => 
+    Object.values(task).some(
+      value => 
+        value && 
+        value.toString().toLowerCase().includes(searchText.toLowerCase())
+    )
+  );
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 text-red-500 text-center">
+        Error loading jobs: {error}
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col w-full overflow-hidden h-full bg-white">
