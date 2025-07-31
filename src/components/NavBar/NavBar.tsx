@@ -7,44 +7,92 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import type { ReactNode } from "react";
-import { CalendarRange, Radar, Rocket, Route } from "lucide-react";
-import { NavLink } from "react-router-dom";
-
-// Define types for breadcrumbs
-interface Breadcrumb {
-  label: string;
-  path?: string;
-}
+import { CalendarRange, Radar, Rocket, Route, List, Clock, CirclePlus } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useMemo } from "react";
 
 // Define types for navigation icons
 interface NavIcon {
   icon: ReactNode;
-  label?: string;
+  label: string;
   onClick?: () => void;
 }
 
-// Expanded props interface
 interface NavBarProps {
-  breadcrumbs?: Breadcrumb[];
-  title?: string;
-  subtitle?: string;
   onSearch?: (value: string) => void;
   searchPlaceholder?: string;
   searchWidth?: number;
   navIcons?: NavIcon[];
 }
 
+// Define types for tab configuration
+interface TabConfig {
+  id: string;
+  label: string;
+  icon: ReactNode;
+}
+
+type RouteTabs = {
+  [key: string]: TabConfig[];
+};
+
+// Define tab configurations for different routes
+const routeTabs: RouteTabs = {
+  "^/dashboard": [
+    { id: "dashboard", label: "Dashboard", icon: <Rocket size={16} /> },
+    { id: "routes", label: "Routes", icon: <Route size={16} /> },
+    { id: "jobs", label: "Jobs", icon: <Radar size={16} /> },
+    { id: "schedule", label: "Schedule", icon: <CalendarRange size={16} /> },
+  ],
+  "^/plan": [
+    { id: "options", label: "Plan", icon: <List size={16} /> },
+    { id: "add", label: "Add", icon: <CirclePlus size={16} /> },
+    { id: "recents", label: "Recents", icon: <Clock size={16} /> },
+  ],
+};
+
 const NavBar = ({
-  breadcrumbs = [],
-  title,
-  subtitle,
   onSearch,
   searchPlaceholder = "Search",
   searchWidth = 428,
   navIcons,
 }: NavBarProps) => {
-  const iconClassName =
-    "w-[32px] h-[32px] flex items-center justify-center text-base text-gray-600 hover:bg-gray-50 cursor-pointer";
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search]
+  );
+
+  // Get current route's tabs
+  const currentTabs = useMemo(() => {
+    const route = Object.keys(routeTabs).find(route => 
+      new RegExp(route).test(location.pathname)
+    );
+    return route ? routeTabs[route as keyof typeof routeTabs] : [];
+  }, [location.pathname]);
+
+  // Get active tab from URL or use first tab as default
+  const activeTab = searchParams.get('tab') || currentTabs[0]?.id || '';
+
+  // Handle tab navigation
+  const handleTabClick = (tabId: string) => {
+    const basePath = location.pathname.split('/')[1] || 'dashboard';
+    navigate(`/${basePath}?tab=${tabId}`);
+  };
+
+  // Set initial tab if none is selected
+  useEffect(() => {
+    if (['/', '/dashboard', '/plan'].includes(location.pathname) && !searchParams.get('tab')) {
+      const basePath = location.pathname === '/' ? 'dashboard' : location.pathname.substring(1);
+      const defaultTab = routeTabs[`^/${basePath}` as keyof typeof routeTabs]?.[0]?.id;
+      if (defaultTab) {
+        navigate(`/${basePath}?tab=${defaultTab}`, { replace: true });
+      }
+    }
+  }, [location.pathname, navigate, searchParams]);
+
+  const iconClassName = "w-[32px] h-[32px] flex items-center justify-center text-base text-gray-600 hover:bg-gray-50 cursor-pointer";
 
   // Default icons if none provided
   const defaultNavIcons: NavIcon[] = [
@@ -53,7 +101,6 @@ const NavBar = ({
     { icon: <BellOutlined />, label: "Notifications" },
     { icon: <UserOutlined />, label: "User profile" },
   ];
-  const showBreadcrumbs = breadcrumbs.length > 0;
 
   // Use provided icons or fallback to defaults
   const iconsToRender = navIcons || defaultNavIcons;
@@ -62,64 +109,25 @@ const NavBar = ({
     <nav className="border-b border-gray-200">
       <div className="h-[60px] flex items-center justify-between px-6">
         {/* Left side - Navigation */}
-        {showBreadcrumbs ? (
-          <div className="flex items-center">
-            {breadcrumbs.length > 0 && (
-              <div className="flex items-center">
-                {breadcrumbs.map((crumb, index) => (
-                  <div key={index} className="flex items-center">
-                    {index > 0 && <span className="mx-1 text-gray-300">/</span>}
-                    <span
-                      className={`text-sm ${
-                        index === 0
-                          ? "font-medium text-gray-700"
-                          : "text-gray-500"
-                      } ${
-                        crumb.path ? "cursor-pointer hover:text-blue-500" : ""
-                      }`}
-                    >
-                      {crumb.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Alternative title when no breadcrumbs */}
-            {breadcrumbs.length === 0 && title && (
-              <div>
-                <h1 className="text-lg font-medium text-gray-800">{title}</h1>
-                {subtitle && (
-                  <p className="text-sm text-gray-500">{subtitle}</p>
-                )}
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="flex space-x-6 items-center">
-            {[
-              { icon: <Rocket />, label: "Dashboard", path: "/" },
-              { icon: <Route />, label: "Routes", path: "/routes" },
-              { icon: <Radar />, label: "Jobs", path: "/jobs" },
-              { icon: <CalendarRange />, label: "Schedule", path: "/schedule" },
-            ].map((tab, index) => (
-              <NavLink
-                to={tab.path}
-                key={index}
-                className={({ isActive }) =>
-                  `flex items-center gap-1 text-sm cursor-pointer pb-2 transition-all ${
-                    isActive
-                      ? "text-green-900 border-b-2 border-green-900 font-medium"
-                      : "text-gray-400 hover:text-green-800"
-                  }`
-                }
+        <div className="flex space-x-6 items-center">
+          {currentTabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <div
+                key={tab.id}
+                onClick={() => handleTabClick(tab.id)}
+                className={`flex items-center gap-2 text-sm cursor-pointer py-2 px-1 transition-all ${
+                  isActive
+                    ? "text-green-900 border-b-2 border-green-900 font-medium"
+                    : "text-gray-500 hover:text-green-800"
+                }`}
               >
-                <span>{tab.icon}</span>
+                <span className="flex items-center">{tab.icon}</span>
                 <span>{tab.label}</span>
-              </NavLink>
-            ))}
-          </div>
-        )}
+              </div>
+            );
+          })}
+        </div>
 
         {/* Right side - Search and icons */}
         <div className="flex items-center">

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
-import ActionButtons from "./components/ActionButtons";
 import TasksTable from "./components/TasksTable";
 import MapComponent from "./components/MapComponent";
 import { useMapState } from "./hooks/useMapState";
@@ -92,11 +91,6 @@ const PlanRecents = () => {
 
   return (
     <div className="h-full flex flex-col max-w-full overflow-hidden">
-      {/* Action Buttons */}
-      <div className="pb-2 flex-shrink-0">
-        <ActionButtons />
-      </div>
-
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden min-h-0">
         {/* Map - Takes approximately 40% of the space */}

@@ -11,7 +11,7 @@ const RootLayout = () => {
     } else if (location.pathname === "/" || location.pathname === "/routes") {
       return []; // Dashboard has no breadcrumbs
     } else {
-      return [{ label: "Unknown Page" }];
+      return [];
     }
   };
   return (

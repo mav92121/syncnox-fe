@@ -1,13 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ConfigProvider } from "antd";
 import RootLayout from "./components/Layout/RootLayout";
-import PlanOptions from "./pages/Plan/PlanOptions";
-import PlanAdd from "./pages/Plan/PlanAdd";
-import PlanRecents from "./pages/Plan/PlanRecents";
 import theme from "./theme/themeConfig";
 import { PlanProvider } from "./pages/Plan/context/PlanContext";
-import Dashboard from "./components/Dashboard";
-import Routes from "./components/Routes";
+import DynamicTabs from "./components/DynamicTabs";
 
 const router = createBrowserRouter([
   {
@@ -16,23 +12,20 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Dashboard />,
+        element: <DynamicTabs />,
       },
       {
-        path: "/routes",
-        element: <Routes />,
+        path: "dashboard/*",
+        element: <DynamicTabs />,
       },
       {
-        path: "plan",
-        element: <PlanOptions />,
+        path: "plan/*",
+        element: <DynamicTabs />,
       },
+      // Handle all other paths with DynamicTabs
       {
-        path: "plan/add",
-        element: <PlanAdd />,
-      },
-      {
-        path: "plan/recents",
-        element: <PlanRecents />,
+        path: "*",
+        element: <DynamicTabs />,
       },
     ],
   },
