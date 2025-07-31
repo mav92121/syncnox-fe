@@ -75,10 +75,6 @@ export interface MapComponentProps {
   opacity?: number;
 }
 
-export interface ActionButtonsProps {
-  className?: string;
-}
-
 export interface TaskOptionsProps {
   onManualAdd: () => void;
 }
