@@ -11,10 +11,11 @@ import {
   ClockFading,
   ListFilter,
   MousePointer2,
+  History,
 } from "lucide-react";
 import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
 import type { DriverInterface, TimelineItem } from "../types";
-import { Button, Input } from "antd";
+import { Button, Input, Tabs } from "antd";
 
 const RouteDashboard = () => {
   // const [selectedDate, setSelectedDate] = useState("02/08/2025");
@@ -143,7 +144,7 @@ const RouteDashboard = () => {
               <div
                 className={`w-8 h-8 ${
                   driver.color === "blue" ? "bg-blue-500" : "bg-green-500"
-                } rounded flex items-center justify-center`}
+                } flex items-center justify-center`}
               >
                 <Home className="w-4 h-4 text-white" />
               </div>
@@ -153,7 +154,7 @@ const RouteDashboard = () => {
                   driver.color === "blue"
                     ? "border-blue-500 bg-blue-100 text-blue-600"
                     : "border-green-500 bg-green-100 text-green-600"
-                } rounded flex items-center justify-center text-sm font-medium`}
+                } flex items-center justify-center text-sm font-medium`}
               >
                 {item.stop}
               </div>
@@ -168,8 +169,8 @@ const RouteDashboard = () => {
     <div className="w-full bg-white min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-4">
             <span className="text-xl text-gray-800">Route1201</span>
             <span className="px-2 py-1 bg-blue-60 text-blue-700 text-sm ml-0.1">
               NewYork
@@ -182,98 +183,85 @@ const RouteDashboard = () => {
         </div>
 
         <div className="flex items-center space-x-20">
-          <div className="flex items-center space-x-6">
-            <Button
-              className={`pb-2 border-b-2 ${
-                activeTab === "Timeline"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500"
-              }`}
-              onClick={() => setActiveTab("Timeline")}
-            >
-              Timeline
-            </Button>
-            <Button
-              className={`pb-2 border-b-2 ${
-                activeTab === "Route"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500"
-              }`}
-              onClick={() => setActiveTab("Route")}
-            >
-              Route
-            </Button>
+          <div className="flex items-center ml-10">
+            <Tabs
+              defaultActiveKey="1"
+              items={[
+                { label: "Timeline", key: "1" },
+                { label: "Route", key: "2" },
+              ]}
+              onChange={(key) => setActiveTab(key)}
+            />
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             {/* Search */}
-
-            <Search className="w-4 h-4 text-gray-400 mr-2" />
-            <Input
-              type="text"
-              suffix={
-                <SearchOutlined
-                  style={{ fontSize: "16px" }}
-                  className="text-gray-400"
-                />
-              }
-              className="pl-9"
-              placeholder="Search"
-            />
+              <Input
+                type="text"
+                suffix={
+                  <SearchOutlined
+                    style={{ fontSize: "16px" }}
+                    className="text-gray-400"
+                  />
+                }
+                className="pl-9"
+                placeholder="Search"
+              />
 
             {/* Manifest & Export */}
-            <Button className="flex items-center justify-between space-x-2 text-gray-600 hover:text-black px-2 py-1">
-              <ClipboardList className="w-6 h-6" />
-              <span className="text-md">Manifest</span>
-            </Button>
-            <Button className="flex items-center space-x-2 text-gray-600 hover:text-black px-2 py-1">
-              <CloudDownload className="w-6 h-6" />
-              <span className="text-md">Export</span>
-            </Button>
+              <Button type="text">
+                <ClipboardList />
+                Menifest
+              </Button>
+              <Button type="text">
+                <CloudDownload />
+                Export
+              </Button>
 
-            {/* Share URL */}
-            <Button className="flex items-center space-x-2 px-4 py-2 bg-green-900 text-white hover:bg-green-800">
-              <img src="/Icon.svg" alt="" className="w-4 h-4 invert"/>
-              <span className="text-sm font-medium">Share URL</span>
-            </Button>
-            <Button className="flex items-center space-x-2 px-4 py-2 bg-green-900 text-white hover:bg-green-800">
-              <MousePointer2 className="w-4 h-4" />
-              <span className="text-sm font-medium">Share to App</span>
-            </Button>
+              {/* Share URL */}
+              <Button type="primary" className="mt-1">
+                <img src="/Icon.svg" alt="" />
+                Share URL
+              </Button>
+              {/* Share to App */}
+              <Button type="primary" className="mt-1">
+                <MousePointer2 />
+                Share to App
+              </Button>
           </div>
         </div>
       </div>
 
       {/* Controls */}
-      <div className="flex py-3">
-        <div className="flex items-center space-x-2">
-          <Button className="flex items-center bg-green-800 text-white hover:bg-green-700">
-            <Plus className="w-4 h-4" />
+      <div className="flex py-2">
+        <div className="flex items-center">
+          <Button type="primary">
+            <Plus className="w-5 h-5" />
             <span className="text-sm">Add New Driver</span>
           </Button>
 
-          <Button className="p-2 text-gray-500 hover:text-gray-700 rounded">
-            <Undo2 className="w-6 h-6" />
+          <Button type="text" className="ml-1">
+            <Undo2 className="w-5 h-5" />
           </Button>
-          <Button className="p-2 text-gray-500 hover:text-gray-700 rounded">
-            <Redo2 className="w-6 h-6" />
+          <Button type="text">
+            <Redo2 className="w-5 h-5" />
           </Button>
-          <Button className="p-2 text-gray-500 hover:text-gray-700 rounded">
-            <ClockFading className="w-6 h-6" />
+          <Button type="text">
+            <History className="w-5 h-5" />
           </Button>
 
-          <div className="flex items-center space-x-4">
-            <Button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-black">
+          <div className="flex items-center">
+            <Button type="text">
               <ListFilter className="w-5 h-5" />
               <span>Filter</span>
             </Button>
 
-            <Button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-black">
+            <Button type="text">
               <ListFilter className="w-5 h-5" />
               <span>30 Mins</span>
             </Button>
           </div>
-          <div className="flex bg-white border-b text-xs text-gray-500">
+          <div className="flex bg-white text-xs text-gray-500">
             <div className="flex-1 px-4 py-2 grid grid-cols-17 gap-2">
               {timeSlots.map((time, index) => (
                 <div key={index} className="text-center w-17">
@@ -288,10 +276,10 @@ const RouteDashboard = () => {
       {/* Driver Rows */}
       <div className="bg-white">
         {drivers.map((driver, index) => (
-          <div key={index} className="flex border-b hover:bg-gray-50">
-            <div className="w-150 px-4 py-2 border-r relative">
+          <div key={index} className="flex">
+            <div className="w-134 px-4 py-2 border-r relative">
               <div
-                className={`absolute top-0 right-0 h-full w-2 ${
+                className={`absolute top-2 right-0 h-28 w-2 ${
                   driver.color === "blue" ? "bg-blue-400" : "bg-green-500"
                 }`}
               />
@@ -302,22 +290,22 @@ const RouteDashboard = () => {
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div className="flex-1">
-                  <div className="flex items-center space-x-30">
+                  <div className="flex items-center space-x-20">
                     <span className="font-medium text-gray-800">
                       {driver.name}
                     </span>
-                    <div className="flex items-center space-x-1">
-                      <Button className="p-1 text-black-400 hover:text-gray-600 rounded ">
-                        <img src="/Vector.svg" alt="" />
+                    <div className="flex items-center">
+                      <Button type="text">
+                        <img src="/Vector.svg" />
                       </Button>
-                      <Button className="p-1 text-black-400 hover:text-gray-600 rounded font-bold">
-                        <img src="/Chat_plus.svg" alt="" />
+                      <Button type="text">
+                        <img src="/Chat_plus.svg" />
                       </Button>
-                      <Button className="p-1 text-black-400 hover:text-gray-600 rounded font-bold">
-                        <img src="/Phone_duotone.svg" alt="" />
+                      <Button type="text">
+                        <img src="/Phone_duotone.svg" />
                       </Button>
-                      <Button className="p-1 text-black-400 hover:text-gray-600 rounded font-bold">
-                        <MoreOutlined className="w-4 h-4" />
+                      <Button type="text">
+                        <MoreOutlined />
                       </Button>
                     </div>
                   </div>
