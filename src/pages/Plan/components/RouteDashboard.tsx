@@ -1,14 +1,11 @@
-import { useState } from "react";
 import {
   Calendar,
-  Search,
   Plus,
   Home,
   Undo2,
   Redo2,
   CloudDownload,
   ClipboardList,
-  ClockFading,
   ListFilter,
   MousePointer2,
   History,
@@ -16,11 +13,13 @@ import {
 import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
 import type { DriverInterface, TimelineItem } from "../types";
 import { Button, Input, Tabs } from "antd";
+import { useState } from "react";
+import dayjs from "dayjs";
+
 
 const RouteDashboard = () => {
-  // const [selectedDate, setSelectedDate] = useState("02/08/2025");
-  const selectedDate = "02/08/2025";
-  const [activeTab, setActiveTab] = useState("Timeline");
+  const [activeTab, setActiveTab] = useState("1");
+  const selectedDate = dayjs().format("DD/MM/YYYY");
 
   const timeSlots = [
     "04:00",
@@ -190,7 +189,7 @@ const RouteDashboard = () => {
                 { label: "Timeline", key: "1" },
                 { label: "Route", key: "2" },
               ]}
-              onChange={(key) => setActiveTab(key)}
+              onChange={() => setActiveTab(activeTab === "1" ? "2" : "1")}
             />
           </div>
 
