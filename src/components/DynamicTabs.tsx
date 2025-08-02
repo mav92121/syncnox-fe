@@ -5,7 +5,7 @@ import Routes from "./Routes";
 import PlanOptions from "../pages/Plan/PlanOptions";
 import PlanAdd from "../pages/Plan/PlanAdd";
 import PlanRecents from "../pages/Plan/PlanRecents";
-
+import Jobs from "./Jobs";
 // Define component types for better type safety
 type ComponentMap = {
   [key: string]: React.ComponentType<Record<string, never>>;
@@ -24,6 +24,7 @@ const routeConfig: Record<string, RouteConfig> = {
     components: {
       dashboard: Dashboard,
       routes: Routes,
+      jobs: Jobs,
     },
   },
   // Plan route configuration
