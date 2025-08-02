@@ -251,24 +251,35 @@ const Routes: React.FC = () => {
   );
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">Routes</h2>
-        <Input
-          placeholder="Search routes..."
-          prefix={<SearchOutlined className="text-gray-300" />}
-          className="w-64 ml-360"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
+    <div className="flex flex-col w-full overflow-hidden h-full bg-white">
+      <div className="flex items-center justify-between pb-2">
+        <h4 className="text-md font-semibold">Recent Routes</h4>
+        <div className="flex gap-10">
+          <Input
+            placeholder="Search"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            suffix={<SearchOutlined className="text-gray-400" />}
+          />
+        </div>
       </div>
-      <Table
-        columns={columns}
-        dataSource={filteredData}
-        pagination={false}
-        rowKey="key"
-        scroll={{ x: "max-content" }}
-      />
+
+      <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden custom-scrollbar">
+        <div
+          className="h-full overflow-y-auto custom-scrollbar"
+          style={{ minWidth: "max-content" }}
+        >
+          <Table
+            columns={columns}
+            dataSource={filteredData}
+            rowKey="key"
+            size="small"
+            tableLayout="auto"
+            className="min-w-full"
+            pagination={false}
+          />
+        </div>
+      </div>
     </div>
   );
 };
