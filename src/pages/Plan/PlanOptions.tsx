@@ -1,28 +1,10 @@
 import TaskOptions from "./components/TaskOptions";
-import MapComponent from "./components/MapComponent";
-import { useMapState } from "./hooks/useMapState";
-import { defaultMapConfig } from "./utils/mapConfig";
 
 const PlanOptions = () => {
-  const { mapType, setMapType } = useMapState();
-
   return (
-    <div className="h-full flex flex-col">
-      {/* Main Content Area */}
-      <div className="flex-1 flex relative">
-        {/* Map as background */}
-        <MapComponent
-          mapType={mapType}
-          setMapType={setMapType}
-          config={defaultMapConfig}
-          className="w-[100%]"
-          opacity={0.3}
-        />
-
-        {/* Task options centered */}
-        <div className="absolute inset-0 w-full h-full flex justify-center items-center z-10">
-          <TaskOptions />
-        </div>
+    <div className="relative h-full flex flex-col">
+      <div className="absolute w-full h-full top-[25vh]">
+        <TaskOptions />
       </div>
     </div>
   );
