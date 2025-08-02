@@ -4,7 +4,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { usePlanContext } from "../pages/Plan/hooks/usePlanContext";
 import type { Job, Task } from "../pages/Plan/types";
 import dayjs from "dayjs";
-import GeneralTasksTable from "@/pages/Plan/components/GeneralTasksTable";
+import JobsTable from "@/pages/Plan/components/JobsTable";
 
 const capitalizeFirstLetter = (string: string = "") => {
   if (!string) return "";
@@ -59,11 +59,8 @@ const mapJobsToTasks = (jobs: Job[]): Task[] => {
 
 const Jobs = () => {
   const [searchText, setSearchText] = useState("");
-  const { jobs, isLoading, error, fetchJobs } = usePlanContext();
+  const { jobs, isLoading, error } = usePlanContext();
   const [tasks, setTasks] = useState<Task[]>([]);
-  useEffect(() => {
-    fetchJobs();
-  }, [fetchJobs]);
 
   // Map jobs to tasks when jobs data changes
   useEffect(() => {
@@ -71,8 +68,6 @@ const Jobs = () => {
       setTasks(mapJobsToTasks(jobs));
     }
   }, [jobs]);
-  // Debug: Log the dataSource to check what we're receiving
-  console.log("Jobs data:", { jobs, tasks, isLoading, error });
 
   // Search logic
   const filteredData = tasks.filter((task) =>
@@ -85,8 +80,9 @@ const Jobs = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex items-center justify-center h-full w-full flex-col">
         <Spin size="large" />
+        <div className="mt-4 text-primary">Loading Jobs...</div>
       </div>
     );
   }
@@ -113,7 +109,7 @@ const Jobs = () => {
         </div>
       </div>
 
-      <GeneralTasksTable dataSource={filteredData} enableRowSelection={false}/>
+      <JobsTable dataSource={filteredData} enableRowSelection={false} />
     </div>
   );
 };

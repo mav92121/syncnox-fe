@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button, Table } from "antd";
 import type { TableProps, TableColumnType } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
 import type { Task } from "../types";
 
 type TableRowSelection<T extends object = object> =
@@ -15,12 +14,6 @@ interface TasksTableProps {
 }
 
 const columns: ColumnsType<Task> = [
-  {
-    title: "",
-    key: "drag",
-    align: "center",
-    render: () => <MoreOutlined className="text-[20px] cursor-pointer" />,
-  },
   {
     title: "Job ID",
     dataIndex: "id",
@@ -280,7 +273,11 @@ const columns: ColumnsType<Task> = [
   },
 ];
 
-const GeneralTasksTable = ({ dataSource, enableRowSelection = false, onSelectionChange }: TasksTableProps) => {
+const JobsTable = ({
+  dataSource,
+  enableRowSelection = false,
+  onSelectionChange,
+}: TasksTableProps) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
@@ -292,7 +289,6 @@ const GeneralTasksTable = ({ dataSource, enableRowSelection = false, onSelection
     selectedRowKeys,
     onChange: onSelectChange,
   };
-
   return (
     <div className="flex-1 min-h-0 overflow-x-auto overflow-y-hidden custom-scrollbar">
       {/* Only the table is scrollable */}
@@ -316,4 +312,4 @@ const GeneralTasksTable = ({ dataSource, enableRowSelection = false, onSelection
   );
 };
 
-export default GeneralTasksTable;
+export default JobsTable;

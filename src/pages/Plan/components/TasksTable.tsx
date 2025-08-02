@@ -13,7 +13,7 @@ import { optimizeRoutes } from "../../../services/optimization";
 import type { Job as OptimizationJob } from "../../../services/optimization";
 import type { Task } from "../types";
 import CreateRouteModalForm from "./CreateRouteModalForm";
-import GeneralTasksTable from "./GeneralTasksTable";
+import JobsTable from "./JobsTable";
 
 interface TasksTableProps {
   dataSource: Task[];
@@ -208,7 +208,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
           handleCreateRoute={handleCreateRoute}
         />
       </div>
-      <GeneralTasksTable
+      <JobsTable
         dataSource={filteredData}
         enableRowSelection
         onSelectionChange={handelSelectChange}
