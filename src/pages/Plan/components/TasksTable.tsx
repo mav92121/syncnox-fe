@@ -88,21 +88,6 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
     // Convert selected tasks to optimization jobs format
     const optimizationJobs: OptimizationJob[] = selectedJobs.map((job) => {
       const jobData = getJobById(job.id) || job;
-      // const timeWindowStart = jobData.start_time
-      //   ? new Date(jobData.start_time).toLocaleTimeString("en-US", {
-      //       hour12: true,
-      //       hour: "numeric",
-      //       minute: "2-digit",
-      //     })
-      //   : "09:00 AM";
-      // const timeWindowEnd = jobData.end_time
-      //   ? new Date(jobData.end_time).toLocaleTimeString("en-US", {
-      //       hour12: true,
-      //       hour: "numeric",
-      //       minute: "2-digit",
-      //     })
-      //   : "06:00 PM";
-
       return {
         id: job.id,
         location: {
@@ -111,11 +96,7 @@ const TasksTable = ({ dataSource }: TasksTableProps) => {
         },
         duration: jobData.duration_minutes
           ? Number(jobData.duration_minutes) * 60
-          : 1800, // Convert minutes to seconds if available
-        // time_window: {
-        //   start: convertTo24HourFormat(timeWindowStart),
-        //   end: convertTo24HourFormat(timeWindowEnd),
-        // },
+          : 1800,
         priority:
           jobData.priority_level === "high"
             ? 10

@@ -63,12 +63,9 @@ const mapJobsToTasks = (jobs: Job[]): Task[] => {
 
 const PlanRecents = () => {
   const { mapType, setMapType } = useMapState();
-  const { jobs, fetchJobs, isLoading, error, optimizationResult } =
+  const { jobs, isLoading, error, optimizationResult } =
     usePlanContext();
   const [transformedTasks, setTransformedTasks] = useState<Task[]>([]);
-  useEffect(() => {
-    fetchJobs();
-  }, [fetchJobs]);
 
   useEffect(() => {
     if (jobs) {

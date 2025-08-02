@@ -9,10 +9,6 @@ import type { Job } from "../types";
 import { PlanContext } from "./planContextDefinition"; // Import the context
 import type { OptimizationResult } from "../../../services/optimization";
 
-// PlanContextType interface has been moved to ./planContextDefinition.ts
-// PlanContext (createContext call) has been moved to ./planContextDefinition.ts
-// usePlanContext hook has been moved to ../hooks/usePlanContext.ts
-
 // Interfaces for a validated API error structure where properties are guaranteed to exist
 interface GuaranteedApiErrorResponseData {
   message: string;
